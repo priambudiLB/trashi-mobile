@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:trashi/constants/colors.dart';
 import 'package:trashi/pages/home_screen/home_screen.dart';
 import 'package:trashi/pages/profile_screen/profile_screen.dart';
@@ -69,7 +68,16 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
                         height: item['size'],
                       ),
                       Container(width: 4),
-                      Text(item['text'], style: TextStyle(fontSize: 14, fontFamily: "Poppins", color: Colors.black))],
+                      Text(
+                          item['text'],
+                          style: TextStyle(
+                              fontSize: 14,
+                              fontFamily: "Poppins",
+                              fontWeight: _currentIndex == index ? FontWeight.w600 : FontWeight.w400,
+                              color: Colors.black
+                          )
+                      )
+                    ],
                   ),
                 ),
               )
