@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trashi/constants/strings.dart';
 import 'package:trashi/constants/theme.dart';
+import 'package:trashi/pages/home_screen/home_screen.dart';
 import 'package:trashi/pages/onboarding_screen/onboarding_screen_view.dart';
 import 'package:trashi/pages/splash_screen/bloc/splash_screen_bloc.dart';
 import 'package:trashi/pages/splash_screen/bloc/splash_screen_state.dart';
@@ -41,6 +42,7 @@ class _TrashiApplicationState extends State<TrashiApplication> {
               // TODO: Add more page and define its path here
               SplashScreen.PATH: (_) => SplashScreen(),
               OnboardingScreen.PATH: (_) => OnboardingScreen(),
+              HomeScreen.PATH: (_) => HomeScreen(),
             },
           ),
         ));

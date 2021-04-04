@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:trashi/constants/colors.dart';
+import 'package:trashi/pages/home_screen/home_screen.dart';
+import 'package:trashi/pages/navbar_screen/bottom_navbar.dart';
 // import 'package:trashi/pages/login_register_screen/welcome_screen.dart';
 import 'package:trashi/pages/onboarding_screen/bloc/on_boarding_bloc.dart';
 import 'package:trashi/utils/commons.dart';
@@ -21,7 +23,11 @@ class OnBoardingBody extends StatelessWidget {
       listener: (context, state) {
         if (state.isNavigateToHome) {
           //TODO Navigate to register screen
-          // Navigator.of(context).pushReplacementNamed(WelcomeScreen.PATH);
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => BottomNavScreen(navIndex: 0)),
+          );
+          // Navigator.of(context).pushReplacementNamed(HomeScreen.PATH);
         }
       },
       child: SafeArea(
