@@ -33,9 +33,11 @@ class OnBoardingContent extends StatelessWidget {
                     width: double.infinity,
                     child: Center(
                         child: SvgPicture.asset(
-                      splashData[state.index]["image"],
-                      semanticsLabel: splashData[state.index]["title"],
-                    ))),
+                        splashData[state.index]["image"],
+                        semanticsLabel: splashData[state.index]["title"],
+                      )
+                    )
+                ),
                 Padding(
                   padding: EdgeInsets.only(bottom: 5),
                 ),

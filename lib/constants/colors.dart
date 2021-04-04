@@ -3,6 +3,7 @@
 const String MAIN_COLOR = "#509761";
 const String COLOR_WHITE = "#FFFFFF";
 const String COLOR_BLACK = "#000000";
+const String NAVBAR_COLOR = "#EEEFEF";
 const String COLOR_GREEN_POSITIVE = "#1FCC79";
 const String COLOR_RED_NEGATIVE = "#F14363";
 const String COLOR_MOOD_YELLOW = "#FFA843";

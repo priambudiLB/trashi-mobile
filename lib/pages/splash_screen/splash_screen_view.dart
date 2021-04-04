@@ -7,7 +7,7 @@ class SplashScreenView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: hexToColor(COLOR_WHITE),
+      backgroundColor: hexToColor(MAIN_COLOR),
       body: Center(
         child: new Text("Ceritanya ini splash screen"),
       ),

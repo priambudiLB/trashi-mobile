@@ -12,7 +12,9 @@ class OnBoardingNextButton extends StatelessWidget {
         builder: (contex, state) {
           return InkWell(
             onTap: () =>
-                context.read<OnBoardingBloc>().add(OnBoardingIndexIncrease()),
+                context
+                    .read<OnBoardingBloc>()
+                    .add(OnBoardingNavigateToHome()),
             child: Container(
               width: 286,
               height: 44,
