@@ -53,3 +53,23 @@ class OnBoarding with ChangeNotifier, DiagnosticableTreeMixin {
     properties.add(IntProperty('index', index));
   }
 }
+
+class Authentication with ChangeNotifier, DiagnosticableTreeMixin {
+  bool _isLogin = true;
+
+  bool get isLogin => _isLogin;
+
+  void setRegister() {
+    if (_isLogin) {
+      _isLogin = false;
+      notifyListeners();
+    }
+  }
+
+  void setLogin() {
+    if (!_isLogin) {
+      _isLogin = true;
+      notifyListeners();
+    }
+  }
+}

@@ -15,6 +15,7 @@ void main() {
       providers: [
         ChangeNotifierProvider(create: (_) => Counter()),
         ChangeNotifierProvider(create: (_) => OnBoarding()),
+        ChangeNotifierProvider(create: (_) => Authentication()),
       ],
       // child: const MyApp(),
       child: const TrashiApplication(),

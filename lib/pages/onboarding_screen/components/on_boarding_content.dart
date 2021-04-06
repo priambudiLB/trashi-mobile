@@ -51,7 +51,8 @@ class OnBoardingContent extends StatelessWidget {
               style: TextStyle(
                   fontWeight: FontWeight.w400,
                   fontSize: 14,
-                  color: Colors.white),
+                  color: Colors.white
+              ),
               textAlign: TextAlign.center,
             )
           ],
