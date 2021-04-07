@@ -29,7 +29,8 @@ class AuthenticationFormRegister extends StatelessWidget {
           errorText: "Format nama salah",
           isValid: true,
           onChanged: (text) {
-            print("First text field: $text");
+            context.read<Authentication>().setRegisterName(text);
+            print(context.read<Authentication>().registerName);
           },
         ),
         Container(
@@ -43,7 +44,8 @@ class AuthenticationFormRegister extends StatelessWidget {
           errorText: "Format email salah",
           isValid: true,
           onChanged: (text) {
-            print("First text field: $text");
+            context.read<Authentication>().setRegisterEmail(text);
+            print(context.read<Authentication>().registerEmail);
           },
         ),
         Container(
@@ -57,7 +59,8 @@ class AuthenticationFormRegister extends StatelessWidget {
           errorText: "Format telpon salah",
           isValid: true,
           onChanged: (text) {
-            print("First text field: $text");
+            context.read<Authentication>().setRegisterPhone(text);
+            print(context.read<Authentication>().registerPhone);
           },
         ),
         Container(
@@ -72,7 +75,8 @@ class AuthenticationFormRegister extends StatelessWidget {
           isValid: true,
           isPassword: true,
           onChanged: (text) {
-            print("First text field: $text");
+            context.read<Authentication>().setRegisterPassword(text);
+            print(context.read<Authentication>().registerPassword);
           },
         ),
         Padding(
@@ -101,7 +105,9 @@ class AuthenticationFormRegister extends StatelessWidget {
                 ),
               ),
               GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  print('register');
+                },
                 child: Container(
                     width: 40,
                     height: 40,
@@ -132,21 +138,22 @@ class AuthenticationFormLogin extends StatelessWidget {
     return Column(
       children: [
         AuthenticationInput(
-          widgetKey: "register-email",
+          widgetKey: "login-email",
           textInputType: TextInputType.emailAddress,
           svgImage: "assets/images/form-email.svg",
           hintText: "EMAIL",
           errorText: "Format email salah",
           isValid: true,
           onChanged: (text) {
-            print("First text field: $text");
+            context.read<Authentication>().setLoginEmail(text);
+            print(context.read<Authentication>().loginEmail);
           },
         ),
         Container(
           height: 8,
         ),
         AuthenticationInput(
-          widgetKey: "register-password",
+          widgetKey: "login-password",
           textInputType: TextInputType.visiblePassword,
           svgImage: "assets/images/form-password.svg",
           hintText: "PASSWORD",
@@ -154,7 +161,9 @@ class AuthenticationFormLogin extends StatelessWidget {
           isValid: true,
           isPassword: true,
           onChanged: (text) {
-            print("First text field: $text");
+            print(text);
+            context.read<Authentication>().setLoginPassword(text);
+            print(context.read<Authentication>().loginPassword);
           },
         ),
         Padding(
@@ -175,7 +184,10 @@ class AuthenticationFormLogin extends StatelessWidget {
                 ),
               ),
               GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  print('login');
+                  print(context.read<Authentication>().loginPassword);
+                },
                 child: Container(
                     width: 40,
                     height: 40,

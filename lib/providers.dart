@@ -54,10 +54,40 @@ class OnBoarding with ChangeNotifier, DiagnosticableTreeMixin {
   }
 }
 
+// class AuthenticationFormData {
+//   AuthenticationFormData({
+//     this.registerName,
+//     this.registerEmail,
+//     this.registerPhone,
+//     this.registerPassword,
+//     this.loginEmail,
+//     this.loginPassword,
+//   });
+//
+//   final String registerName;
+//   final String registerEmail;
+//   final String registerPhone;
+//   final String registerPassword;
+//   final String loginEmail;
+//   final String loginPassword;
+// }
+
 class Authentication with ChangeNotifier, DiagnosticableTreeMixin {
   bool _isLogin = true;
+  String _registerName = "";
+  String _registerEmail = "";
+  String _registerPhone = "";
+  String _registerPassword = "";
+  String _loginEmail = "";
+  String _loginPassword = "";
 
   bool get isLogin => _isLogin;
+  String get registerName => _registerName;
+  String get registerEmail => _registerEmail;
+  String get registerPhone => _registerPhone;
+  String get registerPassword => _registerPassword;
+  String get loginEmail => _loginEmail;
+  String get loginPassword => _loginPassword;
 
   void setRegister() {
     if (_isLogin) {
@@ -71,5 +101,35 @@ class Authentication with ChangeNotifier, DiagnosticableTreeMixin {
       _isLogin = true;
       notifyListeners();
     }
+  }
+
+  void setRegisterName(String newRegisterName) {
+    _registerName = newRegisterName;
+    notifyListeners();
+  }
+
+  void setRegisterEmail(String newRegisterEmail) {
+    _registerEmail = newRegisterEmail;
+    notifyListeners();
+  }
+
+  void setRegisterPhone(String newRegisterPhone) {
+    _registerPhone = newRegisterPhone;
+    notifyListeners();
+  }
+
+  void setRegisterPassword(String newRegisterPassword) {
+    _registerPassword = newRegisterPassword;
+    notifyListeners();
+  }
+
+  void setLoginEmail(String newLoginEmail) {
+    _loginEmail = newLoginEmail;
+    notifyListeners();
+  }
+
+  void setLoginPassword(String newLoginPassword) {
+    _loginPassword = newLoginPassword;
+    notifyListeners();
   }
 }

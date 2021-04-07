@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:provider/provider.dart';
-import 'package:trashi/providers.dart';
-import 'package:trashi/utils/commons.dart';
 
 class AuthenticationInput extends StatefulWidget {
   final String widgetKey;
