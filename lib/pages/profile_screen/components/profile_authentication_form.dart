@@ -24,7 +24,7 @@ class AuthenticationFormRegister extends StatelessWidget {
         AuthenticationInput(
           widgetKey: "register-name",
           textInputType: TextInputType.text,
-          svgImage: "assets/images/form-name.svg",
+          svgImage: "assets/images/ic-name.svg",
           hintText: "NAME",
           errorText: "Format nama salah",
           isValid: true,
@@ -39,7 +39,7 @@ class AuthenticationFormRegister extends StatelessWidget {
         AuthenticationInput(
           widgetKey: "register-email",
           textInputType: TextInputType.emailAddress,
-          svgImage: "assets/images/form-email.svg",
+          svgImage: "assets/images/ic-email.svg",
           hintText: "EMAIL",
           errorText: "Format email salah",
           isValid: true,
@@ -54,7 +54,7 @@ class AuthenticationFormRegister extends StatelessWidget {
         AuthenticationInput(
           widgetKey: "register-phone",
           textInputType: TextInputType.phone,
-          svgImage: "assets/images/form-phone.svg",
+          svgImage: "assets/images/ic-phone.svg",
           hintText: "PHONE NUMBER",
           errorText: "Format telpon salah",
           isValid: true,
@@ -69,7 +69,7 @@ class AuthenticationFormRegister extends StatelessWidget {
         AuthenticationInput(
           widgetKey: "register-password",
           textInputType: TextInputType.visiblePassword,
-          svgImage: "assets/images/form-password.svg",
+          svgImage: "assets/images/ic-password.svg",
           hintText: "PASSWORD",
           errorText: "Format password salah",
           isValid: true,
@@ -140,7 +140,7 @@ class AuthenticationFormLogin extends StatelessWidget {
         AuthenticationInput(
           widgetKey: "login-email",
           textInputType: TextInputType.emailAddress,
-          svgImage: "assets/images/form-email.svg",
+          svgImage: "assets/images/ic-email.svg",
           hintText: "EMAIL",
           errorText: "Format email salah",
           isValid: true,
@@ -155,7 +155,7 @@ class AuthenticationFormLogin extends StatelessWidget {
         AuthenticationInput(
           widgetKey: "login-password",
           textInputType: TextInputType.visiblePassword,
-          svgImage: "assets/images/form-password.svg",
+          svgImage: "assets/images/ic-password.svg",
           hintText: "PASSWORD",
           errorText: "Format password salah",
           isValid: true,
