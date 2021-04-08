@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:trashi/components/layout.dart';
+import 'package:trashi/pages/retribution_screen/components/past_payment.dart';
 import 'package:trashi/pages/retribution_screen/components/waiting_for_payment.dart';
 import 'package:trashi/utils/commons.dart';
 
@@ -34,7 +35,8 @@ class _RetributionScreenState extends State<RetributionScreen> {
       ),
       body: ListView(
         children: [
-          WaitingForPayment()
+          WaitingForPayment(),
+          PastPayment(),
         ],
       )
     );

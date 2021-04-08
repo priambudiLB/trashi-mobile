@@ -1,29 +1,50 @@
 import 'package:flutter/material.dart';
 import 'package:trashi/components/calendar_picker.dart';
+import 'package:trashi/components/retribution_payment_status.dart';
 import 'package:trashi/components/square_pagination_number.dart';
 import 'package:trashi/pages/retribution_screen/components/table_body.dart';
 import 'package:trashi/pages/retribution_screen/components/table_body_text.dart';
 import 'package:trashi/pages/retribution_screen/components/table_header.dart';
 import 'package:trashi/utils/commons.dart';
 
-class WaitingForPayment extends StatelessWidget {
-  const WaitingForPayment({
+class PastPayment extends StatelessWidget {
+  const PastPayment({
     Key key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    List<Map<String, dynamic>> waitingForPaymentData = [];
+    List<Map<String, dynamic>> pastPaymentData = [];
 
-    waitingForPaymentData.add({
-      'idTransaksi': 'RBS 00307',
-      'tarif': '50000',
-      'alamatRumah': 'Jl.Cipinang Elok 1 no 8',
+    pastPaymentData.add({
+      'idTransaksi': 'RBS 00306',
+      'approvedDate': '21 Des 2020',
+      'alamatRumah': 'Jl.Cipinang Elok 1 no 5',
+      'status': 1
     });
-    waitingForPaymentData.add({
+    pastPaymentData.add({
       'idTransaksi': 'RBS 00307',
-      'tarif': '50000',
+      'approvedDate': '22 Des 2020',
       'alamatRumah': 'Jl.Cipinang Elok 1 no 8',
+      'status': 0
+    });
+    pastPaymentData.add({
+      'idTransaksi': 'RBS 00308',
+      'approvedDate': '22 Des 2020',
+      'alamatRumah': 'Jl.Cipinang Elok 1 no 8',
+      'status': 0
+    });
+    pastPaymentData.add({
+      'idTransaksi': 'RBS 00309',
+      'approvedDate': '22 Des 2020',
+      'alamatRumah': 'Jl.Cipinang Elok 1 no 8',
+      'status': 1
+    });
+    pastPaymentData.add({
+      'idTransaksi': 'RBS 00310',
+      'approvedDate': '22 Des 2020',
+      'alamatRumah': 'Jl.Cipinang Elok 1 no 8',
+      'status': 1
     });
     return Container(
       child: Column(
@@ -32,7 +53,7 @@ class WaitingForPayment extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Waiting For Payment',
+                'Past Payment',
                 style: TextStyle(
                   fontFamily: "Poppins",
                   fontWeight: FontWeight.w500,
@@ -40,7 +61,6 @@ class WaitingForPayment extends StatelessWidget {
                   fontSize: 18,
                 ),
               ),
-              CalendarPicker()
             ],
           ),
           Container(
@@ -64,7 +84,7 @@ class WaitingForPayment extends StatelessWidget {
                     flex: 4,
                   ),
                   TableHeader(
-                    text: 'Tarif',
+                    text: 'Approval Date',
                     flex: 4,
                   ),
                   TableHeader(
@@ -72,7 +92,7 @@ class WaitingForPayment extends StatelessWidget {
                     flex: 6,
                   ),
                   TableHeader(
-                    text: 'Approval',
+                    text: 'Status',
                     flex: 4,
                   ),
                 ],
@@ -80,9 +100,9 @@ class WaitingForPayment extends StatelessWidget {
             )
           ),
           Column(
-            children: waitingForPaymentData.map(
+            children: pastPaymentData.map(
               (item) => TableBody(
-                index: waitingForPaymentData.indexOf(item),
+                index: pastPaymentData.indexOf(item),
                 items: [
                   Text(
                     item['idTransaksi'],
@@ -95,7 +115,7 @@ class WaitingForPayment extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    item['tarif'],
+                    item['approvedDate'],
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontFamily: "Poppins",
@@ -114,9 +134,8 @@ class WaitingForPayment extends StatelessWidget {
                       fontSize: 12,
                     ),
                   ),
-                  Image.asset(
-                    'assets/images/ic-approve.png',
-                    width: 25,
+                  RetributionPaymentStatus(
+                    statusCode: item['status'],
                   )
                 ],
               )
@@ -131,6 +150,11 @@ class WaitingForPayment extends StatelessWidget {
                   onTap: (){},
                   number: "1",
                   backgroundColor: hexToColor('#DFDFDF'),
+                ),
+                SquarePaginationNumber(
+                  onTap: (){},
+                  number: "2",
+                  backgroundColor: hexToColor('#FFFFFF'),
                 ),
               ],
             ),

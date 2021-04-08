@@ -5,6 +5,8 @@ import 'package:trashi/pages/retribution_screen/components/table_header.dart';
 import 'package:trashi/utils/commons.dart';
 
 class TableBody extends StatefulWidget {
+  final int index;
+  final List<Widget> items;
   final Widget idTransaksi;
   final Widget tarif;
   final Widget alamatRumah;
@@ -13,6 +15,8 @@ class TableBody extends StatefulWidget {
 
   const TableBody({
     Key key,
+    this.index,
+    this.items,
     this.idTransaksi,
     this.tarif,
     this.alamatRumah,
@@ -27,7 +31,7 @@ class _TableBody extends State<TableBody> {
   Widget build(BuildContext context) {
     return Container(
         decoration: BoxDecoration(
-          color: hexToColor('#DFDFDF'),
+          color: widget.index % 2 == 0 ? hexToColor('#DFDFDF') : hexToColor('#FFFFFF'),
         ),
         width: double.infinity,
         child: Padding(
@@ -35,22 +39,23 @@ class _TableBody extends State<TableBody> {
             vertical: 4,
           ),
           child: Row(
+            // children: widget.items,
             children: [
               TableBodyContent(
-                content: widget.idTransaksi,
-                flex: 4,
-              ),
-              TableBodyContent(
-                content: widget.tarif,
-                flex: 4,
-              ),
-              TableBodyContent(
-                content: widget.alamatRumah,
+                content: widget.items[0],
                 flex: 6,
               ),
               TableBodyContent(
-                content: widget.approval,
-                flex: 4,
+                content: widget.items[1],
+                flex: 6,
+              ),
+              TableBodyContent(
+                content: widget.items[2],
+                flex: 10,
+              ),
+              TableBodyContent(
+                content: widget.items[3],
+                flex: 6,
               ),
             ],
           ),

@@ -22,9 +22,12 @@ class _TableBodyContent extends State<TableBodyContent> {
         flex: widget.flex,
         fit: FlexFit.tight,
         child: Container(
-          child: Center(
-            child: widget.content
-          ),
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 6),
+            child: Center(
+                child: widget.content
+            ),
+          )
         )
     );
   }
