@@ -9,6 +9,7 @@ class HomeScreen extends StatefulWidget {
   static const String PATH = "home";
   final String latestNewsText = "Latest News";
   final double latestNewsFontSize = 20;
+  final double paddingTextBottom = 8;
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
@@ -26,6 +27,9 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: ListView(
         children: <Widget>[
+          Padding(
+            padding: EdgeInsets.only(bottom: widget.paddingTextBottom),
+          ),
           Text(
             widget.latestNewsText,
             style: TextStyle(
@@ -34,6 +38,9 @@ class _HomeScreenState extends State<HomeScreen> {
               fontWeight: FontWeight.w800,
               fontSize: widget.latestNewsFontSize,
             ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(bottom: widget.paddingTextBottom),
           ),
           NewsCardContainer(),
         ],
