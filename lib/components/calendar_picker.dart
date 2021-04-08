@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:trashi/providers.dart';
 import 'package:trashi/utils/commons.dart';
+import 'package:provider/provider.dart';
 
 class CalendarPicker extends StatefulWidget {
   const CalendarPicker({
@@ -15,7 +17,7 @@ class _CalendarPicker extends State<CalendarPicker> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-
+        context.read<RetributionPayment>().setPopupDateOpen(true);
       },
       child: Container(
           decoration: BoxDecoration(
@@ -33,7 +35,7 @@ class _CalendarPicker extends State<CalendarPicker> {
                 SvgPicture.asset('assets/images/ic-calendar.svg'),
                 Container(width: 4),
                 Text(
-                  'Mar, 2020',
+                  context.watch<RetributionPayment>().date,
                   style: TextStyle(
                     fontFamily: "Poppins",
                     fontWeight: FontWeight.w500,

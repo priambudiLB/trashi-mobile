@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, lines_longer_than_80_chars
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 
 /// Mix-in [DiagnosticableTreeMixin] to have access to [debugFillProperties] for the devtool
@@ -53,24 +54,6 @@ class OnBoarding with ChangeNotifier, DiagnosticableTreeMixin {
     properties.add(IntProperty('index', index));
   }
 }
-
-// class AuthenticationFormData {
-//   AuthenticationFormData({
-//     this.registerName,
-//     this.registerEmail,
-//     this.registerPhone,
-//     this.registerPassword,
-//     this.loginEmail,
-//     this.loginPassword,
-//   });
-//
-//   final String registerName;
-//   final String registerEmail;
-//   final String registerPhone;
-//   final String registerPassword;
-//   final String loginEmail;
-//   final String loginPassword;
-// }
 
 class Authentication with ChangeNotifier, DiagnosticableTreeMixin {
   bool _isLogin = true;
@@ -130,6 +113,38 @@ class Authentication with ChangeNotifier, DiagnosticableTreeMixin {
 
   void setLoginPassword(String newLoginPassword) {
     _loginPassword = newLoginPassword;
+    notifyListeners();
+  }
+}
+
+class RetributionPayment with ChangeNotifier, DiagnosticableTreeMixin {
+  bool _popupDateOpen = false;
+  String _chosenMonth = DateFormat('MMM').format(new DateTime.now());
+  String _chosenYear = DateFormat('y').format(new DateTime.now());
+  String _date = "${DateFormat('MMM').format(new DateTime.now())}, ${DateFormat('y').format(new DateTime.now())}";
+
+  bool get popupDateOpen => _popupDateOpen;
+  String get chosenMonth => _chosenMonth;
+  String get chosenYear => _chosenYear;
+  String get date => _date;
+
+  void setMonth(String newMonth) {
+    _chosenMonth = newMonth;
+    notifyListeners();
+  }
+
+  void setYear(String newYear) {
+    _chosenYear = newYear;
+    notifyListeners();
+  }
+
+  void setDate() {
+    _date = "$_chosenMonth, $_chosenYear";
+    notifyListeners();
+  }
+
+  void setPopupDateOpen(bool state) {
+    _popupDateOpen = state;
     notifyListeners();
   }
 }
