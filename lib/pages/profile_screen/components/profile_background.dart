@@ -13,6 +13,7 @@ class ProfileBackground extends StatelessWidget {
         SvgPicture.asset(
           "assets/images/profile-background.svg",
           semanticsLabel: "profile background",
+          width: MediaQuery.of(context).size.width,
         ),
         Positioned(
           right: 10,
