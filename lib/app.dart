@@ -3,6 +3,7 @@ import 'package:trashi/constants/strings.dart';
 import 'package:trashi/constants/theme.dart';
 import 'package:trashi/pages/home_screen/home_screen.dart';
 import 'package:trashi/pages/onboarding_screen/onboarding_screen_view.dart';
+import 'package:trashi/pages/retribution_screen/retribution_screen.dart';
 import 'package:trashi/pages/splash_screen/splash_screen.dart';
 
 class TrashiApplication extends StatelessWidget {
@@ -18,6 +19,7 @@ class TrashiApplication extends StatelessWidget {
         // TODO: Add more page and define its path here
         SplashScreen.PATH: (_) => SplashScreen(),
         OnboardingScreen.PATH: (_) => OnboardingScreen(),
+        RetributionScreen.PATH: (_) => RetributionScreen(),
         // HomeScreen.PATH: (_) => HomeScreen(),
       },
     );
