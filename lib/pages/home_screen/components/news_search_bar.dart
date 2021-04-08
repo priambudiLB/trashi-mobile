@@ -10,6 +10,7 @@ class NewsSearchBar extends StatefulWidget {
   final double magnifierImageWidthAndHeight = 20;
   final double worldImageLocationSquareSizeWidthAndHeight = 40;
   final String searchNewsHintText = "search news";
+  final double searchNewsHintFontSize = 10;
   final double textFieldWidth = 165;
   final double textFieldRightAndLeft = 10;
   final double textFieldAndRightImageDistance = 10;
@@ -53,6 +54,7 @@ class _NewsSearchBarState extends State<NewsSearchBar> {
                         hintStyle: TextStyle(
                           color: Colors.white,
                           fontFamily: "Poppins",
+                          fontSize: widget.searchNewsHintFontSize,
                         ),
                         contentPadding: EdgeInsets.only(
                             left: widget.textFieldRightAndLeft,
