@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:trashi/components/calendar_picker.dart';
-import 'package:trashi/utils/commons.dart';
 
 class TableHeader extends StatefulWidget {
   final String text;

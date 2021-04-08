@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:trashi/components/calendar_picker.dart';
 import 'package:trashi/pages/retribution_screen/components/table_body_text.dart';
-import 'package:trashi/pages/retribution_screen/components/table_header.dart';
 import 'package:trashi/utils/commons.dart';
 
 class TableBody extends StatefulWidget {
