@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:trashi/pages/profile_screen/components/profile_background.dart';
 import 'package:trashi/pages/profile_screen/components/profile_button.dart';
-import 'package:trashi/pages/profile_screen/components/profile_screen_auth.dart';
 import 'package:trashi/pages/profile_screen/components/profile_screen_authed_header.dart';
 import 'package:trashi/pages/profile_screen/components/profile_screen_menu.dart';
+import 'package:trashi/pages/retribution_screen/retribution_screen.dart';
 import 'package:trashi/utils/commons.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -67,7 +66,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ProfileButton(
                           text: "Pembayaran Retribusi",
                           onTap: () {
-                            print("Pembayaran Retribusi");
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => RetributionScreen()),
+                            );
                           },
                         ),
                         Container(
