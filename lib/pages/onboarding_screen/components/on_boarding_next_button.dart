@@ -24,7 +24,8 @@ class OnBoardingNextButton extends StatelessWidget {
                   color: Colors.black,
                   fontWeight: FontWeight.w600,
                   fontSize: 16),
-            )),
+            )
+        ),
         decoration: BoxDecoration(
             color: Colors.white,
             boxShadow: [

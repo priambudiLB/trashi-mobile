@@ -9,6 +9,8 @@
         android:name="io.flutter.app.FlutterApplication"
         android:label="TrasHI"
         android:icon="@mipmap/ic_launcher">
+        <meta-data android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyBRNc2ye4xX0bQ9m1lYBmM8URGWs9bxeBo"/>
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
