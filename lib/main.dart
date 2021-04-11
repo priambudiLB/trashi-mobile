@@ -17,6 +17,7 @@ void main() {
         ChangeNotifierProvider(create: (_) => OnBoarding()),
         ChangeNotifierProvider(create: (_) => Authentication()),
         ChangeNotifierProvider(create: (_) => RetributionPayment()),
+        ChangeNotifierProvider(create: (_) => UPST()),
       ],
       // child: const MyApp(),
       child: const TrashiApplication(),
