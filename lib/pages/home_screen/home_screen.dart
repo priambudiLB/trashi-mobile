@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:trashi/pages/home_screen/components/news_card_container.dart';
 import 'package:trashi/pages/home_screen/components/news_search_bar.dart';
-import 'package:trashi/pages/home_screen/components/news_card.dart';
+import 'package:trashi/pages/pool_detail_screen/pool_detail_screen.dart';
 import 'package:trashi/utils/commons.dart';
 import 'package:trashi/constants/colors.dart';
 
@@ -43,6 +43,17 @@ class _HomeScreenState extends State<HomeScreen> {
             padding: EdgeInsets.only(bottom: widget.paddingTextBottom),
           ),
           NewsCardContainer(),
+
+          // will be removed later yak
+          ElevatedButton(
+            onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => PoolDetailScreen(
+                        poolNumber: 20,
+                        region: "Cipinang Elok, Jakarta Timur"))),
+            child: Text("to news card"),
+          )
         ],
       ),
       backgroundColor: hexToColor(MAIN_COLOR),
