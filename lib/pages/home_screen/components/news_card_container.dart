@@ -51,12 +51,3 @@ class _NewsCardContainerState extends State<NewsCardContainer> {
     );
   }
 }
-
-
-// widget.newsCards
-//             .map((e) => new NewsCard(
-//                   title: e["title"],
-//                   source: e["source"],
-//                   imageURL: e["imageURL"],
-//                 ))
-//             .toList(),
