@@ -2,7 +2,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:trashi/constants/colors.dart';
+import 'package:trashi/providers.dart';
 import 'package:trashi/utils/commons.dart';
+import 'package:provider/provider.dart';
 
 class UPSTScreen extends StatefulWidget {
   static const String PATH = "home";
@@ -77,7 +79,7 @@ class GeneralInformationTrash extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Container(
-                        width: 150,
+                        width: 140,
                         padding: EdgeInsets.only(
                             top: 4, bottom: 4, left: 12, right: 12),
                         decoration: BoxDecoration(
@@ -86,7 +88,11 @@ class GeneralInformationTrash extends StatelessWidget {
                         child: Column(
                           children: [
                             Text(
-                              "2",
+                              context
+                                  .watch<UPST>()
+                                  .listUpstWithGarbage
+                                  .length
+                                  .toString(),
                               style: TextStyle(
                                   fontSize: 20,
                                   fontWeight: FontWeight.w700,
@@ -101,12 +107,54 @@ class GeneralInformationTrash extends StatelessWidget {
                             ),
                             Align(
                                 alignment: Alignment.centerLeft,
-                                child: Text("data"))
+                                child: context
+                                            .watch<UPST>()
+                                            .listUpstWithGarbage
+                                            .length ==
+                                        0
+                                    ? Center(
+                                        child: Text("Tidak ada data"),
+                                      )
+                                    : Column(
+                                        children: List.generate(
+                                            context
+                                                .watch<UPST>()
+                                                .listUpstWithGarbage
+                                                .length,
+                                            (index) => Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          top: 8.0),
+                                                  child: Row(
+                                                    children: [
+                                                      Container(
+                                                          margin:
+                                                              EdgeInsets.only(
+                                                                  right: 7),
+                                                          height: 12,
+                                                          width: 12,
+                                                          decoration: BoxDecoration(
+                                                              color: hexToColor(
+                                                                  COLOR_RED),
+                                                              shape: BoxShape
+                                                                  .circle)),
+                                                      Text(
+                                                        context
+                                                                .watch<UPST>()
+                                                                .listUpstWithGarbage[
+                                                            index],
+                                                        style: TextStyle(
+                                                            fontSize: 12),
+                                                      )
+                                                    ],
+                                                  ),
+                                                )),
+                                      ))
                           ],
                         ),
                       ),
                       Container(
-                        width: 150,
+                        width: 140,
                         padding: EdgeInsets.only(
                             top: 4, bottom: 4, left: 12, right: 12),
                         decoration: BoxDecoration(
@@ -115,7 +163,11 @@ class GeneralInformationTrash extends StatelessWidget {
                         child: Column(
                           children: [
                             Text(
-                              "2",
+                              context
+                                  .watch<UPST>()
+                                  .listUpstWithHighEmission
+                                  .length
+                                  .toString(),
                               style: TextStyle(
                                   fontSize: 20,
                                   fontWeight: FontWeight.w700,
@@ -127,7 +179,52 @@ class GeneralInformationTrash extends StatelessWidget {
                                   fontSize: 12,
                                   fontWeight: FontWeight.w500,
                                   color: Colors.black),
-                            )
+                            ),
+                            Align(
+                                alignment: Alignment.centerLeft,
+                                child: context
+                                            .watch<UPST>()
+                                            .listUpstWithGarbage
+                                            .length ==
+                                        0
+                                    ? Center(
+                                        child: Text("Tidak ada data"),
+                                      )
+                                    : Column(
+                                        children: List.generate(
+                                            context
+                                                .watch<UPST>()
+                                                .listUpstWithHighEmission
+                                                .length,
+                                            (index) => Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          top: 8.0),
+                                                  child: Row(
+                                                    children: [
+                                                      Container(
+                                                          margin:
+                                                              EdgeInsets.only(
+                                                                  right: 7),
+                                                          height: 12,
+                                                          width: 12,
+                                                          decoration: BoxDecoration(
+                                                              color: hexToColor(
+                                                                  COLOR_RED),
+                                                              shape: BoxShape
+                                                                  .circle)),
+                                                      Text(
+                                                        context
+                                                                .watch<UPST>()
+                                                                .listUpstWithHighEmission[
+                                                            index],
+                                                        style: TextStyle(
+                                                            fontSize: 12),
+                                                      )
+                                                    ],
+                                                  ),
+                                                )),
+                                      ))
                           ],
                         ),
                       ),
