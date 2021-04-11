@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:trashi/utils/commons.dart';
 
-Text BuildTitleText(String text) {
+Text buildTitleText(String text, {String colorInHex = "#FBD1A2"}) {
   return Text(
     text,
     textAlign: TextAlign.end,
     style: TextStyle(
       fontFamily: "Poppins",
       fontWeight: FontWeight.w700,
-      color: hexToColor('#FBD1A2'),
+      color: hexToColor(colorInHex),
       fontSize: 24,
       shadows: <Shadow>[
         Shadow(
@@ -21,14 +21,14 @@ Text BuildTitleText(String text) {
   );
 }
 
-Text BuildSubtitleText(String text) {
+Text buildSubtitleText(String text, {String colorInHex = "#C4C4C4"}) {
   return Text(
     text,
     textAlign: TextAlign.end,
     style: TextStyle(
       fontFamily: "Poppins",
       fontWeight: FontWeight.w600,
-      color: hexToColor('#C4C4C4'),
+      color: hexToColor(colorInHex),
       fontSize: 14,
       shadows: <Shadow>[
         Shadow(
