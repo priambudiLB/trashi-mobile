@@ -3,7 +3,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-
 /// Mix-in [DiagnosticableTreeMixin] to have access to [debugFillProperties] for the devtool
 // ignore: prefer_mixin
 class Counter with ChangeNotifier, DiagnosticableTreeMixin {
@@ -121,7 +120,8 @@ class RetributionPayment with ChangeNotifier, DiagnosticableTreeMixin {
   bool _popupDateOpen = false;
   String _chosenMonth = DateFormat('MMM').format(new DateTime.now());
   String _chosenYear = DateFormat('y').format(new DateTime.now());
-  String _date = "${DateFormat('MMM').format(new DateTime.now())}, ${DateFormat('y').format(new DateTime.now())}";
+  String _date =
+      "${DateFormat('MMM').format(new DateTime.now())}, ${DateFormat('y').format(new DateTime.now())}";
 
   bool get popupDateOpen => _popupDateOpen;
   String get chosenMonth => _chosenMonth;
@@ -145,6 +145,42 @@ class RetributionPayment with ChangeNotifier, DiagnosticableTreeMixin {
 
   void setPopupDateOpen(bool state) {
     _popupDateOpen = state;
+    notifyListeners();
+  }
+}
+
+class UPST with ChangeNotifier, DiagnosticableTreeMixin {
+  Map<String, dynamic> _selectedArea = {};
+  Map<String, dynamic> _tpstSelected;
+  List<dynamic> _listUpstWithGarbage = ["UPST 5/Pool17", "UPST 5/Pool17"];
+  List<dynamic> _listUpstWithHighEmission = [
+    "UPST 5/Pool17",
+    "UPST 5/Pool17",
+    "UPST 5/Pool17"
+  ];
+
+  Map<String, dynamic> get selectedArea => _selectedArea;
+  Map<String, dynamic> get tpstSelected => _tpstSelected;
+  List<dynamic> get listUpstWithGarbage => _listUpstWithGarbage;
+  List<dynamic> get listUpstWithHighEmission => _listUpstWithHighEmission;
+
+  void setSelectedArea(Map<String, dynamic> newSelectedArea) {
+    _selectedArea = newSelectedArea;
+    notifyListeners();
+  }
+
+  void setTpstSelected(Map<String, dynamic> newTpst) {
+    _tpstSelected = newTpst;
+    notifyListeners();
+  }
+
+  void setListUpstWithGarbage(List<dynamic> newListUpstWithGarbage) {
+    _listUpstWithGarbage = newListUpstWithGarbage;
+    notifyListeners();
+  }
+
+  void setListUpstWithHighEmission(List<dynamic> newListUpstWithHighEmission) {
+    _listUpstWithHighEmission = newListUpstWithHighEmission;
     notifyListeners();
   }
 }
