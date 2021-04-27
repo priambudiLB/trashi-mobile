@@ -77,6 +77,18 @@ flutter:
           weight: 700
         - asset: assets/fonts/Poppins-Bold.ttf
           weight: 800
+
+    - family: Nunito
+      fonts:
+        - asset: assets/fonts/Nunito-Regular.ttf
+          weight: 500
+        - asset: assets/fonts/Nunito-Black.ttf
+          weight: 900
+    - family: Avenir
+      fonts:
+        - asset: assets/fonts/Avenir-Regular.ttf
+        - asset: assets/fonts/Avenir-Black.ttf
+          weight: 900
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
