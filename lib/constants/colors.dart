@@ -1,6 +1,6 @@
 // Store all color codes from Figma here
 // Format: #<color hex>
-const String MAIN_COLOR = "#509761";
+const String MAIN_COLOR = "#32A37F";
 const String COLOR_YELLOW = "#FFC845";
 const String COLOR_RED = "#D8224D";
 const String COLOR_WHITE = "#FFFFFF";

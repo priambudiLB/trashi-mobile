@@ -4,7 +4,7 @@ import 'package:trashi/utils/commons.dart';
 
 final ThemeData modiAppDefaultTheme = ThemeData(
   brightness: Brightness.light,
-  fontFamily: 'Inter',
+  fontFamily: 'Avenir',
   primaryColor: hexToColor(MAIN_COLOR),
   accentColor: hexToColor(MAIN_COLOR),
 );
