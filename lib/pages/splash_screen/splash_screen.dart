@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:trashi/pages/onboarding_redesign_screen/on_boarding_screen_view.dart';
 // import 'package:trashi/pages/home_screen/home_screen.dart';
 // import 'package:trashi/pages/navbar_screen/default_screen.dart';
-import 'package:trashi/pages/onboarding_screen/onboarding_screen_view.dart';
 import 'package:trashi/pages/splash_screen/splash_screen_view.dart';
 
 // class SplashScreen extends StatefulWidget {
@@ -68,7 +68,8 @@ class SplashScreen extends StatelessWidget {
         new Duration(
           seconds: SplashScreen.SPLASH_SCREEN_TIMEOUT_IN_SEC,
         ), () {
-      if (false) { // state.isUserAccessTokenExist
+      if (false) {
+        // state.isUserAccessTokenExist
         // User Access Token exist, user is already logged in.
         // Move into home page.
         // Navigator.of(context)
@@ -80,8 +81,6 @@ class SplashScreen extends StatelessWidget {
             .pushNamedAndRemoveUntil(OnboardingScreen.PATH, (route) => false);
       }
     });
-    return Scaffold(
-      body: SplashScreenView()
-    );
+    return Scaffold(body: SplashScreenView());
   }
 }
