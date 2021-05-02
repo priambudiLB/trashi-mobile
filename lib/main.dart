@@ -18,6 +18,7 @@ void main() {
         ChangeNotifierProvider(create: (_) => Authentication()),
         ChangeNotifierProvider(create: (_) => RetributionPayment()),
         ChangeNotifierProvider(create: (_) => UPST()),
+        ChangeNotifierProvider(create: (_) => OTP()),
       ],
       // child: const MyApp(),
       child: const TrashiApplication(),
