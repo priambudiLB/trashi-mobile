@@ -3,6 +3,8 @@ import 'package:trashi/components/layout_redesign.dart';
 import 'package:trashi/constants/colors.dart';
 import 'package:trashi/utils/commons.dart';
 
+import 'components/account_type_checkbox.dart';
+
 class AccountTypeSelectionScreen extends StatefulWidget {
   static const String PATH = "accountTypeSelection";
 
@@ -49,7 +51,8 @@ class _AccountTypeSelectionScreenState
     });
   }
 
-  List<CheckboxListTile> getAccountTypeCheckboxes() {
+  // CURRENTLY NOT BEING USED. KEEPING IT JUST IN CASE
+  List<CheckboxListTile> getCheckboxes() {
     List<CheckboxListTile> checkboxes = [];
     for (var item in choices) {
       checkboxes.add(
@@ -69,18 +72,44 @@ class _AccountTypeSelectionScreenState
     return checkboxes;
   }
 
+  List<AccountTypeCheckbox> getAccountTypeCheckboxes() {
+    List<AccountTypeCheckbox> checkboxes = [];
+    for (var item in choices) {
+      checkboxes.add(
+        AccountTypeCheckbox(
+          label: item.text,
+          checkBox: Checkbox(
+            value: item.value,
+            onChanged: (bool value) {
+              _choose(item);
+            },
+            checkColor: hexToColor(MAIN_COLOR),
+            activeColor: Colors.white,
+          ),
+        ),
+      );
+    }
+    return checkboxes;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Layout(
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            "Pilih Tipe Akun",
-            style: TextStyle(
-              fontWeight: FontWeight.w500,
-              fontSize: 16,
+          Padding(
+            padding: EdgeInsets.all(2),
+            child: Text(
+              "Pilih Tipe Akun",
+              style: TextStyle(
+                fontWeight: FontWeight.w500,
+                fontSize: 16,
+              ),
             ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(bottom: 24),
           ),
           Container(
             child: Column(
