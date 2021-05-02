@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:trashi/components/button.dart';
 import 'package:trashi/constants/colors.dart';
+import 'package:trashi/pages/registration_screen/account_type_selection_screen.dart';
 import 'package:trashi/utils/commons.dart';
 
 class OnBoardingBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     onGetStartedPressed() {
-      // TODO
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => AccountTypeSelectionScreen()));
     }
 
     onLoginButtonPressed() {
