@@ -192,6 +192,7 @@ class OTP with ChangeNotifier, DiagnosticableTreeMixin {
   String _otp3 = "";
   String _otp4 = "";
   String _account = "";
+  bool _popUpSuccessOpen = false;
   Verification _verificationOption = Verification.email;
 
   String get otp1 => _otp1;
@@ -200,6 +201,7 @@ class OTP with ChangeNotifier, DiagnosticableTreeMixin {
   String get otp4 => _otp4;
   String get otpComplete => _otp1 + _otp2 + _otp3 + _otp4;
   String get account => _account;
+  bool get popUpSuccessOpen => _popUpSuccessOpen;
   Verification get verificationOption => _verificationOption;
 
   void setOtp1(String newValue) {
@@ -227,6 +229,11 @@ class OTP with ChangeNotifier, DiagnosticableTreeMixin {
     notifyListeners();
   }
 
+  void setPopUpSuccessOpen(bool state) {
+    _popUpSuccessOpen = state;
+    notifyListeners();
+  }
+
   void setVerificationOption(Verification verification) {
     _verificationOption = verification;
     notifyListeners();
@@ -245,5 +252,6 @@ class OTP with ChangeNotifier, DiagnosticableTreeMixin {
 
   void verify() {
     //TODO
+    setPopUpSuccessOpen(true);
   }
 }

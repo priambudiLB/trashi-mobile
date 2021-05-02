@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:trashi/pages/confirmation_otp_screen/components/confirmation_otp_body.dart';
 import 'package:provider/provider.dart';
+import 'package:trashi/pages/confirmation_otp_screen/components/pop_up_success.dart';
 import 'package:trashi/providers.dart';
 import 'package:trashi/verification.dart';
 
@@ -29,16 +30,25 @@ class _ConfirmationOTPScreenState extends State<ConfirmationOTPScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        backgroundColor: Colors.white,
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back, color: Colors.black),
-            onPressed: () => Navigator.of(context).pop(),
-          ),
-          elevation: 0,
-        ),
-        body: ConfirmationOTPBody());
+    return Container(
+      height: double.infinity,
+      width: double.infinity,
+      child: Stack(
+        children: [
+          Scaffold(
+              backgroundColor: Colors.white,
+              appBar: AppBar(
+                backgroundColor: Colors.white,
+                leading: IconButton(
+                  icon: Icon(Icons.arrow_back, color: Colors.black),
+                  onPressed: () => Navigator.of(context).pop(),
+                ),
+                elevation: 0,
+              ),
+              body: ConfirmationOTPBody()),
+          PopUpSuccess()
+        ],
+      ),
+    );
   }
 }
