@@ -1,0 +1,1 @@
+enum Verification { email, phone }

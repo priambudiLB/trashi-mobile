@@ -2,6 +2,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:trashi/verification.dart';
 
 /// Mix-in [DiagnosticableTreeMixin] to have access to [debugFillProperties] for the devtool
 // ignore: prefer_mixin
@@ -182,5 +183,75 @@ class UPST with ChangeNotifier, DiagnosticableTreeMixin {
   void setListUpstWithHighEmission(List<dynamic> newListUpstWithHighEmission) {
     _listUpstWithHighEmission = newListUpstWithHighEmission;
     notifyListeners();
+  }
+}
+
+class OTP with ChangeNotifier, DiagnosticableTreeMixin {
+  String _otp1 = "";
+  String _otp2 = "";
+  String _otp3 = "";
+  String _otp4 = "";
+  String _account = "";
+  bool _popUpSuccessOpen = false;
+  Verification _verificationOption = Verification.email;
+
+  String get otp1 => _otp1;
+  String get otp2 => _otp2;
+  String get otp3 => _otp3;
+  String get otp4 => _otp4;
+  String get otpComplete => _otp1 + _otp2 + _otp3 + _otp4;
+  String get account => _account;
+  bool get popUpSuccessOpen => _popUpSuccessOpen;
+  Verification get verificationOption => _verificationOption;
+
+  void setOtp1(String newValue) {
+    _otp1 = newValue;
+    notifyListeners();
+  }
+
+  void setOtp2(String newValue) {
+    _otp2 = newValue;
+    notifyListeners();
+  }
+
+  void setOtp3(String newValue) {
+    _otp3 = newValue;
+    notifyListeners();
+  }
+
+  void setOtp4(String newValue) {
+    _otp4 = newValue;
+    notifyListeners();
+  }
+
+  void setAccount(String newValue) {
+    _account = newValue;
+    notifyListeners();
+  }
+
+  void setPopUpSuccessOpen(bool state) {
+    _popUpSuccessOpen = state;
+    notifyListeners();
+  }
+
+  void setVerificationOption(Verification verification) {
+    _verificationOption = verification;
+    notifyListeners();
+  }
+
+  void sendVerificationCode() {
+    switch (_verificationOption) {
+      case Verification.email:
+        //TODO
+        break;
+      case Verification.phone:
+        //TODO
+        break;
+    }
+  }
+
+  void verify() {
+    //TODO
+    setPopUpSuccessOpen(true);
   }
 }
