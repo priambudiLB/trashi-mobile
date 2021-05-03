@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:trashi/constants/colors.dart';
+import 'package:trashi/utils/commons.dart';
 
 class AccountTypeCheckbox extends StatelessWidget {
   final String label;
@@ -18,10 +20,20 @@ class AccountTypeCheckbox extends StatelessWidget {
           children: [
             Padding(
               padding: EdgeInsets.fromLTRB(0, 0, 12, 0),
-              child: SizedBox(
-                height: 24.0,
-                width: 24.0,
-                child: checkBox,
+              child: Container(
+                width: 24,
+                height: 24,
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: checkBox.value
+                        ? hexToColor(MAIN_COLOR)
+                        : hexToColor(COLOR_CHECKBOX_INACTIVE),
+                  ),
+                ),
+                child: Theme(
+                  data: ThemeData(unselectedWidgetColor: Colors.white),
+                  child: checkBox,
+                ),
               ),
             ),
             Text(label),

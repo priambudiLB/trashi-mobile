@@ -98,14 +98,11 @@ class _AccountTypeSelectionScreenState
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
-            padding: EdgeInsets.all(2),
-            child: Text(
-              "Pilih Tipe Akun",
-              style: TextStyle(
-                fontWeight: FontWeight.w500,
-                fontSize: 16,
-              ),
+          Text(
+            "Pilih Tipe Akun",
+            style: TextStyle(
+              fontWeight: FontWeight.w500,
+              fontSize: 16,
             ),
           ),
           Padding(
