@@ -11,6 +11,7 @@ const String COLOR_RED_NEGATIVE = "#F14363";
 const String COLOR_MOOD_YELLOW = "#FFA843";
 const String COLOR_MOOD_PINK = "#FD88A4";
 const String COLOR_INACTIVE_GREY = "#C4C4C4";
+const String COLOR_CHECKBOX_INACTIVE = "#CBCBCB";
 
 
 // TODO: Store more color codes here

@@ -30,6 +30,7 @@ class _LayoutState extends State<Layout> {
                 color: Colors.black,
               ),
               onPressed: () => Navigator.of(context).pop()),
+          elevation: 0,
         ),
         backgroundColor: Colors.white,
         body: Padding(
