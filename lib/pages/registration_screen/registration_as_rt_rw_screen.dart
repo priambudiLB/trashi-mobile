@@ -1,6 +1,10 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:trashi/components/button.dart';
 import 'package:trashi/components/layout_redesign.dart';
+import 'package:trashi/constants/colors.dart';
+import 'package:trashi/utils/commons.dart';
 
 class RegistrationAsRTRWScreen extends StatefulWidget {
   static const String PATH = "registrationAsRTRW";
@@ -42,6 +46,36 @@ class _RegistrationAsRTRWScreenState extends State<RegistrationAsRTRWScreen> {
           padding: EdgeInsets.only(bottom: 12),
         ),
       ],
+    );
+  }
+
+  void _onTapUploadDocument() async {
+    FilePicker.platform.pickFiles();
+  }
+
+  _buildDocumentButton(String label) {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.all(
+          Radius.circular(8),
+        ),
+        border: Border.all(
+          color: hexToColor(MAIN_COLOR),
+        ),
+      ),
+      child: ButtonTheme(
+        minWidth: double.infinity,
+        height: 48,
+        child: MaterialButton(
+          onPressed: () => _onTapUploadDocument(),
+          child: Text(
+            label,
+            style: TextStyle(
+              color: hexToColor(MAIN_COLOR),
+            ),
+          ),
+        ),
+      ),
     );
   }
 
@@ -90,6 +124,44 @@ class _RegistrationAsRTRWScreenState extends State<RegistrationAsRTRWScreen> {
                     TextInputType.text,
                     "Confirm Password",
                     obscureText: true,
+                  ),
+                ],
+              ),
+            ),
+            Divider(
+              thickness: 1,
+              color: hexToColor(COLOR_INACTIVE_GREY),
+            ),
+            Padding(
+              padding: EdgeInsets.only(bottom: 24),
+            ),
+            Text(
+              "Kelengkapan Dokumen",
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w800,
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(bottom: 16),
+            ),
+            Container(
+              child: Column(
+                children: [
+                  _buildDocumentButton(
+                    "Upload foto KTP",
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(bottom: 12),
+                  ),
+                  _buildDocumentButton(
+                    "Upload foto KK",
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(bottom: 12),
+                  ),
+                  _buildDocumentButton(
+                    "Upload foto bersama KTP dan KK",
                   ),
                 ],
               ),
