@@ -15,6 +15,35 @@ class RegistrationAsRTRWScreen extends StatefulWidget {
 }
 
 class _RegistrationAsRTRWScreenState extends State<RegistrationAsRTRWScreen> {
+  static const String ktpLabel = "Upload foto KTP";
+  static const String kkLabel = "Upload foto KK";
+  static const String withKKAndKTPLabel = "Upload foto bersama KTP dan KK";
+  static const String officialDocumentLabel = "Upload foto dokumen resmi";
+  static const String withOfficialDocumentLabel =
+      "Upload foto bersama dokumen resmi";
+  static const String businessLicenseDocumentLabel = "Upload foto izin usaha";
+  static const String withBusinessLicenseDocumentLabel =
+      "Upload foto bersama izin usaha";
+
+  var _requiredDocumentLabelsRTRW = [
+    ktpLabel,
+    kkLabel,
+    withKKAndKTPLabel,
+  ];
+  var _requiredDocumentLabelsPublic = [
+    ktpLabel,
+    kkLabel,
+    withKKAndKTPLabel,
+  ];
+  var _requiredDocumentLabelsGovernment = [
+    officialDocumentLabel,
+    withOfficialDocumentLabel,
+  ];
+  var _requiredDocumentLabelsCompany = [
+    businessLicenseDocumentLabel,
+    withBusinessLicenseDocumentLabel,
+  ];
+
   _buildTextFormField(TextInputType keyboardType, String label,
       {bool obscureText = false}) {
     TextFormField textFormField = TextFormField(
@@ -76,6 +105,55 @@ class _RegistrationAsRTRWScreenState extends State<RegistrationAsRTRWScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  _buildRegisterButton() {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.all(
+          Radius.circular(8),
+        ),
+        color: hexToColor(MAIN_COLOR),
+      ),
+      child: ButtonTheme(
+        minWidth: double.infinity,
+        height: 48,
+        child: MaterialButton(
+          onPressed: () {},
+          child: Text(
+            "Registrasi",
+            style: TextStyle(
+              color: Colors.white,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  _buildRTRWDocumentButtons() {
+    return Column(
+      children: [
+        _buildDocumentButton(
+          "Upload foto KTP",
+        ),
+        Padding(
+          padding: EdgeInsets.only(bottom: 12),
+        ),
+        _buildDocumentButton(
+          "Upload foto KK",
+        ),
+        Padding(
+          padding: EdgeInsets.only(bottom: 12),
+        ),
+        _buildDocumentButton(
+          "Upload foto bersama KTP dan KK",
+        ),
+        Padding(
+          padding: EdgeInsets.only(bottom: 24),
+        ),
+      ],
     );
   }
 
@@ -148,21 +226,8 @@ class _RegistrationAsRTRWScreenState extends State<RegistrationAsRTRWScreen> {
             Container(
               child: Column(
                 children: [
-                  _buildDocumentButton(
-                    "Upload foto KTP",
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(bottom: 12),
-                  ),
-                  _buildDocumentButton(
-                    "Upload foto KK",
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(bottom: 12),
-                  ),
-                  _buildDocumentButton(
-                    "Upload foto bersama KTP dan KK",
-                  ),
+                  _buildRTRWDocumentButtons(),
+                  _buildRegisterButton(),
                 ],
               ),
             )
