@@ -19,6 +19,7 @@ void main() {
         ChangeNotifierProvider(create: (_) => RetributionPayment()),
         ChangeNotifierProvider(create: (_) => UPST()),
         ChangeNotifierProvider(create: (_) => OTP()),
+        ChangeNotifierProvider(create: (_) => SubmitDocumentVerification())
       ],
       // child: const MyApp(),
       child: const TrashiApplication(),
