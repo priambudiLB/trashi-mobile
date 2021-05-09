@@ -89,8 +89,8 @@ flutter:
           weight: 900
     - family: Avenir
       fonts:
-        - asset: assets/fonts/Avenir-Regular.ttf
-        - asset: assets/fonts/Avenir-Black.ttf
+        - asset: assets/fonts/AvenirLTStd-Book.otf
+        - asset: assets/fonts/AvenirLTStd-Black.otf
           weight: 900
   #
   # For details regarding fonts from package dependencies,
