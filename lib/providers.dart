@@ -286,16 +286,15 @@ class SubmitDocumentVerification with ChangeNotifier, DiagnosticableTreeMixin {
 
   void fetchData() async {
     setStatusFetchData(FormzStatus.submissionInProgress);
-
+    print("masuk");
     Future.delayed(Duration(seconds: 1), () {
       setGeneralStatus(StatusUpload.NOT_UPLOADED);
       setKtpStatus(StatusUpload.FAILED);
       setKkStatus(StatusUpload.FAILED);
       setKtpAndKkStatus(StatusUpload.FAILED);
+      setStatusFetchData(FormzStatus.submissionSuccess);
     });
     // TODO fetch data from API
-
-    setStatusFetchData(FormzStatus.submissionSuccess);
   }
 
   void setGeneralStatus(StatusUpload newStatus) {
