@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:trashi/components/button.dart';
 import 'package:trashi/components/layout_redesign.dart';
+import 'package:trashi/constants/account_types.dart';
 import 'package:trashi/constants/colors.dart';
-import 'package:trashi/pages/registration_screen/registration_as_rt_rw_screen.dart';
+import 'package:trashi/pages/registration_screen/registration_screen.dart';
 import 'package:trashi/utils/commons.dart';
 
 import 'components/account_type_checkbox.dart';
@@ -17,11 +18,6 @@ class AccountTypeSelectionScreen extends StatefulWidget {
 
 class _AccountTypeSelectionScreenState
     extends State<AccountTypeSelectionScreen> {
-  static const String accountTypeGovernment = "Pemerintah";
-  static const String accountTypeCompany = "Perusahaan";
-  static const String accountTypeRTRW = "RT/RW";
-  static const String accountTypePublic = "Masyarakat Umum";
-
   String currentlyChecked = "";
 
   final choices = [
@@ -115,13 +111,6 @@ class _AccountTypeSelectionScreenState
               children: getAccountTypeCheckboxes(),
             ),
           ),
-          Button(
-            onTap: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => RegistrationAsRTRWScreen())),
-            title: "Form",
-          )
         ],
       ),
     );
