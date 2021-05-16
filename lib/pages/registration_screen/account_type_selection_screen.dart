@@ -39,6 +39,22 @@ class _AccountTypeSelectionScreenState
     });
   }
 
+  _openRegistrationForm(CheckboxConfig config) {
+    Future.delayed(
+      Duration(milliseconds: 500),
+      () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => RegistrationScreen(
+              accountType: config.text,
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   _changeValue(CheckboxConfig config) {
     bool newValue = !config.value;
     config.value = newValue;
@@ -47,6 +63,10 @@ class _AccountTypeSelectionScreenState
         element.value = !newValue;
       }
     });
+
+    if (newValue) {
+      _openRegistrationForm(config);
+    }
   }
 
   // CURRENTLY NOT BEING USED. KEEPING IT JUST IN CASE
