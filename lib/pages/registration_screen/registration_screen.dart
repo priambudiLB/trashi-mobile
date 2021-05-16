@@ -153,7 +153,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    "Registrasi sebagai RT/RW",
+                    "Registrasi sebagai ${widget.accountType}",
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.w800,
