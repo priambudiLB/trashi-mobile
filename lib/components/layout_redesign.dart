@@ -22,20 +22,29 @@ class _LayoutState extends State<Layout> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          leading: IconButton(
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(widget.height),
+        child: SafeArea(
+          child: AppBar(
+            elevation: 0,
+            centerTitle: true,
+            title: widget.title,
+            backgroundColor: Colors.white,
+            leading: IconButton(
               icon: Icon(
                 Icons.arrow_back,
                 color: Colors.black,
               ),
-              onPressed: () => Navigator.of(context).pop()),
-          elevation: 0,
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+          ),
         ),
-        backgroundColor: Colors.white,
-        body: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 24),
-          child: widget.body,
-        ));
+      ),
+      backgroundColor: Colors.white,
+      body: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 24),
+        child: widget.body,
+      ),
+    );
   }
 }
