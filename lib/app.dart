@@ -19,7 +19,7 @@ class TrashiApplication extends StatelessWidget {
     return MaterialApp(
       theme: defaultTheme,
       title: APP_NAME,
-      initialRoute: AcceptTrashCollectionRequestScreen.PATH,
+      initialRoute: SplashScreen.PATH,
       routes: <String, WidgetBuilder>{
         // TODO: Add more page and define its path here
         SplashScreen.PATH: (_) => SplashScreen(),
@@ -32,8 +32,6 @@ class TrashiApplication extends StatelessWidget {
         ProfileExample.PATH: (_) => ProfileExample(),
         RegistrationDocumentConfirmation.PATH: (_) =>
             RegistrationDocumentConfirmation(),
-        AcceptTrashCollectionRequestScreen.PATH: (_) =>
-            AcceptTrashCollectionRequestScreen()
         // HomeScreen.PATH: (_) => HomeScreen(),
       },
     );
