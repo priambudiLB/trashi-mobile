@@ -4,6 +4,8 @@ import 'package:trashi/components/layout_redesign.dart';
 import 'package:trashi/constants/colors.dart';
 import 'package:trashi/utils/commons.dart';
 
+import 'components/trash_collection_requests.dart';
+
 class AcceptTrashCollectionRequestScreen extends StatefulWidget {
   static const String PATH = "acceptTrashCollecting";
 
@@ -117,6 +119,27 @@ class _AcceptTrashCollectionRequestScreenState
     );
   }
 
+  Widget _buildNowButton() {
+    return Container(
+      padding: EdgeInsets.fromLTRB(23, 11, 23, 8),
+      foregroundDecoration: BoxDecoration(
+        border: Border(
+          bottom: BorderSide(
+            color: hexToColor(MAIN_COLOR),
+            width: 2,
+          ),
+        ),
+      ),
+      child: Text(
+        "Sekarang",
+        style: TextStyle(
+          fontSize: 14,
+          fontWeight: FontWeight.w400,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Layout(
@@ -142,7 +165,13 @@ class _AcceptTrashCollectionRequestScreenState
               _buildChooseCalendarButton(),
               _buildFilterButton(),
             ],
-          )
+          ),
+          Padding(
+            padding: EdgeInsets.only(
+              bottom: 21,
+            ),
+          ),
+          TrashCollectionRequests(),
         ],
       ),
     );
