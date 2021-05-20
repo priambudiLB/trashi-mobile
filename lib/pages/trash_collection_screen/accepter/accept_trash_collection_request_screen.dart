@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:trashi/components/layout_redesign.dart';
 import 'package:trashi/constants/colors.dart';
 import 'package:trashi/utils/commons.dart';
@@ -56,14 +57,19 @@ class _AcceptTrashCollectionRequestScreenState
 
   Widget _buildChooseCalendarButton() {
     return Container(
+      height: 32,
       decoration: _buildBoxDecoration(),
-      padding: EdgeInsets.all(14),
+      padding: EdgeInsets.fromLTRB(16, 7, 16, 7),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Icon(
             Icons.calendar_today_outlined,
             size: 14,
+          ),
+          Padding(
+            padding: EdgeInsets.only(
+              right: 12,
+            ),
           ),
           Text(
             "1 Januari 2021",
@@ -72,10 +78,40 @@ class _AcceptTrashCollectionRequestScreenState
               fontSize: 14,
             ),
           ),
+          Padding(
+            padding: EdgeInsets.only(
+              right: 30,
+            ),
+          ),
           Icon(
             Icons.keyboard_arrow_down,
             size: 14,
           )
+        ],
+      ),
+    );
+  }
+
+  Widget _buildFilterButton() {
+    return Container(
+      height: 32,
+      decoration: _buildBoxDecoration(),
+      padding: EdgeInsets.fromLTRB(22, 5, 22, 5),
+      child: Row(
+        children: [
+          SvgPicture.asset('assets/images/filter_icon_trashi.svg'),
+          Padding(
+            padding: EdgeInsets.only(
+              right: 12,
+            ),
+          ),
+          Text(
+            "Filter",
+            style: TextStyle(
+              color: hexToColor("#4C4C4C"),
+              fontSize: 14,
+            ),
+          ),
         ],
       ),
     );
@@ -101,8 +137,10 @@ class _AcceptTrashCollectionRequestScreenState
             ),
           ),
           Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               _buildChooseCalendarButton(),
+              _buildFilterButton(),
             ],
           )
         ],
