@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:trashi/constants/colors.dart';
 import 'package:trashi/utils/commons.dart';
+
+import 'trash_collection_request_card.dart';
 
 class TrashCollectionRequests extends StatefulWidget {
   @override
@@ -16,6 +19,14 @@ class _TrashCollectionRequestsState extends State<TrashCollectionRequests>
   void initState() {
     _tabController = new TabController(length: 3, vsync: this);
     super.initState();
+  }
+
+  Widget _buildRequestCards() {
+    return ListView(
+      children: [
+        TrashCollectionRequestCard(),
+      ],
+    );
   }
 
   @override
@@ -49,12 +60,17 @@ class _TrashCollectionRequestsState extends State<TrashCollectionRequests>
             controller: _tabController,
             indicatorSize: TabBarIndicatorSize.tab,
           ),
+          Padding(
+            padding: EdgeInsets.only(
+              bottom: 16,
+            ),
+          ),
           Expanded(
             child: TabBarView(
               children: [
-                Container(child: Center(child: Text('Sekarang'))),
-                Text('Terjadwal'),
-                Text('Selesai'),
+                _buildRequestCards(),
+                _buildRequestCards(),
+                _buildRequestCards(),
               ],
               controller: _tabController,
             ),
@@ -64,6 +80,5 @@ class _TrashCollectionRequestsState extends State<TrashCollectionRequests>
     );
   }
 }
-
 
 // creds to: https://stackoverflow.com/questions/50609252/flutter-tabbar-without-appbar/50610509
