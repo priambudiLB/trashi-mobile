@@ -24,7 +24,26 @@ class _TrashCollectionRequestsState extends State<TrashCollectionRequests>
   Widget _buildRequestCards() {
     return ListView(
       children: [
-        TrashCollectionRequestCard(),
+        TrashCollectionRequestCard(
+          requesterName: "Mikey",
+          requesterAddress:
+              "Jl. M. Nasir No.18, Cilodong, Kec. Cilodong, Kota Depok, Jawa Barat 16415",
+          requesterPhotoURL:
+              "https://i.pinimg.com/736x/1e/1c/3e/1e1c3e4adbd53afaa0b7f2f999c46887.jpg",
+          requestStatus: "Menunggu Pengambilan",
+          requestTime: "22 Jan, 15:00",
+          trashType: "Batu > 100kg",
+          pickUpDeliveryType: "Pickup",
+        ),
+        TrashCollectionRequestCard(
+          requesterName: "Adisti Lailan",
+          requesterAddress:
+              "Jl. M. Nasir No.18, Cilodong, Kec. Cilodong, Kota Depok, Jawa Barat 16415",
+          requestStatus: "Menunggu Pengambilan",
+          requestTime: "22 Jan, 15:00",
+          trashType: "Batu > 100kg",
+          pickUpDeliveryType: "Pickup",
+        ),
       ],
     );
   }

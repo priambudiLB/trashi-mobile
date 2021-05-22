@@ -3,6 +3,26 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:trashi/utils/commons.dart';
 
 class TrashCollectionRequestCard extends StatefulWidget {
+  final String requesterName;
+  final String requesterPhotoURL;
+  final String requesterAddress;
+  final String requestStatus;
+  final String requestTime;
+  final String trashType;
+  final String pickUpDeliveryType;
+
+  const TrashCollectionRequestCard({
+    Key key,
+    this.requesterName = "",
+    this.requesterPhotoURL =
+        "https://ak.picdn.net/shutterstock/videos/14582785/thumb/4.jpg",
+    this.requesterAddress = "",
+    this.requestStatus = "",
+    this.requestTime = "",
+    this.trashType = "",
+    this.pickUpDeliveryType = "",
+  }) : super(key: key);
+
   @override
   _TrashCollectionRequestCardState createState() =>
       _TrashCollectionRequestCardState();
@@ -15,7 +35,7 @@ class _TrashCollectionRequestCardState
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
-          "Menunggu Pengambilan",
+          widget.requestStatus,
           style: TextStyle(
             color: hexToColor("#32A37F"),
             fontSize: 12,
@@ -34,7 +54,7 @@ class _TrashCollectionRequestCardState
             color: Color.fromRGBO(255, 144, 89, 0.1),
           ),
           child: Text(
-            "Sekarang",
+            widget.requestTime,
             style: TextStyle(
               color: hexToColor("#FF9059"),
               fontSize: 12,
@@ -57,7 +77,7 @@ class _TrashCollectionRequestCardState
             shape: BoxShape.circle,
             image: DecorationImage(
               image: NetworkImage(
-                'https://ak.picdn.net/shutterstock/videos/14582785/thumb/4.jpg',
+                widget.requesterPhotoURL,
               ),
               fit: BoxFit.fill,
             ),
@@ -69,7 +89,7 @@ class _TrashCollectionRequestCardState
           ),
         ),
         Text(
-          "Adisti Lailan",
+          widget.requesterName,
           style: TextStyle(
             color: hexToColor("#4D4D4D"),
             fontSize: 12,
@@ -97,7 +117,7 @@ class _TrashCollectionRequestCardState
                 ),
               ),
               Text(
-                "Pohon > 50 kg",
+                widget.trashType,
                 style: TextStyle(
                   fontWeight: FontWeight.w400,
                   color: hexToColor("#909090"),
@@ -125,7 +145,7 @@ class _TrashCollectionRequestCardState
                 ),
               ),
               Text(
-                "Gerobak - Motor",
+                widget.pickUpDeliveryType,
                 style: TextStyle(
                   fontWeight: FontWeight.w400,
                   color: hexToColor("#909090"),
@@ -197,7 +217,7 @@ class _TrashCollectionRequestCardState
                 ),
               ),
               Text(
-                "Jl Amil No 10 A Pejaten Barat, Ps. Minggu, Jakarta Selatan",
+                widget.requesterAddress,
                 style: TextStyle(
                     fontWeight: FontWeight.w400, color: hexToColor("#909090")),
               ),
