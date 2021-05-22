@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:trashi/constants/strings.dart';
 import 'package:trashi/constants/theme.dart';
 import 'package:trashi/pages/confirmation_otp_screen/confirmation_otp_screen.dart';
+import 'package:trashi/pages/form_request_pengangkatan/form_request_pengangkatan.dart';
 import 'package:trashi/pages/home_screen/home_screen.dart';
 import 'package:trashi/pages/onboarding_redesign_screen/on_boarding_screen_view.dart';
 import 'package:trashi/pages/registration_document_confirmation/profile_example.dart';
@@ -18,7 +19,7 @@ class TrashiApplication extends StatelessWidget {
     return MaterialApp(
       theme: defaultTheme,
       title: APP_NAME,
-      initialRoute: SplashScreen.PATH,
+      initialRoute: FormRequestPengangkatan.PATH,
       routes: <String, WidgetBuilder>{
         // TODO: Add more page and define its path here
         SplashScreen.PATH: (_) => SplashScreen(),
@@ -30,7 +31,8 @@ class TrashiApplication extends StatelessWidget {
             ),
         ProfileExample.PATH: (_) => ProfileExample(),
         RegistrationDocumentConfirmation.PATH: (_) =>
-            RegistrationDocumentConfirmation()
+            RegistrationDocumentConfirmation(),
+        FormRequestPengangkatan.PATH: (_) => FormRequestPengangkatan()
         // HomeScreen.PATH: (_) => HomeScreen(),
       },
     );
