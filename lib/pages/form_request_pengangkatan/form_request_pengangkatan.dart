@@ -5,6 +5,7 @@ import 'package:trashi/pages/form_request_pengangkatan/components/jenis_berat_dr
 import 'package:trashi/pages/form_request_pengangkatan/components/jenis_kendaraan_dropdown.dart';
 import 'package:trashi/pages/form_request_pengangkatan/model/barang.dart';
 import 'package:trashi/pages/form_request_pengangkatan/provider.dart';
+import 'package:trashi/pages/form_request_pengangkatan/time_type.dart';
 import 'package:trashi/utils/commons.dart';
 import 'package:provider/provider.dart';
 
@@ -78,6 +79,40 @@ class _FormRequestPengangkatanState extends State<FormRequestPengangkatan> {
             ),
             Text("Pilih Waktu",
                 style: TextStyle(color: hexToColor("#4D4D4D"), fontSize: 14)),
+            ListTile(
+              title: Text("Now"),
+              dense: true,
+              contentPadding: EdgeInsets.all(0),
+              minVerticalPadding: 0,
+              leading: Radio<TimeType>(
+                value: TimeType.NOW,
+                groupValue: context
+                    .watch<FormRequestPengangkatanProvider>()
+                    .selectedTimeType,
+                onChanged: (TimeType value) {
+                  context
+                      .read<FormRequestPengangkatanProvider>()
+                      .setTimeType(value);
+                },
+              ),
+            ),
+            ListTile(
+              title: Text("Set Schedule Time"),
+              dense: true,
+              contentPadding: EdgeInsets.all(0),
+              minVerticalPadding: 0,
+              leading: Radio<TimeType>(
+                value: TimeType.SCHEDULED_TIME,
+                groupValue: context
+                    .watch<FormRequestPengangkatanProvider>()
+                    .selectedTimeType,
+                onChanged: (TimeType value) {
+                  context
+                      .read<FormRequestPengangkatanProvider>()
+                      .setTimeType(value);
+                },
+              ),
+            ),
           ],
         ),
       ),

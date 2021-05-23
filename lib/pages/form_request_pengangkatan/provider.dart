@@ -3,6 +3,7 @@ import 'package:formz/formz.dart';
 import 'package:trashi/pages/form_request_pengangkatan/model/barang.dart';
 import 'package:trashi/pages/form_request_pengangkatan/model/berat_barang.dart';
 import 'package:trashi/pages/form_request_pengangkatan/model/kendaraan.dart';
+import 'package:trashi/pages/form_request_pengangkatan/time_type.dart';
 
 class FormRequestPengangkatanProvider
     with ChangeNotifier, DiagnosticableTreeMixin {
@@ -13,6 +14,7 @@ class FormRequestPengangkatanProvider
   List<BeratBarang> _listBeratBarang;
   List<Kendaraan> _listKendaraan;
   FormzStatus _statusFetchData = FormzStatus.pure;
+  TimeType _selectedTimeType = TimeType.NOW;
 
   Barang get selectedBarang => _selectedBarang;
   BeratBarang get selectedBeratBarang => _selectedBeratBarang;
@@ -21,6 +23,7 @@ class FormRequestPengangkatanProvider
   List<BeratBarang> get listBeratBarang => _listBeratBarang;
   List<Kendaraan> get listKendaraan => _listKendaraan;
   FormzStatus get statusFetchData => _statusFetchData;
+  TimeType get selectedTimeType => _selectedTimeType;
 
   void fetchData() async {
     setStatusFetchData(FormzStatus.submissionInProgress);
@@ -78,6 +81,11 @@ class FormRequestPengangkatanProvider
 
   void setListKendaraan(List<Kendaraan> list) {
     _listKendaraan = list;
+    notifyListeners();
+  }
+
+  void setTimeType(TimeType type) {
+    _selectedTimeType = type;
     notifyListeners();
   }
 }
