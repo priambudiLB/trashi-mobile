@@ -18,7 +18,12 @@ class OnBoardingBody extends StatelessWidget {
     }
 
     onLoginButtonPressed() {
-      print("login");
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => AcceptTrashCollectionRequestScreen(),
+        ),
+      );
     }
 
     var heightTmp = 48.0;

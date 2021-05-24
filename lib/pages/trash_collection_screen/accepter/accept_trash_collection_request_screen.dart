@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:trashi/components/button.dart';
 import 'package:trashi/components/layout_redesign.dart';
 import 'package:trashi/constants/colors.dart';
+import 'package:trashi/pages/trash_collection_screen/accepter/components/row_button_wrapper.dart';
 import 'package:trashi/utils/commons.dart';
 
+import 'components/filter_button.dart';
 import 'components/trash_collection_requests.dart';
 
 class AcceptTrashCollectionRequestScreen extends StatefulWidget {
@@ -58,11 +61,9 @@ class _AcceptTrashCollectionRequestScreenState
   }
 
   Widget _buildChooseCalendarButton() {
-    return Container(
+    return RowButtonWrapper(
       height: 32,
-      decoration: _buildBoxDecoration(),
-      padding: EdgeInsets.fromLTRB(16, 7, 16, 7),
-      child: Row(
+      content: Row(
         children: [
           Icon(
             Icons.calendar_today_outlined,
@@ -91,52 +92,14 @@ class _AcceptTrashCollectionRequestScreenState
           )
         ],
       ),
-    );
-  }
-
-  Widget _buildFilterButton() {
-    return Container(
-      height: 32,
-      decoration: _buildBoxDecoration(),
-      padding: EdgeInsets.fromLTRB(22, 5, 22, 5),
-      child: Row(
-        children: [
-          SvgPicture.asset('assets/images/filter_icon_trashi.svg'),
-          Padding(
-            padding: EdgeInsets.only(
-              right: 12,
-            ),
-          ),
-          Text(
-            "Filter",
-            style: TextStyle(
-              color: hexToColor("#4C4C4C"),
-              fontSize: 14,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildNowButton() {
-    return Container(
-      padding: EdgeInsets.fromLTRB(23, 11, 23, 8),
-      foregroundDecoration: BoxDecoration(
-        border: Border(
-          bottom: BorderSide(
-            color: hexToColor(MAIN_COLOR),
-            width: 2,
-          ),
-        ),
-      ),
-      child: Text(
-        "Sekarang",
-        style: TextStyle(
-          fontSize: 14,
-          fontWeight: FontWeight.w400,
-        ),
-      ),
+      padding: EdgeInsets.fromLTRB(16, 7, 16, 7),
+      circularBorderRadius: 8,
+      borderColor: hexToColor("#F2F2F2"),
+      backgroundColor: Colors.white,
+      foregroundColor: hexToColor("#4C4C4C"),
+      onPressed: () {
+        print("calendar");
+      },
     );
   }
 
@@ -163,7 +126,7 @@ class _AcceptTrashCollectionRequestScreenState
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               _buildChooseCalendarButton(),
-              _buildFilterButton(),
+              FilterButton(),
             ],
           ),
           Padding(
