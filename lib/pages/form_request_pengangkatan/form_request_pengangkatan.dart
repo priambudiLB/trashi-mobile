@@ -84,7 +84,10 @@ class _FormRequestPengangkatanState extends State<FormRequestPengangkatan> {
               dense: true,
               contentPadding: EdgeInsets.all(0),
               minVerticalPadding: 0,
+              horizontalTitleGap: 0,
               leading: Radio<TimeType>(
+                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                visualDensity: VisualDensity(horizontal: -4),
                 value: TimeType.NOW,
                 groupValue: context
                     .watch<FormRequestPengangkatanProvider>()
@@ -101,7 +104,10 @@ class _FormRequestPengangkatanState extends State<FormRequestPengangkatan> {
               dense: true,
               contentPadding: EdgeInsets.all(0),
               minVerticalPadding: 0,
+              horizontalTitleGap: 0,
               leading: Radio<TimeType>(
+                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                visualDensity: VisualDensity(horizontal: -4),
                 value: TimeType.SCHEDULED_TIME,
                 groupValue: context
                     .watch<FormRequestPengangkatanProvider>()
