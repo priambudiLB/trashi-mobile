@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:trashi/components/layout_redesign.dart';
 import 'package:trashi/pages/form_request_pengangkatan/components/jenis_barang_dropdown.dart';
 import 'package:trashi/pages/form_request_pengangkatan/components/jenis_berat_dropdown.dart';
@@ -85,6 +86,7 @@ class _FormRequestPengangkatanState extends State<FormRequestPengangkatan> {
               contentPadding: EdgeInsets.all(0),
               minVerticalPadding: 0,
               horizontalTitleGap: 0,
+              visualDensity: VisualDensity(horizontal: 0, vertical: -4),
               leading: Radio<TimeType>(
                 materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 visualDensity: VisualDensity(horizontal: -4),
@@ -96,6 +98,12 @@ class _FormRequestPengangkatanState extends State<FormRequestPengangkatan> {
                   context
                       .read<FormRequestPengangkatanProvider>()
                       .setTimeType(value);
+                  context
+                      .read<FormRequestPengangkatanProvider>()
+                      .setSelectedDate(null);
+                  context
+                      .read<FormRequestPengangkatanProvider>()
+                      .setSelectedTime(null);
                 },
               ),
             ),
@@ -105,6 +113,7 @@ class _FormRequestPengangkatanState extends State<FormRequestPengangkatan> {
               contentPadding: EdgeInsets.all(0),
               minVerticalPadding: 0,
               horizontalTitleGap: 0,
+              visualDensity: VisualDensity(horizontal: 0, vertical: -4),
               leading: Radio<TimeType>(
                 materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 visualDensity: VisualDensity(horizontal: -4),
@@ -119,9 +128,116 @@ class _FormRequestPengangkatanState extends State<FormRequestPengangkatan> {
                 },
               ),
             ),
+            Container(
+              height: 16,
+            ),
+            Row(
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Expanded(
+                  child: InkWell(
+                    child: Container(
+                      padding: EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(
+                              width: 1, color: hexToColor("#CBCBCB"))),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.calendar_today_outlined,
+                            size: 14,
+                          ),
+                          Container(
+                            width: 12,
+                          ),
+                          Text(
+                            context
+                                        .watch<
+                                            FormRequestPengangkatanProvider>()
+                                        .selectedDate !=
+                                    null
+                                ? getStringDate(context
+                                    .watch<FormRequestPengangkatanProvider>()
+                                    .selectedDate)
+                                : "Tanggal",
+                          ),
+                          Expanded(
+                            child: Align(
+                              alignment: Alignment.centerRight,
+                              child: Icon(
+                                Icons.keyboard_arrow_down,
+                                size: 20,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                Container(
+                  width: 15,
+                ),
+                Expanded(
+                  child: InkWell(
+                    child: Container(
+                      padding: EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(
+                              width: 1, color: hexToColor("#CBCBCB"))),
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.access_time_rounded,
+                            size: 14,
+                          ),
+                          Container(
+                            width: 12,
+                          ),
+                          Text(
+                            context
+                                        .watch<
+                                            FormRequestPengangkatanProvider>()
+                                        .selectedTime !=
+                                    null
+                                ? getStringTime(context
+                                    .watch<FormRequestPengangkatanProvider>()
+                                    .selectedTime)
+                                : "Jam",
+                          ),
+                          Expanded(
+                            child: Align(
+                              alignment: Alignment.centerRight,
+                              child: Icon(
+                                Icons.keyboard_arrow_down,
+                                size: 20,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                )
+              ],
+            )
           ],
         ),
       ),
     );
+  }
+
+  getStringDate(DateTime selectedDate) {
+    return "${selectedDate.day} ${getMonth(selectedDate.month)}";
+  }
+
+  getStringTime(TimeOfDay selectedTime) {
+    final now = new DateTime.now();
+    final dt = DateTime(
+        now.year, now.month, now.day, selectedTime.hour, selectedTime.minute);
+    return DateFormat("HH:mm").format(dt);
   }
 }

@@ -16,6 +16,7 @@ class JenisKendaraanDropdown extends StatelessWidget {
                 borderRadius: BorderRadius.circular(8),
                 border: Border.all(width: 1, color: hexToColor("#CBCBCB"))),
             child: DropdownButton(
+              dropdownColor: Colors.white,
               underline: SizedBox(),
               value: context
                   .watch<FormRequestPengangkatanProvider>()

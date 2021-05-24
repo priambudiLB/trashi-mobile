@@ -16,6 +16,7 @@ class JenisBeratDropdown extends StatelessWidget {
                 borderRadius: BorderRadius.circular(8),
                 border: Border.all(width: 1, color: hexToColor("#CBCBCB"))),
             child: DropdownButton(
+              dropdownColor: Colors.white,
               underline: SizedBox(),
               value: context
                   .watch<FormRequestPengangkatanProvider>()
@@ -30,9 +31,7 @@ class JenisBeratDropdown extends StatelessWidget {
                   .listBeratBarang
                   .map<DropdownMenuItem<BeratBarang>>((BeratBarang item) {
                 return DropdownMenuItem<BeratBarang>(
-                  value: item,
-                  child: Text(item.name),
-                );
+                    value: item, child: Text(item.name));
               }).toList(),
               onChanged: (BeratBarang newBeratBarang) {
                 context
