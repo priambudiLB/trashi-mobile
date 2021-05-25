@@ -1,10 +1,14 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:trashi/components/button.dart';
 import 'package:trashi/components/layout_redesign.dart';
+import 'package:trashi/pages/form_request_pengangkatan/components/date_picker.dart';
 import 'package:trashi/pages/form_request_pengangkatan/components/jenis_barang_dropdown.dart';
 import 'package:trashi/pages/form_request_pengangkatan/components/jenis_berat_dropdown.dart';
 import 'package:trashi/pages/form_request_pengangkatan/components/jenis_kendaraan_dropdown.dart';
-import 'package:trashi/pages/form_request_pengangkatan/model/barang.dart';
+import 'package:trashi/pages/form_request_pengangkatan/components/time_picker.dart';
 import 'package:trashi/pages/form_request_pengangkatan/provider.dart';
 import 'package:trashi/pages/form_request_pengangkatan/time_type.dart';
 import 'package:trashi/utils/commons.dart';
@@ -19,6 +23,7 @@ class FormRequestPengangkatan extends StatefulWidget {
 }
 
 class _FormRequestPengangkatanState extends State<FormRequestPengangkatan> {
+  final picker = ImagePicker();
   @override
   void initState() {
     super.initState();
@@ -49,6 +54,11 @@ class _FormRequestPengangkatanState extends State<FormRequestPengangkatan> {
             ),
             Container(
               height: 12,
+            ),
+            Wrap(
+              spacing: 4.0, // gap between adjacent chips
+              runSpacing: 4.0,
+              children: getFileListWidget(context),
             ),
             Container(
               height: 24,
@@ -134,95 +144,23 @@ class _FormRequestPengangkatanState extends State<FormRequestPengangkatan> {
             Row(
               mainAxisSize: MainAxisSize.max,
               children: [
-                Expanded(
-                  child: InkWell(
-                    child: Container(
-                      padding: EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                          border: Border.all(
-                              width: 1, color: hexToColor("#CBCBCB"))),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.calendar_today_outlined,
-                            size: 14,
-                          ),
-                          Container(
-                            width: 12,
-                          ),
-                          Text(
-                            context
-                                        .watch<
-                                            FormRequestPengangkatanProvider>()
-                                        .selectedDate !=
-                                    null
-                                ? getStringDate(context
-                                    .watch<FormRequestPengangkatanProvider>()
-                                    .selectedDate)
-                                : "Tanggal",
-                          ),
-                          Expanded(
-                            child: Align(
-                              alignment: Alignment.centerRight,
-                              child: Icon(
-                                Icons.keyboard_arrow_down,
-                                size: 20,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
+                Expanded(child: DatePickerComponent()),
                 Container(
                   width: 15,
                 ),
-                Expanded(
-                  child: InkWell(
-                    child: Container(
-                      padding: EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                          border: Border.all(
-                              width: 1, color: hexToColor("#CBCBCB"))),
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.access_time_rounded,
-                            size: 14,
-                          ),
-                          Container(
-                            width: 12,
-                          ),
-                          Text(
-                            context
-                                        .watch<
-                                            FormRequestPengangkatanProvider>()
-                                        .selectedTime !=
-                                    null
-                                ? getStringTime(context
-                                    .watch<FormRequestPengangkatanProvider>()
-                                    .selectedTime)
-                                : "Jam",
-                          ),
-                          Expanded(
-                            child: Align(
-                              alignment: Alignment.centerRight,
-                              child: Icon(
-                                Icons.keyboard_arrow_down,
-                                size: 20,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                )
+                Expanded(child: TimePickerComponent())
               ],
+            ),
+            Container(
+              height: 24,
+            ),
+            Button(
+              onTap: () {},
+              title: "Lanjut",
+              width: double.infinity,
+            ),
+            Container(
+              height: 30,
             )
           ],
         ),
@@ -230,14 +168,73 @@ class _FormRequestPengangkatanState extends State<FormRequestPengangkatan> {
     );
   }
 
-  getStringDate(DateTime selectedDate) {
-    return "${selectedDate.day} ${getMonth(selectedDate.month)}";
-  }
-
-  getStringTime(TimeOfDay selectedTime) {
-    final now = new DateTime.now();
-    final dt = DateTime(
-        now.year, now.month, now.day, selectedTime.hour, selectedTime.minute);
-    return DateFormat("HH:mm").format(dt);
+  List<Widget> getFileListWidget(BuildContext context) {
+    return List.generate(
+        context.watch<FormRequestPengangkatanProvider>().listFile.length + 1,
+        (index) {
+      if (index ==
+          context.read<FormRequestPengangkatanProvider>().listFile.length) {
+        return InkWell(
+          onTap: () async {
+            final pickedFile =
+                await picker.getImage(source: ImageSource.gallery);
+            if (pickedFile != null) {
+              List<File> tmp =
+                  context.read<FormRequestPengangkatanProvider>().listFile;
+              tmp.add(File(pickedFile.path));
+              context.read<FormRequestPengangkatanProvider>().setListFile(tmp);
+            }
+          },
+          child: Container(
+            height: 80,
+            width: 80,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(width: 1, color: hexToColor("#CBCBCB"))),
+            child: Icon(
+              Icons.add_a_photo,
+              size: 30,
+            ),
+          ),
+        );
+      } else {
+        return Stack(
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: Image.file(
+                context.read<FormRequestPengangkatanProvider>().listFile[index],
+                height: 80,
+                width: 80,
+                fit: BoxFit.fill,
+              ),
+            ),
+            Positioned(
+                right: 0,
+                top: 0,
+                child: InkWell(
+                  onTap: () {
+                    List<File> tmp = context
+                        .read<FormRequestPengangkatanProvider>()
+                        .listFile;
+                    tmp.removeAt(index);
+                    context
+                        .read<FormRequestPengangkatanProvider>()
+                        .setListFile(tmp);
+                  },
+                  child: ClipOval(
+                    child: Container(
+                      color: Colors.white,
+                      child: Icon(
+                        Icons.cancel,
+                        color: hexToColor("#ED3739"),
+                      ),
+                    ),
+                  ),
+                ))
+          ],
+        );
+      }
+    });
   }
 }

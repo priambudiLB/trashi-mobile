@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:formz/formz.dart';
@@ -18,6 +20,7 @@ class FormRequestPengangkatanProvider
   TimeType _selectedTimeType = TimeType.NOW;
   DateTime _selectedDate;
   TimeOfDay _selectedTime;
+  List<File> _listFile = [];
 
   Barang get selectedBarang => _selectedBarang;
   BeratBarang get selectedBeratBarang => _selectedBeratBarang;
@@ -29,6 +32,7 @@ class FormRequestPengangkatanProvider
   TimeType get selectedTimeType => _selectedTimeType;
   DateTime get selectedDate => _selectedDate;
   TimeOfDay get selectedTime => _selectedTime;
+  List<File> get listFile => _listFile;
 
   void fetchData() async {
     setStatusFetchData(FormzStatus.submissionInProgress);
@@ -52,6 +56,11 @@ class FormRequestPengangkatanProvider
       ]);
       setStatusFetchData(FormzStatus.submissionSuccess);
     });
+  }
+
+  void setListFile(List<File> list) {
+    _listFile = list;
+    notifyListeners();
   }
 
   void setSelectedDate(DateTime date) {
