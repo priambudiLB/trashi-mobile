@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:trashi/pages/trash_collection_screen/accepter/components/row_button_wrapper.dart';
+import 'package:trashi/pages/trash_collection_screen/accepter/trash_collection_request_detail_screen.dart';
 import 'package:trashi/utils/commons.dart';
 
 class TrashCollectionRequestCard extends StatefulWidget {
@@ -10,6 +12,8 @@ class TrashCollectionRequestCard extends StatefulWidget {
   final String requestTime;
   final String trashType;
   final String pickUpDeliveryType;
+  final String trashWeightFormatted;
+  final String costFormatted;
 
   const TrashCollectionRequestCard({
     Key key,
@@ -21,6 +25,8 @@ class TrashCollectionRequestCard extends StatefulWidget {
     this.requestTime = "",
     this.trashType = "",
     this.pickUpDeliveryType = "",
+    this.trashWeightFormatted = "",
+    this.costFormatted = "",
   }) : super(key: key);
 
   @override
@@ -159,23 +165,41 @@ class _TrashCollectionRequestCardState
   }
 
   Widget _buildShowDetailButton() {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.all(
-          Radius.circular(8),
-        ),
-        border: Border.all(
-          color: hexToColor("#32A37F"),
-        ),
-      ),
+    return RowButtonWrapper(
       padding: EdgeInsets.fromLTRB(105, 11, 105, 11),
-      child: Text(
-        "Lihat Detail",
-        style: TextStyle(
-          color: hexToColor("#32A37F"),
-          fontSize: 14,
-        ),
+      circularBorderRadius: 8,
+      borderColor: hexToColor("#32A37F"),
+      backgroundColor: Colors.white,
+      height: 40,
+      content: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            "Lihat Detail",
+            style: TextStyle(
+              color: hexToColor("#32A37F"),
+              fontSize: 14,
+            ),
+          ),
+        ],
       ),
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => TrashCollectionRequestDetailScreen(
+              trashType: widget.trashType,
+              trashWeightFormatted: widget.trashWeightFormatted,
+              pickUpDeliveryType: widget.pickUpDeliveryType,
+              costFormatted: widget.costFormatted,
+              requestTimeFormatted: widget.requestTime,
+              requesterAddress: widget.requesterAddress,
+              paymentStatus: widget.requestStatus,
+              isCollected: false,
+            ),
+          ),
+        );
+      },
     );
   }
 
