@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:trashi/pages/form_request_pengangkatan/provider.dart';
+import 'package:trashi/pages/form_request_pengangkatan/time_type.dart';
 import 'package:trashi/utils/commons.dart';
 
 class TimePickerComponent extends StatelessWidget {
@@ -30,30 +31,44 @@ class TimePickerComponent extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        _selectTime(context);
+        if (context.read<FormRequestPengangkatanProvider>().selectedTimeType ==
+            TimeType.SCHEDULED_TIME) {
+          _selectTime(context);
+        }
       },
+      splashColor: Colors.transparent,
       child: Container(
         padding: EdgeInsets.all(12),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8),
-            border: Border.all(width: 1, color: hexToColor("#CBCBCB"))),
+            border: Border.all(width: 1, color: hexToColor("#CBCBCB")),
+            color: context
+                        .watch<FormRequestPengangkatanProvider>()
+                        .selectedTimeType ==
+                    TimeType.NOW
+                ? Colors.grey[200]
+                : Colors.transparent),
         child: Row(
           children: [
             Icon(
               Icons.access_time_rounded,
               size: 14,
+              color: hexToColor("#C4C4C4"),
             ),
             Container(
               width: 12,
             ),
-            Text(
-              context.watch<FormRequestPengangkatanProvider>().selectedTime !=
-                      null
-                  ? getStringTime(context
-                      .watch<FormRequestPengangkatanProvider>()
-                      .selectedTime)
-                  : "Jam",
-            ),
+            context.watch<FormRequestPengangkatanProvider>().selectedTime !=
+                    null
+                ? Text(
+                    getStringTime(context
+                        .watch<FormRequestPengangkatanProvider>()
+                        .selectedTime),
+                  )
+                : Text(
+                    "Jam",
+                    style: TextStyle(color: hexToColor("#C4C4C4")),
+                  ),
             Expanded(
               child: Align(
                 alignment: Alignment.centerRight,
