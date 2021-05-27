@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:trashi/utils/commons.dart';
 
 class Layout extends StatefulWidget {
   final Text title;
@@ -24,6 +25,16 @@ class _LayoutState extends State<Layout> {
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.white,
+          title: Text(
+            "Pembayaran Retribusi",
+            // textAlign: TextAlign.end,
+            style: TextStyle(
+              fontFamily: "Avenir",
+              fontWeight: FontWeight.w600,
+              color: Colors.black,
+              fontSize: 20
+            ),
+          ),
           leading: IconButton(
               icon: Icon(
                 Icons.arrow_back,

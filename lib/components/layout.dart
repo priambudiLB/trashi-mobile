@@ -49,7 +49,7 @@ class _LayoutState extends State<Layout> {
           ),
         )
       ),
-      backgroundColor: hexToColor(MAIN_COLOR),
+      backgroundColor: Colors.white,
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 20),
         child: widget.body,

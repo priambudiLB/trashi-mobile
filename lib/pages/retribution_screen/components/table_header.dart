@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:trashi/utils/commons.dart';
 
 class TableHeader extends StatefulWidget {
   final String text;
@@ -25,10 +26,10 @@ class _TableHeader extends State<TableHeader> {
               widget.text,
               textAlign: TextAlign.center,
               style: TextStyle(
-                fontFamily: "Poppins",
-                fontWeight: FontWeight.w500,
-                color: Colors.white,
-                fontSize: 10,
+                fontFamily: "Avenit",
+                fontWeight: FontWeight.w800,
+                color: hexToColor('#464646'),
+                fontSize: 12,
               ),
             ),
           ),
