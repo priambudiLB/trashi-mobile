@@ -10,6 +10,7 @@ import 'package:trashi/pages/registration_document_confirmation/registration_doc
 import 'package:trashi/pages/request_screen/request_screen.dart';
 import 'package:trashi/pages/retribution_screen/retribution_screen.dart';
 import 'package:trashi/pages/splash_screen/splash_screen.dart';
+import 'package:trashi/pages/trash_collection_screen/accepter/accept_trash_collection_request_screen.dart';
 import 'package:trashi/verification.dart';
 
 class TrashiApplication extends StatelessWidget {
