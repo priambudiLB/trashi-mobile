@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:trashi/components/layout_redesign.dart';
 import 'package:trashi/components/routes.dart';
-import 'package:trashi/pages/form_request_pengangkatan/provider.dart';
 import 'package:trashi/utils/commons.dart';
-import 'package:trashi/pages/form_request_pengangkatan/form_request_pengangkatan.dart';
+import 'package:trashi/pages/form_request_pengangkatan/location_picker_form.dart';
 
 class RequestScreen extends StatelessWidget {
   static const String PATH = "request_screen";
@@ -18,7 +17,7 @@ class RequestScreen extends StatelessWidget {
             highlightColor: Colors.transparent,
             onTap: () {
               Navigator.push(
-                  context, SlideLeftRoute(page: FormRequestPengangkatan()));
+                  context, SlideLeftRoute(page: LocationPickerForm()));
             },
             child: Row(
               children: [
