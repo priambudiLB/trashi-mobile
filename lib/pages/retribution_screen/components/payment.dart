@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:trashi/components/calendar_picker.dart';
 import 'package:trashi/components/square_pagination_number.dart';
+import 'package:trashi/pages/retribution_screen/components/status.dart';
 import 'package:trashi/pages/retribution_screen/components/table_body.dart';
 import 'package:trashi/pages/retribution_screen/components/table_header.dart';
 import 'package:trashi/utils/commons.dart';
@@ -19,11 +20,19 @@ class Payment extends StatelessWidget {
       'idTransaksi': 'RBS 00307',
       'tarif': '50000',
       'alamatRumah': 'Jl.Cipinang Elok 1 no 8',
+      'status': 0,
     });
     paymentData.add({
       'idTransaksi': 'RBS 00307',
       'tarif': '50000',
       'alamatRumah': 'Jl.Cipinang Elok 1 no 8',
+      'status': 1,
+    });
+    paymentData.add({
+      'idTransaksi': 'RBS 00307',
+      'tarif': '50000',
+      'alamatRumah': 'Jl.Cipinang Elok 1 no 8',
+      'status': 2,
     });
     return Container(
       margin: EdgeInsets.only(top: 16),
@@ -130,10 +139,7 @@ class Payment extends StatelessWidget {
                                   fontSize: 12,
                                 ),
                               ),
-                              Image.asset(
-                                'assets/images/ic-approve.png',
-                                width: 25,
-                              )
+                              Status(item['status'])
                             ],
                           )
                       ).toList()

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:trashi/components/layout_redesign.dart';
-import 'package:trashi/pages/retribution_screen/components/filter.dart';
-import 'package:trashi/pages/retribution_screen/components/past_payment.dart';
+import 'package:trashi/components/overlay.dart';
 import 'package:trashi/pages/retribution_screen/components/payment.dart';
+import 'package:trashi/pages/retribution_screen/components/success_overlay.dart';
 import 'package:trashi/utils/commons.dart';
 
 class RetributionScreen extends StatefulWidget {
@@ -65,19 +65,13 @@ class _RetributionScreenState extends State<RetributionScreen> {
         Layout(
           height: 88,
           title: Text(
-            "Pembayaran\nRetribusi",
-            textAlign: TextAlign.end,
+            "Pembayaran Retribusi",
+            // textAlign: TextAlign.end,
             style: TextStyle(
-              fontWeight: FontWeight.w700,
-              color: hexToColor('#FBD1A2'),
-              fontSize: 24,
-              shadows: <Shadow>[
-                Shadow(
-                  offset: Offset(0.0, 4.0),
-                  blurRadius: 4.0,
-                  color: Color.fromRGBO(0, 0, 0, 0.25),
-                ),
-              ],
+                fontFamily: "Avenir",
+                fontWeight: FontWeight.w600,
+                color: Colors.black,
+                fontSize: 20
             ),
           ),
           body: ListView(
@@ -87,11 +81,10 @@ class _RetributionScreenState extends State<RetributionScreen> {
                 margin: EdgeInsets.only(top: 16),
               ),
               Payment(),
-              // PastPayment(),
             ],
           ),
         ),
-        // CalendarPopup()
+        SuccessOverlay()
       ],
     );
   }

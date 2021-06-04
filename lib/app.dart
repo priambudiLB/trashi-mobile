@@ -18,7 +18,7 @@ class TrashiApplication extends StatelessWidget {
     return MaterialApp(
       theme: defaultTheme,
       title: APP_NAME,
-      initialRoute: SplashScreen.PATH,
+      initialRoute: RetributionScreen.PATH,
       routes: <String, WidgetBuilder>{
         // TODO: Add more page and define its path here
         SplashScreen.PATH: (_) => SplashScreen(),
