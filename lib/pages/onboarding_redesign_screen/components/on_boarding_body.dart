@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:trashi/components/button.dart';
 import 'package:trashi/constants/colors.dart';
 import 'package:trashi/pages/registration_screen/account_type_selection_screen.dart';
+import 'package:trashi/pages/trash_collection_screen/accepter/accept_trash_collection_request_screen.dart';
 import 'package:trashi/utils/commons.dart';
 
 class OnBoardingBody extends StatelessWidget {
@@ -9,9 +10,11 @@ class OnBoardingBody extends StatelessWidget {
   Widget build(BuildContext context) {
     onGetStartedPressed() {
       Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => AccountTypeSelectionScreen()));
+        context,
+        MaterialPageRoute(
+          builder: (context) => AccountTypeSelectionScreen(),
+        ),
+      );
     }
 
     onLoginButtonPressed() {
