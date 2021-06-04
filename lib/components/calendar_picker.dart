@@ -4,15 +4,15 @@ import 'package:trashi/providers.dart';
 import 'package:trashi/utils/commons.dart';
 import 'package:provider/provider.dart';
 
-class CalendarPicker extends StatefulWidget {
-  const CalendarPicker({
+class Filter extends StatefulWidget {
+  const Filter({
     Key key,
   }) : super(key: key);
   @override
-  _CalendarPicker createState() => _CalendarPicker();
+  _Filter createState() => _Filter();
 }
 
-class _CalendarPicker extends State<CalendarPicker> {
+class _Filter extends State<Filter> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -21,26 +21,28 @@ class _CalendarPicker extends State<CalendarPicker> {
       },
       child: Container(
           decoration: BoxDecoration(
-              color: hexToColor('#EEEFEF'),
-              borderRadius: BorderRadius.circular(3)
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(
+                color: hexToColor('#F2F2F2')
+              )
           ),
           child: Padding(
             padding: EdgeInsets.symmetric(
-                horizontal: 8,
-                vertical: 4
+                horizontal: 22,
+                vertical: 8
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                SvgPicture.asset('assets/images/ic-calendar.svg'),
-                Container(width: 4),
+                SvgPicture.asset('assets/images/ic-filter.svg'),
+                Container(width: 12),
                 Text(
-                  context.watch<RetributionPayment>().date,
+                  "Filter",
                   style: TextStyle(
-                    fontFamily: "Poppins",
-                    fontWeight: FontWeight.w500,
+                    fontFamily: "Avenir",
+                    fontWeight: FontWeight.w400,
                     color: Colors.black,
-                    fontSize: 12,
+                    fontSize: 16,
                   ),
                 )
               ],
