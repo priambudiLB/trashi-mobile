@@ -4,11 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:trashi/components/button.dart';
 import 'package:trashi/components/layout_redesign.dart';
+import 'package:trashi/components/routes.dart';
 import 'package:trashi/pages/form_request_pengangkatan/components/date_picker.dart';
 import 'package:trashi/pages/form_request_pengangkatan/components/jenis_barang_dropdown.dart';
 import 'package:trashi/pages/form_request_pengangkatan/components/jenis_berat_dropdown.dart';
 import 'package:trashi/pages/form_request_pengangkatan/components/jenis_kendaraan_dropdown.dart';
 import 'package:trashi/pages/form_request_pengangkatan/components/time_picker.dart';
+import 'package:trashi/pages/form_request_pengangkatan/detail_pengangkatan.dart';
 import 'package:trashi/pages/form_request_pengangkatan/provider.dart';
 import 'package:trashi/pages/form_request_pengangkatan/time_type.dart';
 import 'package:trashi/utils/commons.dart';
@@ -155,7 +157,10 @@ class _FormRequestPengangkatanState extends State<FormRequestPengangkatan> {
               height: 24,
             ),
             Button(
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                    context, SlideLeftRoute(page: DetailPengangkatan()));
+              },
               title: "Lanjut",
               width: double.infinity,
             ),

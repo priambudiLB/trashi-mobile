@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:formz/formz.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:trashi/pages/form_request_pengangkatan/model/barang.dart';
 import 'package:trashi/pages/form_request_pengangkatan/model/berat_barang.dart';
 import 'package:trashi/pages/form_request_pengangkatan/model/kendaraan.dart';
@@ -21,6 +22,9 @@ class FormRequestPengangkatanProvider
   DateTime _selectedDate;
   TimeOfDay _selectedTime;
   List<File> _listFile = [];
+  Set<Marker> _markers = {};
+  LatLng _selectedLocation;
+  String _descriptionLocation = "";
 
   Barang get selectedBarang => _selectedBarang;
   BeratBarang get selectedBeratBarang => _selectedBeratBarang;
@@ -33,6 +37,9 @@ class FormRequestPengangkatanProvider
   DateTime get selectedDate => _selectedDate;
   TimeOfDay get selectedTime => _selectedTime;
   List<File> get listFile => _listFile;
+  Set<Marker> get markers => _markers;
+  LatLng get selectedLocation => _selectedLocation;
+  String get descriptionLocation => _descriptionLocation;
 
   void fetchData() async {
     setStatusFetchData(FormzStatus.submissionInProgress);
@@ -56,6 +63,21 @@ class FormRequestPengangkatanProvider
       ]);
       setStatusFetchData(FormzStatus.submissionSuccess);
     });
+  }
+
+  void setSelectedLocation(LatLng location) {
+    _selectedLocation = location;
+    notifyListeners();
+  }
+
+  void setDescriptionLocation(String desc) {
+    _descriptionLocation = desc;
+    notifyListeners();
+  }
+
+  void setMarkers(Set<Marker> markers) {
+    _markers = markers;
+    notifyListeners();
   }
 
   void setListFile(List<File> list) {
