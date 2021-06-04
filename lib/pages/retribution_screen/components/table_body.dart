@@ -29,12 +29,18 @@ class _TableBody extends State<TableBody> {
   Widget build(BuildContext context) {
     return Container(
         decoration: BoxDecoration(
-          color: widget.index % 2 == 0 ? hexToColor('#DFDFDF') : hexToColor('#FFFFFF'),
+          border: Border(
+            top: BorderSide(
+                width: 1,
+                color: hexToColor('#F2F2F2'),
+            )
+          ),
+          // color: widget.index % 2 == 0 ? hexToColor('#DFDFDF') : hexToColor('#FFFFFF'),
         ),
         width: double.infinity,
         child: Padding(
           padding: EdgeInsets.symmetric(
-            vertical: 4,
+            vertical: 12,
           ),
           child: Row(
             // children: widget.items,
