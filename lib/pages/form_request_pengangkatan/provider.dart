@@ -40,6 +40,12 @@ class FormRequestPengangkatanProvider
   Set<Marker> get markers => _markers;
   LatLng get selectedLocation => _selectedLocation;
   String get descriptionLocation => _descriptionLocation;
+  bool get isValid =>
+      _selectedBarang != null &&
+      _selectedBeratBarang != null &&
+      _selectedKendaraan != null &&
+      (_selectedTimeType == TimeType.NOW ||
+          (_selectedDate != null && _selectedTime != null));
 
   void fetchData() async {
     setStatusFetchData(FormzStatus.submissionInProgress);

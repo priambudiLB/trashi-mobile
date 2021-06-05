@@ -6,6 +6,7 @@ import 'dart:async';
 import 'package:google_maps_webservice/places.dart';
 import 'package:trashi/components/button.dart';
 import 'package:trashi/components/routes.dart';
+import 'package:trashi/constants/colors.dart';
 import 'package:trashi/pages/form_request_pengangkatan/form_request_pengangkatan.dart';
 import 'package:trashi/utils/commons.dart';
 import 'package:trashi/pages/form_request_pengangkatan/provider.dart';
@@ -175,15 +176,34 @@ class _LocationPickerFormState extends State<LocationPickerForm> {
                       ),
                       Button(
                         onTap: () {
-                          context
-                              .read<FormRequestPengangkatanProvider>()
-                              .setDescriptionLocation(
-                                  _textDescriptionEditingController.text);
-                          Navigator.push(context,
-                              SlideLeftRoute(page: FormRequestPengangkatan()));
+                          if (context
+                                  .read<FormRequestPengangkatanProvider>()
+                                  .selectedLocation !=
+                              null) {
+                            context
+                                .read<FormRequestPengangkatanProvider>()
+                                .setDescriptionLocation(
+                                    _textDescriptionEditingController.text);
+                            Navigator.push(
+                                context,
+                                SlideLeftRoute(
+                                    page: FormRequestPengangkatan()));
+                          }
                         },
                         title: "Pilih Lokasi Ini",
                         width: double.infinity,
+                        fontColor: context
+                                    .watch<FormRequestPengangkatanProvider>()
+                                    .selectedLocation !=
+                                null
+                            ? Colors.white
+                            : hexToColor("#C4C4C4"),
+                        backgroundColor: context
+                                    .watch<FormRequestPengangkatanProvider>()
+                                    .selectedLocation !=
+                                null
+                            ? hexToColor(MAIN_COLOR)
+                            : Colors.grey[200],
                       )
                     ],
                   ),

@@ -5,6 +5,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:trashi/components/button.dart';
 import 'package:trashi/components/layout_redesign.dart';
 import 'package:trashi/components/routes.dart';
+import 'package:trashi/constants/colors.dart';
 import 'package:trashi/pages/form_request_pengangkatan/components/date_picker.dart';
 import 'package:trashi/pages/form_request_pengangkatan/components/jenis_barang_dropdown.dart';
 import 'package:trashi/pages/form_request_pengangkatan/components/jenis_berat_dropdown.dart';
@@ -34,140 +35,199 @@ class _FormRequestPengangkatanState extends State<FormRequestPengangkatan> {
     });
   }
 
+  Future<bool> _onWillPop() async {
+    return (await showDialog(
+          context: context,
+          builder: (context) => new AlertDialog(
+            title: new Text('Apakah kamu yakin?'),
+            content: new Text('Keluar dari halaman ini'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(false),
+                child: new Text('No'),
+              ),
+              TextButton(
+                onPressed: () {
+                  context
+                      .read<FormRequestPengangkatanProvider>()
+                      .setSelectedBarang(null);
+                  context
+                      .read<FormRequestPengangkatanProvider>()
+                      .setSelectedBeratBarang(null);
+                  context
+                      .read<FormRequestPengangkatanProvider>()
+                      .setSelectedKendaraan(null);
+
+                  Navigator.of(context).pop(true);
+                },
+                child: new Text('Yes'),
+              ),
+            ],
+          ),
+        )) ??
+        false;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Layout(
-      title: Text(
-        "Request Pengangkatan",
-        style: TextStyle(
-          color: hexToColor("#4C4C4C"),
-          fontWeight: FontWeight.w800,
-          fontSize: 20,
+    return WillPopScope(
+      onWillPop: _onWillPop,
+      child: Layout(
+        title: Text(
+          "Request Pengangkatan",
+          style: TextStyle(
+            color: hexToColor("#4C4C4C"),
+            fontWeight: FontWeight.w800,
+            fontSize: 20,
+          ),
+          textAlign: TextAlign.end,
         ),
-        textAlign: TextAlign.end,
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              "Tambahkan Foto",
-              style: TextStyle(color: hexToColor("#4D4D4D"), fontSize: 14),
-            ),
-            Container(
-              height: 12,
-            ),
-            Wrap(
-              spacing: 4.0, // gap between adjacent chips
-              runSpacing: 4.0,
-              children: getFileListWidget(context),
-            ),
-            Container(
-              height: 24,
-            ),
-            Text("Pilih Jenis Barang",
-                style: TextStyle(color: hexToColor("#4D4D4D"), fontSize: 14)),
-            Container(
-              height: 12,
-            ),
-            JenisBarangDropdown(),
-            Container(
-              height: 24,
-            ),
-            Text("Berat",
-                style: TextStyle(color: hexToColor("#4D4D4D"), fontSize: 14)),
-            Container(height: 12),
-            JenisBeratDropdown(),
-            Container(
-              height: 24,
-            ),
-            Text("Jenis Kendaraan dan DP",
-                style: TextStyle(color: hexToColor("#4D4D4D"), fontSize: 14)),
-            Container(
-              height: 12,
-            ),
-            JenisKendaraanDropdown(),
-            Container(
-              height: 24,
-            ),
-            Text("Pilih Waktu",
-                style: TextStyle(color: hexToColor("#4D4D4D"), fontSize: 14)),
-            ListTile(
-              title: Text("Now"),
-              dense: true,
-              contentPadding: EdgeInsets.all(0),
-              minVerticalPadding: 0,
-              horizontalTitleGap: 0,
-              visualDensity: VisualDensity(horizontal: 0, vertical: -4),
-              leading: Radio<TimeType>(
-                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                visualDensity: VisualDensity(horizontal: -4),
-                value: TimeType.NOW,
-                groupValue: context
-                    .watch<FormRequestPengangkatanProvider>()
-                    .selectedTimeType,
-                onChanged: (TimeType value) {
-                  context
-                      .read<FormRequestPengangkatanProvider>()
-                      .setTimeType(value);
-                  context
-                      .read<FormRequestPengangkatanProvider>()
-                      .setSelectedDate(null);
-                  context
-                      .read<FormRequestPengangkatanProvider>()
-                      .setSelectedTime(null);
-                },
+        body: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "Tambahkan Foto",
+                style: TextStyle(color: hexToColor("#4D4D4D"), fontSize: 14),
               ),
-            ),
-            ListTile(
-              title: Text("Set Schedule Time"),
-              dense: true,
-              contentPadding: EdgeInsets.all(0),
-              minVerticalPadding: 0,
-              horizontalTitleGap: 0,
-              visualDensity: VisualDensity(horizontal: 0, vertical: -4),
-              leading: Radio<TimeType>(
-                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                visualDensity: VisualDensity(horizontal: -4),
-                value: TimeType.SCHEDULED_TIME,
-                groupValue: context
-                    .watch<FormRequestPengangkatanProvider>()
-                    .selectedTimeType,
-                onChanged: (TimeType value) {
-                  context
-                      .read<FormRequestPengangkatanProvider>()
-                      .setTimeType(value);
-                },
+              Container(
+                height: 12,
               ),
-            ),
-            Container(
-              height: 16,
-            ),
-            Row(
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                Expanded(child: DatePickerComponent()),
-                Container(
-                  width: 15,
+              Wrap(
+                spacing: 4.0, // gap between adjacent chips
+                runSpacing: 4.0,
+                children: getFileListWidget(context),
+              ),
+              Container(
+                height: 24,
+              ),
+              Text("Pilih Jenis Barang",
+                  style: TextStyle(color: hexToColor("#4D4D4D"), fontSize: 14)),
+              Container(
+                height: 12,
+              ),
+              JenisBarangDropdown(),
+              Container(
+                height: 24,
+              ),
+              Text("Berat",
+                  style: TextStyle(color: hexToColor("#4D4D4D"), fontSize: 14)),
+              Container(height: 12),
+              JenisBeratDropdown(),
+              Container(
+                height: 24,
+              ),
+              Text("Jenis Kendaraan dan DP",
+                  style: TextStyle(color: hexToColor("#4D4D4D"), fontSize: 14)),
+              Container(
+                height: 12,
+              ),
+              JenisKendaraanDropdown(),
+              Container(
+                height: 24,
+              ),
+              Text("Pilih Waktu",
+                  style: TextStyle(color: hexToColor("#4D4D4D"), fontSize: 14)),
+              ListTile(
+                title: Text("Now"),
+                dense: true,
+                contentPadding: EdgeInsets.all(0),
+                minVerticalPadding: 0,
+                horizontalTitleGap: 0,
+                visualDensity: VisualDensity(horizontal: 0, vertical: -4),
+                leading: Radio<TimeType>(
+                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  visualDensity: VisualDensity(horizontal: -4),
+                  value: TimeType.NOW,
+                  groupValue: context
+                      .watch<FormRequestPengangkatanProvider>()
+                      .selectedTimeType,
+                  onChanged: (TimeType value) {
+                    context
+                        .read<FormRequestPengangkatanProvider>()
+                        .setTimeType(value);
+                    context
+                        .read<FormRequestPengangkatanProvider>()
+                        .setSelectedDate(null);
+                    context
+                        .read<FormRequestPengangkatanProvider>()
+                        .setSelectedTime(null);
+                  },
                 ),
-                Expanded(child: TimePickerComponent())
-              ],
-            ),
-            Container(
-              height: 24,
-            ),
-            Button(
-              onTap: () {
-                Navigator.push(
-                    context, SlideLeftRoute(page: DetailPengangkatan()));
-              },
-              title: "Lanjut",
-              width: double.infinity,
-            ),
-            Container(
-              height: 30,
-            )
-          ],
+              ),
+              ListTile(
+                title: Text("Set Schedule Time"),
+                dense: true,
+                contentPadding: EdgeInsets.all(0),
+                minVerticalPadding: 0,
+                horizontalTitleGap: 0,
+                visualDensity: VisualDensity(horizontal: 0, vertical: -4),
+                leading: Radio<TimeType>(
+                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  visualDensity: VisualDensity(horizontal: -4),
+                  value: TimeType.SCHEDULED_TIME,
+                  groupValue: context
+                      .watch<FormRequestPengangkatanProvider>()
+                      .selectedTimeType,
+                  onChanged: (TimeType value) {
+                    context
+                        .read<FormRequestPengangkatanProvider>()
+                        .setTimeType(value);
+                  },
+                ),
+              ),
+              Container(
+                height: 16,
+              ),
+              Row(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Expanded(child: DatePickerComponent()),
+                  Container(
+                    width: 15,
+                  ),
+                  Expanded(child: TimePickerComponent())
+                ],
+              ),
+              Container(
+                height: 24,
+              ),
+              Button(
+                onTap: () {
+                  if (context.read<FormRequestPengangkatanProvider>().isValid) {
+                    if (context
+                            .read<FormRequestPengangkatanProvider>()
+                            .selectedTimeType ==
+                        TimeType.NOW) {
+                      DateTime now = DateTime.now();
+                      context
+                          .read<FormRequestPengangkatanProvider>()
+                          .setSelectedDate(
+                              DateTime(now.year, now.month, now.day));
+                      context
+                          .read<FormRequestPengangkatanProvider>()
+                          .setSelectedTime(TimeOfDay.fromDateTime(now));
+                    }
+                    Navigator.push(
+                        context, SlideLeftRoute(page: DetailPengangkatan()));
+                  }
+                },
+                title: "Lanjut",
+                fontColor:
+                    context.watch<FormRequestPengangkatanProvider>().isValid
+                        ? Colors.white
+                        : hexToColor("#C4C4C4"),
+                width: double.infinity,
+                backgroundColor:
+                    context.watch<FormRequestPengangkatanProvider>().isValid
+                        ? hexToColor(MAIN_COLOR)
+                        : Colors.grey[200],
+              ),
+              Container(
+                height: 30,
+              )
+            ],
+          ),
         ),
       ),
     );
