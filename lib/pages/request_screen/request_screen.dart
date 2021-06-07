@@ -4,6 +4,8 @@ import 'package:trashi/components/routes.dart';
 import 'package:trashi/utils/commons.dart';
 import 'package:trashi/pages/form_request_pengangkatan/location_picker_form.dart';
 
+import 'history/collection_history_screen.dart';
+
 class RequestScreen extends StatelessWidget {
   static const String PATH = "request_screen";
   @override
@@ -61,7 +63,12 @@ class RequestScreen extends StatelessWidget {
             splashColor: Colors.transparent,
             highlightColor: Colors.transparent,
             onTap: () {
-              //TODO
+              Navigator.push(
+                context,
+                SlideLeftRoute(
+                  page: CollectionHistoryScreen(),
+                ),
+              );
             },
             child: Row(
               children: [
