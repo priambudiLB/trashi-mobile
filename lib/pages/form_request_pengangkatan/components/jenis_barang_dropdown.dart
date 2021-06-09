@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:formz/formz.dart';
 import 'package:provider/provider.dart';
+import 'package:skeleton_text/skeleton_text.dart';
 import 'package:trashi/pages/form_request_pengangkatan/model/barang.dart';
 import 'package:trashi/pages/form_request_pengangkatan/provider.dart';
 import 'package:trashi/utils/commons.dart';
@@ -7,8 +9,16 @@ import 'package:trashi/utils/commons.dart';
 class JenisBarangDropdown extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return context.watch<FormRequestPengangkatanProvider>().listBarang == null
-        ? Container()
+    return context.watch<FormRequestPengangkatanProvider>().statusFetchData ==
+            FormzStatus.submissionInProgress
+        ? SkeletonAnimation(
+            child: Container(
+            height: 48,
+            width: double.infinity,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                color: hexToColor("#CBCBCB")),
+          ))
         : Container(
             padding: EdgeInsets.symmetric(horizontal: 14),
             decoration: BoxDecoration(
