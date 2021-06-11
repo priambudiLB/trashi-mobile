@@ -6,8 +6,14 @@ class CollectionHistoryModel {
   final String paymentStatus;
   final String paymentDetail;
   final String address;
+  final String trashWeightFormatted;
+  final String remainingPayment;
+  final String downPayment;
 
   CollectionHistoryModel({
+    this.trashWeightFormatted,
+    this.remainingPayment,
+    this.downPayment,
     this.requestStatus,
     this.requestTime,
     this.pickUpDeliveryType,

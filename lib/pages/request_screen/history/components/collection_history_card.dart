@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:trashi/components/spacings.dart';
 import 'package:trashi/constants/trash_collections.dart';
 import 'package:trashi/pages/request_screen/history/models/collection_history_model.dart';
+import 'package:trashi/pages/request_screen/history/request_detail_screen.dart';
 import 'package:trashi/utils/commons.dart';
 
 class CollectionHistoryCard extends StatefulWidget {
@@ -149,50 +150,62 @@ class _CollectionHistoryCardState extends State<CollectionHistoryCard> {
       padding: EdgeInsets.only(
         bottom: 12,
       ),
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(
-            Radius.circular(8),
-          ),
-          border: Border.all(
-            color: hexToColor("#F2F2F2"),
-          ),
-        ),
-        child: Padding(
-          padding: EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildStatusAndTimeOfCollectionSection(),
-              Padding(
-                padding: EdgeInsets.only(
-                  bottom: 15,
-                ),
+      child: InkWell(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => RequestDetailScreen(
+                collectionHistoryModel: widget.collectionHistoryModel,
               ),
-              _buildRequestDataSection(),
-              Spacings.verticalSpace(16),
-              RichText(
-                textAlign: TextAlign.left,
-                text: TextSpan(
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w400,
-                    color: hexToColor("#909090"),
-                    fontFamily: "Avenir",
+            ),
+          );
+        },
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.all(
+              Radius.circular(8),
+            ),
+            border: Border.all(
+              color: hexToColor("#F2F2F2"),
+            ),
+          ),
+          child: Padding(
+            padding: EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildStatusAndTimeOfCollectionSection(),
+                Padding(
+                  padding: EdgeInsets.only(
+                    bottom: 15,
                   ),
-                  children: [
-                    TextSpan(text: "Status Pembayaran: "),
-                    TextSpan(
-                      text: widget.collectionHistoryModel.paymentStatus,
-                      style: TextStyle(
-                        color: _getPaymentStatusColor(),
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ],
                 ),
-              ),
-            ],
+                _buildRequestDataSection(),
+                Spacings.verticalSpace(16),
+                RichText(
+                  textAlign: TextAlign.left,
+                  text: TextSpan(
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w400,
+                      color: hexToColor("#909090"),
+                      fontFamily: "Avenir",
+                    ),
+                    children: [
+                      TextSpan(text: "Status Pembayaran: "),
+                      TextSpan(
+                        text: widget.collectionHistoryModel.paymentStatus,
+                        style: TextStyle(
+                          color: _getPaymentStatusColor(),
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
