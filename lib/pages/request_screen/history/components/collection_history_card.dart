@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:trashi/components/spacings.dart';
+import 'package:trashi/constants/trash_collections.dart';
 import 'package:trashi/pages/request_screen/history/models/collection_history_model.dart';
 import 'package:trashi/utils/commons.dart';
 
@@ -17,6 +18,28 @@ class CollectionHistoryCard extends StatefulWidget {
 }
 
 class _CollectionHistoryCardState extends State<CollectionHistoryCard> {
+  Color _getPaymentStatusColor() {
+    switch (widget.collectionHistoryModel.paymentStatus) {
+      case paymentStatusPaid:
+        return hexToColor("#32A37F");
+      case paymentStatusNotPaid:
+        return hexToColor("#ED7D31");
+      default:
+        return hexToColor("#909090");
+    }
+  }
+
+  Color _getRequestStatusColor() {
+    switch (widget.collectionHistoryModel.requestStatus) {
+      case requestStatusFinished:
+        return hexToColor("#909090");
+      case requestStatusWaiting:
+        return hexToColor("#32A37F");
+      default:
+        return hexToColor("#32A37F");
+    }
+  }
+
   Widget _buildStatusAndTimeOfCollectionSection() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -24,7 +47,7 @@ class _CollectionHistoryCardState extends State<CollectionHistoryCard> {
         Text(
           widget.collectionHistoryModel.requestStatus,
           style: TextStyle(
-            color: hexToColor("#32A37F"),
+            color: _getRequestStatusColor(),
             fontSize: 12,
             fontWeight: FontWeight.w500,
             fontStyle: FontStyle.italic,
@@ -162,7 +185,7 @@ class _CollectionHistoryCardState extends State<CollectionHistoryCard> {
                     TextSpan(
                       text: widget.collectionHistoryModel.paymentStatus,
                       style: TextStyle(
-                        color: hexToColor("#ED7D31"),
+                        color: _getPaymentStatusColor(),
                         fontWeight: FontWeight.w500,
                       ),
                     ),
