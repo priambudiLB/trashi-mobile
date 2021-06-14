@@ -84,7 +84,7 @@ class _RetributionScreenState extends State<RetributionScreen> {
             ],
           ),
         ),
-        SuccessOverlay()
+        // SuccessOverlay()
       ],
     );
   }
