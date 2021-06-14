@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:trashi/components/button.dart';
 import 'package:trashi/components/layout_redesign.dart';
 import 'package:trashi/pages/form_request_pengangkatan/provider.dart';
 import 'package:trashi/utils/commons.dart';
@@ -34,7 +35,13 @@ class DetailPengangkatan extends StatelessWidget {
         ),
         Text(
           context.read<FormRequestPengangkatanProvider>().selectedBarang.name,
-          style: TextStyle(),
+          style: TextStyle(
+              fontSize: 14,
+              color: hexToColor("#4D4D4D"),
+              fontWeight: FontWeight.w500),
+        ),
+        Container(
+          height: 16,
         ),
         Text(
           "Berat",
@@ -47,6 +54,19 @@ class DetailPengangkatan extends StatelessWidget {
           height: 8,
         ),
         Text(
+          context
+              .read<FormRequestPengangkatanProvider>()
+              .selectedBeratBarang
+              .name,
+          style: TextStyle(
+              fontSize: 14,
+              color: hexToColor("#4D4D4D"),
+              fontWeight: FontWeight.w500),
+        ),
+        Container(
+          height: 16,
+        ),
+        Text(
           "Jenis Kendaraan dan DP",
           style: TextStyle(
               fontSize: 12,
@@ -57,12 +77,42 @@ class DetailPengangkatan extends StatelessWidget {
           height: 8,
         ),
         Text(
+          context
+              .read<FormRequestPengangkatanProvider>()
+              .selectedKendaraan
+              .name,
+          style: TextStyle(
+              fontSize: 14,
+              color: hexToColor("#4D4D4D"),
+              fontWeight: FontWeight.w500),
+        ),
+        Container(
+          height: 16,
+        ),
+        Text(
           "Lokasi",
           style: TextStyle(
               fontSize: 12,
               color: hexToColor("#909090"),
               fontWeight: FontWeight.w400),
         ),
+        Container(
+          height: 8,
+        ),
+        Text(
+          context
+              .read<FormRequestPengangkatanProvider>()
+              .selectedLocation
+              .toString(),
+          style: TextStyle(
+              fontSize: 14,
+              color: hexToColor("#4D4D4D"),
+              fontWeight: FontWeight.w500),
+        ),
+        Container(
+          height: 32,
+        ),
+        Button(onTap: () {}, width: double.infinity, title: "Lanjut Pembayaran")
       ],
     ));
   }
