@@ -33,16 +33,9 @@ class TrashiTextFormField {
       ),
     );
 
-    return Column(
-      children: [
-        Container(
-          height: 48,
-          child: textFormField,
-        ),
-        Padding(
-          padding: EdgeInsets.only(bottom: 12),
-        ),
-      ],
+    return Container(
+      height: 48,
+      child: textFormField,
     );
   }
 }
