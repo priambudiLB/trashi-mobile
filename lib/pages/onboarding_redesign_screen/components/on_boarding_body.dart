@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:trashi/components/button.dart';
 import 'package:trashi/constants/colors.dart';
+import 'package:trashi/pages/log_in_screen/log_in_screen.dart';
 import 'package:trashi/pages/registration_screen/account_type_selection_screen.dart';
 import 'package:trashi/pages/trash_collection_screen/accepter/accept_trash_collection_request_screen.dart';
 import 'package:trashi/utils/commons.dart';
@@ -18,7 +19,12 @@ class OnBoardingBody extends StatelessWidget {
     }
 
     onLoginButtonPressed() {
-      print("login");
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => LogInScreen(),
+        ),
+      );
     }
 
     var heightTmp = 48.0;
