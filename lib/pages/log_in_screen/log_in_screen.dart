@@ -46,13 +46,14 @@ class _LogInScreenState extends State<LogInScreen> {
               controller: _emailOrPhoneNumberController,
               label: "Email",
               keyboardType: TextInputType.text,
-            ).buildTextFormField(),
+            ),
             Spacings.verticalSpace(12),
             TrashiTextFormField(
               controller: _passwordController,
               label: "Password",
               keyboardType: TextInputType.text,
-            ).buildTextFormField(),
+              isPasswordField: true,
+            ),
             Spacings.verticalSpace(8),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
