@@ -2,10 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:trashi/components/form.dart';
 import 'package:trashi/components/layout_redesign.dart';
 import 'package:trashi/components/spacings.dart';
+import 'package:trashi/http_request/models/auth.dart';
+import 'package:trashi/http_request/trashi_client.dart';
 import 'package:trashi/pages/navbar_screen/bottom_navbar.dart';
 import 'package:trashi/pages/registration_screen/account_type_selection_screen.dart';
 import 'package:trashi/pages/trash_collection_screen/accepter/components/row_button_wrapper.dart';
 import 'package:trashi/utils/commons.dart';
+import 'package:dio/dio.dart';
+import 'package:logger/logger.dart';
 
 class LogInScreen extends StatefulWidget {
   static const String PATH = "logIn";
@@ -17,6 +21,86 @@ class LogInScreen extends StatefulWidget {
 class _LogInScreenState extends State<LogInScreen> {
   TextEditingController _emailOrPhoneNumberController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
+  bool isSignInSuccessful = false;
+
+  bool isPhoneNumber(String text) {
+    try {
+      int.parse(text);
+      return true;
+    } on FormatException {
+      return false;
+    }
+  }
+
+  bool isEmail(String text) {
+    return RegExp(
+            r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+        .hasMatch(text);
+  }
+
+  void _onSignInError(Object obj) {
+    switch (obj.runtimeType) {
+      case DioError:
+        // Here's the sample to get the failed response error code and message
+        final res = (obj as DioError).response;
+        Logger logger = Logger();
+        logger.e("Got error : ${res.statusCode} -> ${res.statusMessage}");
+        break;
+      default:
+    }
+  }
+
+  Future<void> _signIn() async {
+    if (isPhoneNumber(_emailOrPhoneNumberController.text)) {
+      SignInByPhoneRequest body = SignInByPhoneRequest(
+        password: _passwordController.text,
+        phone: _emailOrPhoneNumberController.text,
+      );
+
+      final client = TrashiClient(
+        Dio(
+          BaseOptions(contentType: 'application/json'),
+        ),
+      );
+
+      SignInByPhoneResponse response;
+
+      await client
+          .signInByPhone(body)
+          .then(
+            (value) => response = value,
+          )
+          .catchError(_onSignInError);
+
+      if (response != null) {
+        isSignInSuccessful = true;
+      }
+    } else if (isEmail(_emailOrPhoneNumberController.text)) {
+      SignInRequest body = SignInRequest(
+        username: _emailOrPhoneNumberController.text,
+        password: _passwordController.text,
+      );
+
+      final client = TrashiClient(
+        Dio(
+          BaseOptions(contentType: 'application/json'),
+        ),
+      );
+
+      SignInResponse response;
+
+      await client
+          .signIn(body)
+          .then(
+            (value) => response = value,
+          )
+          .catchError(_onSignInError);
+
+      if (response != null) {
+        isSignInSuccessful = true;
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -80,16 +164,21 @@ class _LogInScreenState extends State<LogInScreen> {
               foregroundColor: Colors.white,
               circularBorderRadius: 8,
               borderColor: hexToColor("#32A37F"),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => BottomNavScreen(
-                      navIndex: 2,
-                      isVerified: true,
+              onPressed: () async {
+                await _signIn();
+
+                if (isSignInSuccessful) {
+                  print('sign in');
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => BottomNavScreen(
+                        navIndex: 2,
+                        isVerified: true,
+                      ),
                     ),
-                  ),
-                );
+                  );
+                }
               },
               content: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
