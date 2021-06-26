@@ -119,9 +119,9 @@ class _LocationPickerFormState extends State<LocationPickerForm> {
                               types: [],
                               language: "id_ID",
                               location: Location(
-                                  lat: LocationPickerForm
+                                  LocationPickerForm
                                       ._initialPosition.target.latitude,
-                                  lng: LocationPickerForm
+                                  LocationPickerForm
                                       ._initialPosition.target.latitude),
                               apiKey: "AIzaSyBRNc2ye4xX0bQ9m1lYBmM8URGWs9bxeBo",
                               onError: onError,

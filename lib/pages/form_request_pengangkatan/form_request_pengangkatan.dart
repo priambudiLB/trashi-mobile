@@ -242,7 +242,7 @@ class _FormRequestPengangkatanState extends State<FormRequestPengangkatan> {
         return InkWell(
           onTap: () async {
             final pickedFile =
-                await picker.getImage(source: ImageSource.gallery);
+                await ImagePicker.pickImage(source: ImageSource.gallery);
             if (pickedFile != null) {
               List<File> tmp =
                   context.read<FormRequestPengangkatanProvider>().listFile;

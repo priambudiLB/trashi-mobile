@@ -38,7 +38,7 @@ class UploadKtpAndKkComponent extends StatelessWidget {
           Button(
             onTap: () async {
               final pickedFile =
-                  await picker.getImage(source: ImageSource.gallery);
+                  await ImagePicker.pickImage(source: ImageSource.gallery);
               if (pickedFile != null) {
                 context
                     .read<SubmitDocumentVerification>()
