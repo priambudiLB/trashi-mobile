@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:trashi/app.dart';
+import 'package:trashi/pages/edit_profile_screen/provider.dart';
 import 'package:trashi/pages/form_request_pengangkatan/provider.dart';
 import 'package:trashi/pages/profile_screen_redesign/provider.dart';
 import 'package:trashi/providers.dart';
@@ -24,7 +25,8 @@ void main() {
         ChangeNotifierProvider(create: (_) => SubmitDocumentVerification()),
         ChangeNotifierProvider(
             create: (_) => FormRequestPengangkatanProvider()),
-        ChangeNotifierProvider(create: (_) => ProfileScreenProvider())
+        ChangeNotifierProvider(create: (_) => ProfileScreenProvider()),
+        ChangeNotifierProvider(create: (_) => EditProfileScreenProvider())
       ],
       // child: const MyApp(),
       child: const TrashiApplication(),
