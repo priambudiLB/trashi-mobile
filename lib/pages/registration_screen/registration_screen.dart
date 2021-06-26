@@ -4,7 +4,9 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:trashi/components/button.dart';
+import 'package:trashi/components/form.dart';
 import 'package:trashi/components/layout_redesign.dart';
+import 'package:trashi/components/spacings.dart';
 import 'package:trashi/constants/account_types.dart';
 import 'package:trashi/constants/colors.dart';
 import 'package:trashi/pages/registration_screen/components/document_upload_button.dart';
@@ -178,24 +180,28 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 Container(
                   child: Column(
                     children: [
-                      _buildTextFormField(
-                        TextInputType.text,
-                        "Name",
+                      TrashiTextFormField(
+                        keyboardType: TextInputType.text,
+                        label: 'Name',
                       ),
-                      _buildTextFormField(
-                        TextInputType.phone,
-                        "Phone Number",
+                      Spacings.verticalSpace(12),
+                      TrashiTextFormField(
+                        keyboardType: TextInputType.phone,
+                        label: 'Phone Number',
                       ),
-                      _buildTextFormField(
-                        TextInputType.text,
-                        "Password",
-                        obscureText: true,
+                      Spacings.verticalSpace(12),
+                      TrashiTextFormField(
+                        keyboardType: TextInputType.text,
+                        label: 'Password',
+                        isPasswordField: true,
                       ),
-                      _buildTextFormField(
-                        TextInputType.text,
-                        "Confirm Password",
-                        obscureText: true,
+                      Spacings.verticalSpace(12),
+                      TrashiTextFormField(
+                        keyboardType: TextInputType.text,
+                        label: 'Confirm Password',
+                        isPasswordField: true,
                       ),
+                      Spacings.verticalSpace(12),
                     ],
                   ),
                 ),
