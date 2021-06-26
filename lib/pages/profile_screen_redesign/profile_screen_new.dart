@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:trashi/constants/colors.dart';
+import 'package:trashi/http_request/trashi_client.dart';
 import 'package:trashi/pages/edit_profile_screen/edit_profile_screen.dart';
 import 'package:trashi/pages/form_request_pengangkatan/form_request_pengangkatan.dart';
 import 'package:trashi/pages/onboarding_redesign_screen/on_boarding_screen_view.dart';
@@ -8,6 +9,8 @@ import 'package:trashi/pages/profile_screen_redesign/role_type.dart';
 import 'package:trashi/pages/request_screen/request_screen.dart';
 import 'package:trashi/pages/retribution_screen/retribution_screen.dart';
 import 'package:trashi/utils/commons.dart';
+import 'package:dio/dio.dart';
+import 'package:logger/logger.dart';
 
 import 'package:provider/provider.dart';
 
@@ -19,6 +22,35 @@ class ProfileScreenRedesign extends StatefulWidget {
 }
 
 class _ProfileScreenRedesignState extends State<ProfileScreenRedesign> {
+  bool isSignOutSuccessful = false;
+
+  void _onSignOutError(Object obj) {
+    switch (obj.runtimeType) {
+      case DioError:
+        // Here's the sample to get the failed response error code and message
+        final res = (obj as DioError).response;
+        Logger logger = Logger();
+        logger.e("Got error : ${res.statusCode} -> ${res.statusMessage}");
+        break;
+      default:
+    }
+  }
+
+  Future<void> _signOut() async {
+    final client = TrashiClient(
+      Dio(
+        BaseOptions(contentType: 'application/json'),
+      ),
+    );
+
+    await client
+        .signOut()
+        .then(
+          (_) => isSignOutSuccessful = true,
+        )
+        .catchError(_onSignOutError);
+  }
+
   @override
   void initState() {
     super.initState();
@@ -68,14 +100,18 @@ class _ProfileScreenRedesignState extends State<ProfileScreenRedesign> {
           ),
           ItemTileProfile(
               icon: Icons.logout,
-              ontap: () {
-                // TODO call api logout
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => OnboardingScreen(),
-                  ),
-                );
+              ontap: () async {
+                await _signOut();
+
+                if (isSignOutSuccessful) {
+                  print('log out');
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => OnboardingScreen(),
+                    ),
+                  );
+                }
               },
               title: "Logout"),
         ],
