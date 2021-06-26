@@ -14,6 +14,7 @@ import 'package:trashi/pages/request_screen/request_screen.dart';
 import 'package:trashi/pages/retribution_screen/retribution_screen.dart';
 import 'package:trashi/pages/splash_screen/splash_screen.dart';
 import 'package:trashi/pages/trash_collection_screen/accepter/accept_trash_collection_request_screen.dart';
+import 'package:trashi/providers.dart';
 import 'package:trashi/verification.dart';
 
 class TrashiApplication extends StatelessWidget {
@@ -24,7 +25,7 @@ class TrashiApplication extends StatelessWidget {
     return MaterialApp(
       theme: defaultTheme,
       title: APP_NAME,
-      initialRoute: SplashScreen.PATH,
+      initialRoute: OnboardingScreen.PATH,
       routes: <String, WidgetBuilder>{
         // TODO: Add more page and define its path here
         SplashScreen.PATH: (_) => SplashScreen(),

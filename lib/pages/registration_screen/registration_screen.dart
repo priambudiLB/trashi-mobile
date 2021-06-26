@@ -9,8 +9,10 @@ import 'package:trashi/components/layout_redesign.dart';
 import 'package:trashi/components/spacings.dart';
 import 'package:trashi/constants/account_types.dart';
 import 'package:trashi/constants/colors.dart';
+import 'package:trashi/pages/confirmation_otp_screen/confirmation_otp_screen.dart';
 import 'package:trashi/pages/registration_screen/components/document_upload_button.dart';
 import 'package:trashi/utils/commons.dart';
+import 'package:trashi/verification.dart';
 
 class RegistrationScreen extends StatefulWidget {
   static const String PATH = "registration";
@@ -99,7 +101,17 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         minWidth: double.infinity,
         height: 48,
         child: MaterialButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ConfirmationOTPScreen(
+                  account: "089635",
+                  verification: Verification.phone,
+                ),
+              ),
+            );
+          },
           child: Text(
             "Registrasi",
             style: TextStyle(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:trashi/components/form.dart';
 import 'package:trashi/components/layout_redesign.dart';
 import 'package:trashi/components/spacings.dart';
+import 'package:trashi/pages/navbar_screen/bottom_navbar.dart';
 import 'package:trashi/pages/registration_screen/account_type_selection_screen.dart';
 import 'package:trashi/pages/trash_collection_screen/accepter/components/row_button_wrapper.dart';
 import 'package:trashi/utils/commons.dart';
@@ -80,7 +81,15 @@ class _LogInScreenState extends State<LogInScreen> {
               circularBorderRadius: 8,
               borderColor: hexToColor("#32A37F"),
               onPressed: () {
-                print("Sign In");
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => BottomNavScreen(
+                      navIndex: 2,
+                      isVerified: true,
+                    ),
+                  ),
+                );
               },
               content: Row(
                 mainAxisAlignment: MainAxisAlignment.center,

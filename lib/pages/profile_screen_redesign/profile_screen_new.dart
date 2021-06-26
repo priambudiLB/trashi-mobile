@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:trashi/constants/colors.dart';
+import 'package:trashi/pages/edit_profile_screen/edit_profile_screen.dart';
+import 'package:trashi/pages/form_request_pengangkatan/form_request_pengangkatan.dart';
+import 'package:trashi/pages/onboarding_redesign_screen/on_boarding_screen_view.dart';
 import 'package:trashi/pages/profile_screen_redesign/provider.dart';
 import 'package:trashi/pages/profile_screen_redesign/role_type.dart';
+import 'package:trashi/pages/request_screen/request_screen.dart';
+import 'package:trashi/pages/retribution_screen/retribution_screen.dart';
 import 'package:trashi/utils/commons.dart';
 
 import 'package:provider/provider.dart';
@@ -61,7 +66,18 @@ class _ProfileScreenRedesignState extends State<ProfileScreenRedesign> {
             margin: EdgeInsets.symmetric(horizontal: 24),
             color: hexToColor("#DFDFDF"),
           ),
-          ItemTileProfile(icon: Icons.logout, ontap: () {}, title: "Logout"),
+          ItemTileProfile(
+              icon: Icons.logout,
+              ontap: () {
+                // TODO call api logout
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => OnboardingScreen(),
+                  ),
+                );
+              },
+              title: "Logout"),
         ],
       ),
     );
@@ -170,13 +186,23 @@ class ProfileHeader extends StatelessWidget {
                   Container(
                     width: 25,
                   ),
-                  ClipOval(
-                      child: Container(
-                          height: 30,
-                          width: 30,
-                          color: Colors.white,
-                          child:
-                              Image.asset("assets/images/Icon_success.png"))),
+                  InkWell(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => EditProfile(),
+                        ),
+                      );
+                    },
+                    child: ClipOval(
+                        child: Container(
+                            height: 30,
+                            width: 30,
+                            color: Colors.white,
+                            child:
+                                Image.asset("assets/images/Icon_success.png"))),
+                  ),
                 ],
               )),
           Positioned(
@@ -189,51 +215,16 @@ class ProfileHeader extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Container(
-                          height: 115,
-                          width: 148,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(8),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.08),
-                                blurRadius: 7,
-                                offset:
-                                    Offset(0, 4), // changes position of shadow
+                        InkWell(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => RetributionScreen(),
                               ),
-                            ],
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              ClipOval(
-                                child: Container(
-                                  padding: EdgeInsets.all(6),
-                                  height: 32,
-                                  width: 32,
-                                  color: hexToColor(MAIN_COLOR),
-                                  child: Center(
-                                    child: Image.asset(
-                                      "assets/images/wallet_icon.png",
-                                      width: 15,
-                                      height: 15,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Container(
-                                height: 12,
-                              ),
-                              Text(
-                                "Pembayaran\nRetribusi",
-                                textAlign: TextAlign.center,
-                              )
-                            ],
-                          ),
-                        ),
-                        Container(
+                            );
+                          },
+                          child: Container(
                             height: 115,
                             width: 148,
                             decoration: BoxDecoration(
@@ -260,7 +251,7 @@ class ProfileHeader extends StatelessWidget {
                                     color: hexToColor(MAIN_COLOR),
                                     child: Center(
                                       child: Image.asset(
-                                        "assets/images/bag_icon.png",
+                                        "assets/images/wallet_icon.png",
                                         width: 15,
                                         height: 15,
                                       ),
@@ -271,11 +262,66 @@ class ProfileHeader extends StatelessWidget {
                                   height: 12,
                                 ),
                                 Text(
-                                  "Request\nPengangkatan",
+                                  "Pembayaran\nRetribusi",
                                   textAlign: TextAlign.center,
                                 )
                               ],
-                            )),
+                            ),
+                          ),
+                        ),
+                        InkWell(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => RequestScreen(),
+                              ),
+                            );
+                          },
+                          child: Container(
+                              height: 115,
+                              width: 148,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(8),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(0.08),
+                                    blurRadius: 7,
+                                    offset: Offset(
+                                        0, 4), // changes position of shadow
+                                  ),
+                                ],
+                              ),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  ClipOval(
+                                    child: Container(
+                                      padding: EdgeInsets.all(6),
+                                      height: 32,
+                                      width: 32,
+                                      color: hexToColor(MAIN_COLOR),
+                                      child: Center(
+                                        child: Image.asset(
+                                          "assets/images/bag_icon.png",
+                                          width: 15,
+                                          height: 15,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Container(
+                                    height: 12,
+                                  ),
+                                  Text(
+                                    "Request\nPengangkatan",
+                                    textAlign: TextAlign.center,
+                                  )
+                                ],
+                              )),
+                        ),
                       ],
                     ),
                     Container(

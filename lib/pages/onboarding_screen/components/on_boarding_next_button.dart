@@ -11,7 +11,11 @@ class OnBoardingNextButton extends StatelessWidget {
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => BottomNavScreen(navIndex: 0)),
+          MaterialPageRoute(
+              builder: (context) => BottomNavScreen(
+                    navIndex: 0,
+                    isVerified: true,
+                  )),
         );
       },
       child: Container(
@@ -19,13 +23,10 @@ class OnBoardingNextButton extends StatelessWidget {
         height: 44,
         child: Center(
             child: Text(
-              "Get Started",
-              style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 16),
-            )
-        ),
+          "Get Started",
+          style: TextStyle(
+              color: Colors.black, fontWeight: FontWeight.w600, fontSize: 16),
+        )),
         decoration: BoxDecoration(
             color: Colors.white,
             boxShadow: [

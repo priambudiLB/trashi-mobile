@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:trashi/components/button.dart';
+import 'package:trashi/pages/navbar_screen/bottom_navbar.dart';
 import 'package:trashi/providers.dart';
 import 'package:trashi/utils/commons.dart';
 
@@ -58,7 +59,15 @@ class PopUpSuccess extends StatelessWidget {
                   child: Material(
                     child: Button(
                       onTap: () {
-                        context.read<OTP>().setPopUpSuccessOpen(false);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => BottomNavScreen(
+                              navIndex: 2,
+                              isVerified: false,
+                            ),
+                          ),
+                        );
                       },
                       title: "Done",
                     ),
