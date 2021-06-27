@@ -14,9 +14,9 @@ class FormRequestPengangkatanProvider
   Barang _selectedBarang;
   BeratBarang _selectedBeratBarang;
   Kendaraan _selectedKendaraan;
-  List<Barang> _listBarang;
-  List<BeratBarang> _listBeratBarang;
-  List<Kendaraan> _listKendaraan;
+  List<Barang> _listBarang = [];
+  List<BeratBarang> _listBeratBarang = [];
+  List<Kendaraan> _listKendaraan = [];
   FormzStatus _statusFetchData = FormzStatus.pure;
   TimeType _selectedTimeType = TimeType.NOW;
   DateTime _selectedDate;
