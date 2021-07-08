@@ -47,6 +47,15 @@ class FormRequestPengangkatanProvider
       (_selectedTimeType == TimeType.NOW ||
           (_selectedDate != null && _selectedTime != null));
 
+  void fetchDataMap() async {
+    LatLng latlang = new LatLng(-6.2339227, 106.8387889);
+    Future.delayed(Duration(seconds: 1), () {
+      setMarkers(
+          {Marker(markerId: MarkerId(latlang.toString()), position: latlang)});
+      setSelectedLocation(latlang);
+    });
+  }
+
   void fetchData() async {
     setStatusFetchData(FormzStatus.submissionInProgress);
     Future.delayed(Duration(seconds: 1), () {
@@ -67,6 +76,7 @@ class FormRequestPengangkatanProvider
         Kendaraan(name: "Kendaraan 2"),
         Kendaraan(name: "Kendaraan 3")
       ]);
+
       setStatusFetchData(FormzStatus.submissionSuccess);
     });
   }
