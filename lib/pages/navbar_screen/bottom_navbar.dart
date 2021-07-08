@@ -49,7 +49,16 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
       body: navbarItems[_currentIndex]['screen'],
       // body: Text("a"),
       bottomNavigationBar: Container(
-        height: 40,
+        height: 48,
+        decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              color: hexToColor("#E0E0E0").withOpacity(0.25),
+              blurRadius: 7,
+              offset: Offset(0, -10), // changes position of shadow
+            ),
+          ],
+        ),
         child: Row(
             children: navbarItems
                 .asMap()
@@ -71,8 +80,8 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
                         );
                       },
                       child: Container(
-                        color: hexToColor(NAVBAR_COLOR),
-                        child: Row(
+                        color: Colors.white,
+                        child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
                             Image.asset(
@@ -86,11 +95,12 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
                             Text(item['text'],
                                 style: TextStyle(
                                     fontSize: 14,
-                                    fontFamily: "Poppins",
                                     fontWeight: _currentIndex == index
                                         ? FontWeight.w600
                                         : FontWeight.w400,
-                                    color: Colors.black))
+                                    color: _currentIndex == index
+                                        ? hexToColor(MAIN_COLOR)
+                                        : hexToColor("#4D4D4D")))
                           ],
                         ),
                       ),
