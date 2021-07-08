@@ -49,6 +49,13 @@ class _LocationPickerFormState extends State<LocationPickerForm> {
         .setSelectedLocation(latlang);
   }
 
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<FormRequestPengangkatanProvider>().fetchDataMap();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     FocusScopeNode currentScope = FocusScope.of(context);
@@ -72,9 +79,6 @@ class _LocationPickerFormState extends State<LocationPickerForm> {
                 _controller.complete(controller);
               },
               markers: context.watch<FormRequestPengangkatanProvider>().markers,
-              onTap: (LatLng latlng) {
-                onAddMarkerButtonPressed(latlng);
-              },
             ),
             Positioned(
                 bottom: 0,
@@ -89,50 +93,6 @@ class _LocationPickerFormState extends State<LocationPickerForm> {
                       color: Colors.white),
                   child: Column(
                     children: [
-                      Container(
-                        width: double.infinity,
-                        padding: EdgeInsets.symmetric(horizontal: 14),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                          border: Border.all(
-                              width: 1, color: hexToColor("#CBCBCB")),
-                        ),
-                        child: TextField(
-                          readOnly: true,
-                          cursorColor: Colors.black,
-                          controller: _textEditingController,
-                          focusNode: _textFocusNode,
-                          decoration: InputDecoration(
-                            border: InputBorder.none,
-                            focusedBorder: InputBorder.none,
-                            enabledBorder: InputBorder.none,
-                            errorBorder: InputBorder.none,
-                            disabledBorder: InputBorder.none,
-                            icon: Icon(Icons.search),
-                            hintText: "Cari Lokasi",
-                            contentPadding: EdgeInsets.all(0),
-                          ),
-                          onTap: () async {
-                            Prediction p = await PlacesAutocomplete.show(
-                              context: context,
-                              strictbounds: false,
-                              types: [],
-                              language: "id_ID",
-                              location: Location(
-                                  LocationPickerForm
-                                      ._initialPosition.target.latitude,
-                                  LocationPickerForm
-                                      ._initialPosition.target.latitude),
-                              apiKey: "AIzaSyBRNc2ye4xX0bQ9m1lYBmM8URGWs9bxeBo",
-                              onError: onError,
-                              radius: null,
-                            );
-                            if (p != null) {
-                              print(p.description);
-                            }
-                          },
-                        ),
-                      ),
                       Container(
                         height: 16,
                       ),
