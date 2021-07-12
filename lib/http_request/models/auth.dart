@@ -28,7 +28,6 @@ class SignInResponse {
   String firstName;
   @JsonKey(name: 'lastName')
   String lastName;
-  String phone;
 
   SignInResponse({
     this.isAcc,
@@ -37,7 +36,6 @@ class SignInResponse {
     this.role,
     this.firstName,
     this.lastName,
-    this.phone,
   });
 
   factory SignInResponse.fromJson(Map<String, dynamic> json) =>
