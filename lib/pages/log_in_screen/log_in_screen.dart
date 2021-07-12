@@ -7,6 +7,7 @@ import 'package:trashi/http_request/trashi_client.dart';
 import 'package:trashi/pages/navbar_screen/bottom_navbar.dart';
 import 'package:trashi/pages/registration_screen/account_type_selection_screen.dart';
 import 'package:trashi/pages/trash_collection_screen/accepter/components/row_button_wrapper.dart';
+import 'package:trashi/secure_storage/secure_storage.dart';
 import 'package:trashi/utils/commons.dart';
 import 'package:dio/dio.dart';
 import 'package:logger/logger.dart';
@@ -51,6 +52,8 @@ class _LogInScreenState extends State<LogInScreen> {
   }
 
   Future<void> _signIn() async {
+    SecureStorage _secureStorage = SecureStorage();
+
     if (isPhoneNumber(_emailOrPhoneNumberController.text)) {
       SignInByPhoneRequest body = SignInByPhoneRequest(
         password: _passwordController.text,
@@ -74,6 +77,8 @@ class _LogInScreenState extends State<LogInScreen> {
 
       if (response != null) {
         isSignInSuccessful = true;
+
+        await _secureStorage.setSignInByPhoneResponse(response);
       }
     } else if (isEmail(_emailOrPhoneNumberController.text)) {
       SignInRequest body = SignInRequest(
@@ -98,6 +103,8 @@ class _LogInScreenState extends State<LogInScreen> {
 
       if (response != null) {
         isSignInSuccessful = true;
+
+        await _secureStorage.setSignInResponse(response);
       }
     }
   }
@@ -129,7 +136,7 @@ class _LogInScreenState extends State<LogInScreen> {
             Spacings.verticalSpace(24),
             TrashiTextFormField(
               controller: _emailOrPhoneNumberController,
-              label: "Email",
+              label: "Email or phone number",
               keyboardType: TextInputType.text,
             ),
             Spacings.verticalSpace(12),
@@ -169,7 +176,7 @@ class _LogInScreenState extends State<LogInScreen> {
 
                 if (isSignInSuccessful) {
                   print('sign in');
-                  Navigator.push(
+                  Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
                       builder: (context) => BottomNavScreen(

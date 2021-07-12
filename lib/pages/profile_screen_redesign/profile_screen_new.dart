@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:trashi/constants/colors.dart';
+import 'package:trashi/http_request/models/auth.dart';
 import 'package:trashi/http_request/trashi_client.dart';
 import 'package:trashi/pages/edit_profile_screen/edit_profile_screen.dart';
-import 'package:trashi/pages/form_request_pengangkatan/form_request_pengangkatan.dart';
 import 'package:trashi/pages/onboarding_redesign_screen/on_boarding_screen_view.dart';
 import 'package:trashi/pages/profile_screen_redesign/provider.dart';
 import 'package:trashi/pages/profile_screen_redesign/role_type.dart';
 import 'package:trashi/pages/request_screen/request_screen.dart';
 import 'package:trashi/pages/retribution_screen/retribution_screen.dart';
+import 'package:trashi/secure_storage/secure_storage.dart';
 import 'package:trashi/utils/commons.dart';
 import 'package:dio/dio.dart';
 import 'package:logger/logger.dart';
@@ -23,6 +24,7 @@ class ProfileScreenRedesign extends StatefulWidget {
 
 class _ProfileScreenRedesignState extends State<ProfileScreenRedesign> {
   bool isSignOutSuccessful = false;
+  SecureStorage _secureStorage = SecureStorage();
 
   void _onSignOutError(Object obj) {
     switch (obj.runtimeType) {
@@ -57,6 +59,19 @@ class _ProfileScreenRedesignState extends State<ProfileScreenRedesign> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<ProfileScreenProvider>().fetchData();
     });
+    printMethod();
+  }
+
+  void printMethod() async {
+    // can be deleted later. for testing purposes
+    SignInByPhoneResponse signInByPhoneResponse =
+        await _secureStorage.getSignInByPhoneResponse();
+
+    SignInResponse signInResponse = await _secureStorage.getSignInResponse();
+
+    if (signInByPhoneResponse != null) print(signInByPhoneResponse.phone);
+
+    if (signInResponse != null) print(signInResponse.username);
   }
 
   @override
@@ -105,6 +120,7 @@ class _ProfileScreenRedesignState extends State<ProfileScreenRedesign> {
 
                 if (isSignOutSuccessful) {
                   print('log out');
+                  await _secureStorage.deleteAll();
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
