@@ -1,9 +1,7 @@
 import 'dart:io';
 
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:trashi/components/button.dart';
 import 'package:trashi/components/form.dart';
 import 'package:trashi/components/layout_redesign.dart';
 import 'package:trashi/components/spacings.dart';
@@ -11,13 +9,14 @@ import 'package:trashi/constants/account_types.dart';
 import 'package:trashi/constants/colors.dart';
 import 'package:trashi/pages/confirmation_otp_screen/confirmation_otp_screen.dart';
 import 'package:trashi/pages/registration_screen/components/document_upload_button.dart';
+import 'package:trashi/pages/registration_screen/logics/registration.dart';
 import 'package:trashi/utils/commons.dart';
 import 'package:trashi/verification.dart';
 
 class RegistrationScreen extends StatefulWidget {
   static const String PATH = "registration";
 
-  final String accountType;
+  final AccountType accountType;
 
   const RegistrationScreen({Key key, this.accountType}) : super(key: key);
 
@@ -35,6 +34,18 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   static const String businessLicenseDocumentLabel = "Upload foto izin usaha";
   static const String withBusinessLicenseDocumentLabel =
       "Upload foto bersama izin usaha";
+
+  RegistrationLogic _logic;
+
+  final _formKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    super.initState();
+    _logic = RegistrationLogic(
+      accountType: widget.accountType,
+    );
+  }
 
   var _requiredDocumentLabelsRTRW = [
     ktpLabel,
@@ -55,40 +66,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     withBusinessLicenseDocumentLabel,
   ];
 
-  _buildTextFormField(TextInputType keyboardType, String label,
-      {bool obscureText = false}) {
-    TextFormField textFormField = TextFormField(
-      obscureText: obscureText,
-      keyboardType: keyboardType,
-      decoration: InputDecoration(
-        floatingLabelBehavior: FloatingLabelBehavior.never,
-        contentPadding: EdgeInsets.fromLTRB(16, 14, 16, 15),
-        labelText: label,
-        labelStyle: TextStyle(
-          fontSize: 14,
-          fontWeight: FontWeight.w400,
-        ),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.all(
-            Radius.circular(8),
-          ),
-        ),
-      ),
-    );
-
-    return Column(
-      children: [
-        Container(
-          height: 48,
-          child: textFormField,
-        ),
-        Padding(
-          padding: EdgeInsets.only(bottom: 12),
-        ),
-      ],
-    );
-  }
-
   _buildRegisterButton() {
     return Container(
       decoration: BoxDecoration(
@@ -101,16 +78,23 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         minWidth: double.infinity,
         height: 48,
         child: MaterialButton(
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => ConfirmationOTPScreen(
-                  account: "089635",
-                  verification: Verification.phone,
-                ),
-              ),
-            );
+          onPressed: () async {
+            if (_formKey.currentState.validate()) {
+              await _logic.signUp();
+              print('jakh');
+
+              if (_logic.isSignUpSuccessful) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ConfirmationOTPScreen(
+                      account: "089635",
+                      verification: Verification.phone,
+                    ),
+                  ),
+                );
+              }
+            }
           },
           child: Text(
             "Registrasi",
@@ -123,20 +107,21 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     );
   }
 
-  _buildDocumentButtons(String accountType) {
+  Widget _buildDocumentButtons(AccountType accountType) {
     switch (accountType) {
-      case accountTypeGovernment:
+      case AccountType.government:
         return _buildAccountDocumentButtons(_requiredDocumentLabelsGovernment);
-      case accountTypeCompany:
+      case AccountType.company:
         return _buildAccountDocumentButtons(_requiredDocumentLabelsCompany);
-      case accountTypePublic:
-        return _buildAccountDocumentButtons(_requiredDocumentLabelsPublic);
-      case accountTypeRTRW:
+      case AccountType.RTRW:
         return _buildAccountDocumentButtons(_requiredDocumentLabelsRTRW);
+      case AccountType.public:
+      default:
+        return _buildAccountDocumentButtons(_requiredDocumentLabelsPublic);
     }
   }
 
-  _buildAccountDocumentButtons(List<String> labels) {
+  Widget _buildAccountDocumentButtons(List<String> labels) {
     List<Widget> _children = [];
 
     for (var i = 0; i < labels.length; i++) {
@@ -156,6 +141,23 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     );
   }
 
+  TrashiTextFormField _buildIdentifierField() {
+    if (widget.accountType.shouldInputPhoneNumberToRegister) {
+      return TrashiTextFormField(
+        keyboardType: TextInputType.phone,
+        label: 'Phone Number',
+        controller: _logic.phoneNumberController,
+        validator: _logic.validatePhoneNumber,
+      );
+    }
+    return TrashiTextFormField(
+      keyboardType: TextInputType.text,
+      label: 'Email',
+      controller: _logic.emailController,
+      validator: _logic.validateEmail,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Layout(
@@ -167,7 +169,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    "Registrasi sebagai ${widget.accountType}",
+                    "Registrasi sebagai ${widget.accountType.text}",
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.w800,
@@ -190,31 +192,37 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   ),
                 ),
                 Container(
-                  child: Column(
-                    children: [
-                      TrashiTextFormField(
-                        keyboardType: TextInputType.text,
-                        label: 'Name',
-                      ),
-                      Spacings.verticalSpace(12),
-                      TrashiTextFormField(
-                        keyboardType: TextInputType.phone,
-                        label: 'Phone Number',
-                      ),
-                      Spacings.verticalSpace(12),
-                      TrashiTextFormField(
-                        keyboardType: TextInputType.text,
-                        label: 'Password',
-                        isPasswordField: true,
-                      ),
-                      Spacings.verticalSpace(12),
-                      TrashiTextFormField(
-                        keyboardType: TextInputType.text,
-                        label: 'Confirm Password',
-                        isPasswordField: true,
-                      ),
-                      Spacings.verticalSpace(12),
-                    ],
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      children: [
+                        TrashiTextFormField(
+                          keyboardType: TextInputType.text,
+                          label: 'Name',
+                          controller: _logic.nameController,
+                          validator: _logic.validateName,
+                        ),
+                        Spacings.verticalSpace(12),
+                        _buildIdentifierField(),
+                        Spacings.verticalSpace(12),
+                        TrashiTextFormField(
+                          keyboardType: TextInputType.text,
+                          label: 'Password',
+                          isPasswordField: true,
+                          controller: _logic.passwordController,
+                          validator: _logic.validatePassword,
+                        ),
+                        Spacings.verticalSpace(12),
+                        TrashiTextFormField(
+                          keyboardType: TextInputType.text,
+                          label: 'Confirm Password',
+                          isPasswordField: true,
+                          controller: _logic.confirmPasswordController,
+                          validator: _logic.validateConfirmPassword,
+                        ),
+                        Spacings.verticalSpace(12),
+                      ],
+                    ),
                   ),
                 ),
                 Divider(

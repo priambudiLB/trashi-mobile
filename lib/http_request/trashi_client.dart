@@ -20,4 +20,14 @@ abstract class TrashiClient {
 
   @POST('/auth/signout')
   Future<void> signOut();
+
+  @POST('/auth/signup')
+  Future<SignInResponse> signUp(
+    @Body() SignUpRequest body,
+  );
+
+  @POST('/auth/signup/byphone')
+  Future<SignInByPhoneResponse> signUpByPhone(
+    @Body() SignUpByPhoneRequest body,
+  );
 }

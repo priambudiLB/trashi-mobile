@@ -4,11 +4,12 @@ part 'auth.g.dart';
 
 @JsonSerializable()
 class SignInRequest {
-  String username;
+  @JsonKey(name: 'username')
+  String email;
   String password;
 
   SignInRequest({
-    this.username,
+    this.email,
     this.password,
   });
 
@@ -22,7 +23,8 @@ class SignInResponse {
   int isAcc;
   @JsonKey(name: '_id')
   String id;
-  String username;
+  @JsonKey(name: 'username')
+  String email;
   int role;
   @JsonKey(name: 'firstname')
   String firstName;
@@ -32,7 +34,7 @@ class SignInResponse {
   SignInResponse({
     this.isAcc,
     this.id,
-    this.username,
+    this.email,
     this.role,
     this.firstName,
     this.lastName,
@@ -79,4 +81,49 @@ class SignInByPhoneResponse {
   factory SignInByPhoneResponse.fromJson(Map<String, dynamic> json) =>
       _$SignInByPhoneResponseFromJson(json);
   Map<String, dynamic> toJson() => _$SignInByPhoneResponseToJson(this);
+}
+
+@JsonSerializable()
+class SignUpRequest {
+  @JsonKey(name: 'username')
+  String email;
+  String password;
+  String firstname;
+  String lastname;
+  int role;
+
+  SignUpRequest({
+    this.email,
+    this.password,
+    this.firstname,
+    this.lastname,
+    this.role,
+  });
+
+  factory SignUpRequest.fromJson(Map<String, dynamic> json) =>
+      _$SignUpRequestFromJson(json);
+
+  Map<String, dynamic> toJson() => _$SignUpRequestToJson(this);
+}
+
+@JsonSerializable()
+class SignUpByPhoneRequest {
+  String phone;
+  String password;
+  String firstname;
+  String lastname;
+  int role;
+
+  SignUpByPhoneRequest({
+    this.phone,
+    this.password,
+    this.firstname,
+    this.lastname,
+    this.role,
+  });
+
+  factory SignUpByPhoneRequest.fromJson(Map<String, dynamic> json) =>
+      _$SignUpByPhoneRequestFromJson(json);
+
+  Map<String, dynamic> toJson() => _$SignUpByPhoneRequestToJson(this);
 }

@@ -52,6 +52,7 @@ class _TrashiTextFormFieldState extends State<TrashiTextFormField> {
         ),
         suffixIcon: (isPassword && suffixIcon != null) ? suffixIcon : null,
       ),
+      validator: widget.validator,
     );
 
     return Container(

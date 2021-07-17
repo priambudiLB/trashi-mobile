@@ -82,7 +82,7 @@ class _LogInScreenState extends State<LogInScreen> {
       }
     } else if (isEmail(_emailOrPhoneNumberController.text)) {
       SignInRequest body = SignInRequest(
-        username: _emailOrPhoneNumberController.text,
+        email: _emailOrPhoneNumberController.text,
         password: _passwordController.text,
       );
 

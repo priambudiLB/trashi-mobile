@@ -71,7 +71,7 @@ class _ProfileScreenRedesignState extends State<ProfileScreenRedesign> {
 
     if (signInByPhoneResponse != null) print(signInByPhoneResponse.phone);
 
-    if (signInResponse != null) print(signInResponse.username);
+    if (signInResponse != null) print(signInResponse.email);
   }
 
   @override
