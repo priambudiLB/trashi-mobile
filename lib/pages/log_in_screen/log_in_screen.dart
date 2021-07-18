@@ -2,15 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:trashi/components/form.dart';
 import 'package:trashi/components/layout_redesign.dart';
 import 'package:trashi/components/spacings.dart';
+import 'package:trashi/http_request/api_provider.dart';
 import 'package:trashi/http_request/models/auth.dart';
-import 'package:trashi/http_request/trashi_client.dart';
 import 'package:trashi/pages/navbar_screen/bottom_navbar.dart';
 import 'package:trashi/pages/registration_screen/account_type_selection_screen.dart';
 import 'package:trashi/pages/trash_collection_screen/accepter/components/row_button_wrapper.dart';
 import 'package:trashi/secure_storage/secure_storage.dart';
 import 'package:trashi/utils/commons.dart';
-import 'package:dio/dio.dart';
-import 'package:logger/logger.dart';
 
 class LogInScreen extends StatefulWidget {
   static const String PATH = "logIn";
@@ -39,18 +37,6 @@ class _LogInScreenState extends State<LogInScreen> {
         .hasMatch(text);
   }
 
-  void _onSignInError(Object obj) {
-    switch (obj.runtimeType) {
-      case DioError:
-        // Here's the sample to get the failed response error code and message
-        final res = (obj as DioError).response;
-        Logger logger = Logger();
-        logger.e("Got error : ${res.statusCode} -> ${res.statusMessage}");
-        break;
-      default:
-    }
-  }
-
   Future<void> _signIn() async {
     SecureStorage _secureStorage = SecureStorage();
 
@@ -60,20 +46,7 @@ class _LogInScreenState extends State<LogInScreen> {
         phone: _emailOrPhoneNumberController.text,
       );
 
-      final client = TrashiClient(
-        Dio(
-          BaseOptions(contentType: 'application/json'),
-        ),
-      );
-
-      SignInByPhoneResponse response;
-
-      await client
-          .signInByPhone(body)
-          .then(
-            (value) => response = value,
-          )
-          .catchError(_onSignInError);
+      final response = await ApiProvider().signInByPhone(body);
 
       if (response != null) {
         isSignInSuccessful = true;
@@ -86,20 +59,7 @@ class _LogInScreenState extends State<LogInScreen> {
         password: _passwordController.text,
       );
 
-      final client = TrashiClient(
-        Dio(
-          BaseOptions(contentType: 'application/json'),
-        ),
-      );
-
-      SignInResponse response;
-
-      await client
-          .signIn(body)
-          .then(
-            (value) => response = value,
-          )
-          .catchError(_onSignInError);
+      final response = await ApiProvider().signIn(body);
 
       if (response != null) {
         isSignInSuccessful = true;

@@ -81,18 +81,19 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           onPressed: () async {
             if (_formKey.currentState.validate()) {
               await _logic.signUp();
-              print('jakh');
-
               if (_logic.isSignUpSuccessful) {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ConfirmationOTPScreen(
-                      account: "089635",
-                      verification: Verification.phone,
+                // await _logic.generateVerificationCode();
+
+                if (_logic.isGenerateVerificationCodeSuccessful)
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ConfirmationOTPScreen(
+                        account: "089635",
+                        verification: Verification.phone,
+                      ),
                     ),
-                  ),
-                );
+                  );
               }
             }
           },

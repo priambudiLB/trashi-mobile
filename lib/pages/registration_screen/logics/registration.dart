@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:trashi/constants/account_types.dart';
+import 'package:trashi/http_request/api_provider.dart';
 import 'package:trashi/http_request/models/auth.dart';
-import 'package:trashi/http_request/trashi_client.dart';
-import 'package:dio/dio.dart';
 
 class RegistrationLogic {
   static const int maxPhoneNumberLength = 14;
@@ -15,12 +14,11 @@ class RegistrationLogic {
   TextEditingController _confirmPasswordController;
   final AccountType accountType;
 
-  TrashiClient _client;
-
   String _firstName;
   String _lastName;
 
   bool _isSignUpSuccessful;
+  bool _isGenerateVerificationCodeSuccessful;
 
   RegistrationLogic({
     @required this.accountType,
@@ -31,13 +29,8 @@ class RegistrationLogic {
     _passwordController = TextEditingController();
     _confirmPasswordController = TextEditingController();
 
-    _client = TrashiClient(
-      Dio(
-        BaseOptions(contentType: 'application/json'),
-      ),
-    );
-
     _isSignUpSuccessful = false;
+    _isGenerateVerificationCodeSuccessful = false;
   }
 
   TextEditingController get nameController => _nameController;
@@ -48,6 +41,8 @@ class RegistrationLogic {
       _confirmPasswordController;
 
   bool get isSignUpSuccessful => _isSignUpSuccessful;
+  bool get isGenerateVerificationCodeSuccessful =>
+      _isGenerateVerificationCodeSuccessful;
 
   void _separateName(String name) {
     List<String> names = name.split(' ');
@@ -165,30 +160,12 @@ class RegistrationLogic {
     );
   }
 
-  void _onSignUpError(Object obj) {
-    switch (obj.runtimeType) {
-      case DioError:
-        // Here's the sample to get the failed response error code and message
-        final res = (obj as DioError).response;
-        Logger logger = Logger();
-        logger.e("Got error : ${res.statusCode} -> ${res.statusMessage}");
-        logger.e(res.data);
-        break;
-      default:
-    }
-  }
-
   Future<void> _signUp() async {
     SignInResponse response;
 
     final SignUpRequest _requestBody = _buildSignUpRequest();
 
-    await _client
-        .signUp(_requestBody)
-        .then(
-          (value) => response = value,
-        )
-        .catchError(_onSignUpError);
+    response = await ApiProvider().signUp(_requestBody);
 
     if (response != null) {
       _isSignUpSuccessful = true;
@@ -200,12 +177,7 @@ class RegistrationLogic {
 
     final SignUpByPhoneRequest _requestBody = _buildSignUpByPhoneRequest();
 
-    await _client
-        .signUpByPhone(_requestBody)
-        .then(
-          (value) => response = value,
-        )
-        .catchError(_onSignUpError);
+    response = await ApiProvider().signUpByPhone(_requestBody);
 
     if (response != null) {
       _isSignUpSuccessful = true;
@@ -222,6 +194,20 @@ class RegistrationLogic {
       case AccountType.public:
         await _signUpByPhone();
         return;
+    }
+  }
+
+  Future<void> generateVerificationCode() async {
+    GenerateVerificationCodeResponse response;
+
+    final GenerateVerificationCodeRequest _requestBody =
+        GenerateVerificationCodeRequest(
+            method: this.accountType.verificationMethod);
+
+    response = await ApiProvider().generateVerificationCode(_requestBody);
+
+    if (response != null) {
+      _isGenerateVerificationCodeSuccessful = true;
     }
   }
 }

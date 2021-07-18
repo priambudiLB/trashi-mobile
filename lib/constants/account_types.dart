@@ -25,6 +25,19 @@ extension AccountTypeExtension on AccountType {
     AccountType.public: 4,
   };
 
+  String get verificationMethod {
+    switch (this) {
+      case AccountType.government:
+      case AccountType.company:
+        return 'email';
+      case AccountType.RTRW:
+      case AccountType.public:
+        return 'sms';
+      default:
+        return '';
+    }
+  }
+
   String get text => accountTypeText[this];
 
   int get roleInt => accountTypeRoleInt[this];

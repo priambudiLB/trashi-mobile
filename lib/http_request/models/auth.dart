@@ -127,3 +127,50 @@ class SignUpByPhoneRequest {
 
   Map<String, dynamic> toJson() => _$SignUpByPhoneRequestToJson(this);
 }
+
+@JsonSerializable()
+class GenerateVerificationCodeRequest {
+  final String method;
+
+  GenerateVerificationCodeRequest({
+    this.method,
+  });
+
+  factory GenerateVerificationCodeRequest.fromJson(Map<String, dynamic> json) =>
+      _$GenerateVerificationCodeRequestFromJson(json);
+
+  Map<String, dynamic> toJson() =>
+      _$GenerateVerificationCodeRequestToJson(this);
+}
+
+@JsonSerializable()
+class GenerateVerificationCodeResponse {
+  @JsonKey(name: '_id')
+  String id;
+  String userId;
+  String username;
+  String code;
+  DateTime expiry;
+  DateTime delay;
+  @JsonKey(name: '__v')
+  int v;
+  String method;
+
+  GenerateVerificationCodeResponse({
+    this.id,
+    this.userId,
+    this.username,
+    this.code,
+    this.expiry,
+    this.delay,
+    this.v,
+    this.method,
+  });
+
+  factory GenerateVerificationCodeResponse.fromJson(
+          Map<String, dynamic> json) =>
+      _$GenerateVerificationCodeResponseFromJson(json);
+
+  Map<String, dynamic> toJson() =>
+      _$GenerateVerificationCodeResponseToJson(this);
+}
