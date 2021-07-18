@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:trashi/components/button.dart';
 import 'package:trashi/components/layout_redesign.dart';
 import 'package:trashi/constants/account_types.dart';
 import 'package:trashi/constants/colors.dart';
 import 'package:trashi/pages/registration_screen/registration_screen.dart';
+import 'package:trashi/utils/checkbox_configs.dart';
 import 'package:trashi/utils/commons.dart';
 
 import 'components/account_type_checkbox.dart';
@@ -21,25 +21,33 @@ class _AccountTypeSelectionScreenState
   String currentlyChecked = "";
 
   final choices = [
-    CheckboxConfig(text: accountTypeGovernment),
-    CheckboxConfig(text: accountTypeCompany),
-    CheckboxConfig(text: accountTypeRTRW),
-    CheckboxConfig(text: accountTypePublic),
+    AccountTypeCheckboxConfig(
+      accountType: AccountType.government,
+    ),
+    AccountTypeCheckboxConfig(
+      accountType: AccountType.company,
+    ),
+    AccountTypeCheckboxConfig(
+      accountType: AccountType.RTRW,
+    ),
+    AccountTypeCheckboxConfig(
+      accountType: AccountType.public,
+    ),
   ];
 
-  _choose(CheckboxConfig config) {
+  _choose(AccountTypeCheckboxConfig config) {
     setState(() {
       if (currentlyChecked.length == 0) {
         _changeValue(config);
-        currentlyChecked = config.text;
-      } else if (currentlyChecked == config.text) {
+        currentlyChecked = config.accountType.text;
+      } else if (currentlyChecked == config.accountType.text) {
         _changeValue(config);
         currentlyChecked = "";
       }
     });
   }
 
-  _openRegistrationForm(CheckboxConfig config) {
+  _openRegistrationForm(AccountTypeCheckboxConfig config) {
     Future.delayed(
       Duration(milliseconds: 500),
       () {
@@ -47,7 +55,7 @@ class _AccountTypeSelectionScreenState
           context,
           MaterialPageRoute(
             builder: (context) => RegistrationScreen(
-              accountType: config.text,
+              accountType: config.accountType,
             ),
           ),
         );
@@ -55,11 +63,12 @@ class _AccountTypeSelectionScreenState
     );
   }
 
-  _changeValue(CheckboxConfig config) {
+  _changeValue(AccountTypeCheckboxConfig config) {
     bool newValue = !config.value;
     config.value = newValue;
     choices.forEach((element) {
-      if (element.text != config.text && element.value != newValue) {
+      if (element.accountType.text != config.accountType.text &&
+          element.value != newValue) {
         element.value = !newValue;
       }
     });
@@ -75,7 +84,7 @@ class _AccountTypeSelectionScreenState
     for (var item in choices) {
       checkboxes.add(
         CheckboxListTile(
-          title: Text(item.text),
+          title: Text(item.accountType.text),
           value: item.value,
           onChanged: (bool value) {
             _choose(item);
@@ -95,7 +104,7 @@ class _AccountTypeSelectionScreenState
     for (var item in choices) {
       checkboxes.add(
         AccountTypeCheckbox(
-          label: item.text,
+          label: item.accountType.text,
           checkBox: Checkbox(
             value: item.value,
             onChanged: (bool value) {
@@ -135,14 +144,4 @@ class _AccountTypeSelectionScreenState
       ),
     );
   }
-}
-
-class CheckboxConfig {
-  String text;
-  bool value;
-
-  CheckboxConfig({
-    this.text,
-    this.value = false,
-  });
 }

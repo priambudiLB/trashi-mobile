@@ -2,19 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:trashi/components/layout_redesign.dart';
 import 'package:trashi/components/spacings.dart';
 import 'package:trashi/constants/colors.dart';
-import 'package:trashi/pages/registration_screen/account_type_selection_screen.dart';
 import 'package:trashi/pages/registration_screen/components/account_type_checkbox.dart';
 import 'package:trashi/pages/trash_collection_screen/accepter/components/drop_down_filter.dart';
 import 'package:trashi/pages/trash_collection_screen/accepter/components/row_button_wrapper.dart';
+import 'package:trashi/utils/checkbox_configs.dart';
 import 'package:trashi/utils/commons.dart';
 
 class FilterCivilianScreen extends StatefulWidget {
   static const String PATH = "retributionFilterCivilian";
 
   @override
-  _FilterCivilianScreen createState() =>
-      _FilterCivilianScreen();
+  _FilterCivilianScreen createState() => _FilterCivilianScreen();
 }
+
 class _FilterCivilianScreen extends State<FilterCivilianScreen> {
   Widget _buildMonthDropdown() {
     return DropdownFilter(

@@ -2,19 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:trashi/components/layout_redesign.dart';
 import 'package:trashi/components/spacings.dart';
 import 'package:trashi/constants/colors.dart';
-import 'package:trashi/pages/registration_screen/account_type_selection_screen.dart';
 import 'package:trashi/pages/registration_screen/components/account_type_checkbox.dart';
 import 'package:trashi/pages/trash_collection_screen/accepter/components/drop_down_filter.dart';
 import 'package:trashi/pages/trash_collection_screen/accepter/components/row_button_wrapper.dart';
+import 'package:trashi/utils/checkbox_configs.dart';
 import 'package:trashi/utils/commons.dart';
 
 class FilterAdminScreen extends StatefulWidget {
   static const String PATH = "retributionFilterAdmin";
 
   @override
-  _FilterAdminScreen createState() =>
-      _FilterAdminScreen();
+  _FilterAdminScreen createState() => _FilterAdminScreen();
 }
+
 class _FilterAdminScreen extends State<FilterAdminScreen> {
   Widget _buildProvinceDropdown() {
     return DropdownFilter(

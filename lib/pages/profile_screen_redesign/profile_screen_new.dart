@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:trashi/constants/colors.dart';
+import 'package:trashi/http_request/api_provider.dart';
 import 'package:trashi/http_request/models/auth.dart';
-import 'package:trashi/http_request/trashi_client.dart';
 import 'package:trashi/pages/edit_profile_screen/edit_profile_screen.dart';
 import 'package:trashi/pages/onboarding_redesign_screen/on_boarding_screen_view.dart';
 import 'package:trashi/pages/profile_screen_redesign/provider.dart';
@@ -10,8 +10,6 @@ import 'package:trashi/pages/request_screen/request_screen.dart';
 import 'package:trashi/pages/retribution_screen/retribution_screen.dart';
 import 'package:trashi/secure_storage/secure_storage.dart';
 import 'package:trashi/utils/commons.dart';
-import 'package:dio/dio.dart';
-import 'package:logger/logger.dart';
 
 import 'package:provider/provider.dart';
 
@@ -26,31 +24,12 @@ class _ProfileScreenRedesignState extends State<ProfileScreenRedesign> {
   bool isSignOutSuccessful = false;
   SecureStorage _secureStorage = SecureStorage();
 
-  void _onSignOutError(Object obj) {
-    switch (obj.runtimeType) {
-      case DioError:
-        // Here's the sample to get the failed response error code and message
-        final res = (obj as DioError).response;
-        Logger logger = Logger();
-        logger.e("Got error : ${res.statusCode} -> ${res.statusMessage}");
-        break;
-      default:
-    }
-  }
-
   Future<void> _signOut() async {
-    final client = TrashiClient(
-      Dio(
-        BaseOptions(contentType: 'application/json'),
-      ),
-    );
+    final response = await ApiProvider().signOut();
 
-    await client
-        .signOut()
-        .then(
-          (_) => isSignOutSuccessful = true,
-        )
-        .catchError(_onSignOutError);
+    if (response != null) {
+      isSignOutSuccessful = true;
+    }
   }
 
   @override
@@ -71,7 +50,7 @@ class _ProfileScreenRedesignState extends State<ProfileScreenRedesign> {
 
     if (signInByPhoneResponse != null) print(signInByPhoneResponse.phone);
 
-    if (signInResponse != null) print(signInResponse.username);
+    if (signInResponse != null) print(signInResponse.email);
   }
 
   @override
