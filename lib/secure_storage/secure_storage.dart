@@ -6,6 +6,7 @@ import 'package:trashi/http_request/models/auth.dart';
 enum SecureStorageKeys {
   signInByPhoneResponse,
   signInResponse,
+  currentUserResponse,
 }
 
 class SecureStorageKeysString {
@@ -13,8 +14,16 @@ class SecureStorageKeysString {
     switch (key) {
       case SecureStorageKeys.signInResponse:
         return 'signInResponse';
+        break;
       case SecureStorageKeys.signInByPhoneResponse:
         return 'signInByPhoneResponse';
+        break;
+      case SecureStorageKeys.currentUserResponse:
+        return "currentUserResponse";
+        break;
+      default:
+        return "currentUserResponse";
+        break;
     }
   }
 }
@@ -38,6 +47,8 @@ class SecureStorage {
         return SignInByPhoneResponse.fromJson(jsonData);
       case SecureStorageKeys.signInResponse:
         return SignInResponse.fromJson(jsonData);
+      case SecureStorageKeys.currentUserResponse:
+        return CurrentUserResponse.fromJson(jsonData);
     }
   }
 
@@ -64,6 +75,10 @@ class SecureStorage {
     return await _get(SecureStorageKeys.signInByPhoneResponse);
   }
 
+  Future<CurrentUserResponse> getCurrentUserResponse() async {
+    return await _get(SecureStorageKeys.currentUserResponse);
+  }
+
   // SETTERS
   Future<void> setSignInResponse(SignInResponse value) async {
     await _set(SecureStorageKeys.signInResponse, value);
@@ -71,5 +86,9 @@ class SecureStorage {
 
   Future<void> setSignInByPhoneResponse(SignInByPhoneResponse value) async {
     await _set(SecureStorageKeys.signInByPhoneResponse, value);
+  }
+
+  Future<void> setCurrentUserResponse(CurrentUserResponse value) async {
+    await _set(SecureStorageKeys.currentUserResponse, value);
   }
 }
