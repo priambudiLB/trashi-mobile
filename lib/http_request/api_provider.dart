@@ -1,12 +1,12 @@
-import 'dart:convert';
-
 import 'package:dio/dio.dart';
 import 'package:logger/logger.dart';
 import 'package:trashi/http_request/models/auth.dart';
+import 'package:trashi/secure_storage/secure_storage.dart';
 
 class ApiProvider {
   Dio _dio;
   String token = '';
+  SecureStorage _secureStorage = SecureStorage();
 
   final BaseOptions options = new BaseOptions(
     contentType: 'application/json',
@@ -23,11 +23,15 @@ class ApiProvider {
     _dio.interceptors.add(
       InterceptorsWrapper(
         onRequest: (Options options) async {
+          final sessionToken = await _secureStorage.getSessionToken();
+
           // to prevent other request enter this interceptor.
           _dio.interceptors.requestLock.lock();
           // We use a new Dio(to avoid dead lock) instance to request token.
           //Set the cookie to headers
-          options.headers['cookie'] = token;
+
+          if (sessionToken != null)
+            options.headers['cookie'] = sessionToken.token;
 
           _dio.interceptors.requestLock.unlock();
           return options; //continue
@@ -49,15 +53,15 @@ class ApiProvider {
     }
   }
 
-  void _saveTokenFromCookies(List<String> cookies) {
+  Future<void> _saveTokenFromCookies(List<String> cookies) async {
     if (cookies.isNotEmpty && cookies.length > 0) {
       List<String> splittedCookies = cookies[0].split(';');
 
       if (splittedCookies.length > 0) {
         String requestToken = splittedCookies[0];
-        token = requestToken;
 
-        print(token);
+        final sessionToken = SessionToken(token: requestToken);
+        await _secureStorage.setSessionToken(sessionToken);
       }
     }
   }
@@ -78,7 +82,7 @@ class ApiProvider {
 
     final cookies = response.headers.map['set-cookie'];
 
-    _saveTokenFromCookies(cookies);
+    await _saveTokenFromCookies(cookies);
 
     return SignInByPhoneResponse.fromJson(response.data);
   }
@@ -99,7 +103,7 @@ class ApiProvider {
 
     final cookies = response.headers.map['set-cookie'];
 
-    _saveTokenFromCookies(cookies);
+    await _saveTokenFromCookies(cookies);
 
     return SignInResponse.fromJson(response.data);
   }
@@ -138,7 +142,7 @@ class ApiProvider {
 
     final cookies = response.headers.map['set-cookie'];
 
-    _saveTokenFromCookies(cookies);
+    await _saveTokenFromCookies(cookies);
 
     return SignInResponse.fromJson(response.data);
   }
@@ -159,7 +163,7 @@ class ApiProvider {
 
     final cookies = response.headers.map['set-cookie'];
 
-    _saveTokenFromCookies(cookies);
+    await _saveTokenFromCookies(cookies);
 
     return SignInByPhoneResponse.fromJson(response.data);
   }
