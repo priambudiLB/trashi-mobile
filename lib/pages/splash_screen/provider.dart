@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:trashi/http_request/api_provider.dart';
 import 'package:trashi/http_request/models/auth.dart';
 import 'package:trashi/http_request/trashi_client.dart';
 import 'package:trashi/secure_storage/secure_storage.dart';
@@ -12,18 +13,8 @@ class SplashScreenProvider with ChangeNotifier, DiagnosticableTreeMixin {
   bool get isLogin => _isLogin;
   bool get fetchingDone => _fetchingDone;
   void fetchData() async {
-    await _secureStorage.deleteAll();
     Future.delayed(Duration(seconds: 2), () async {
-      final client = TrashiClient(
-        Dio(
-          BaseOptions(contentType: 'application/json'),
-        ),
-      );
-
-      CurrentUserResponse response;
-      await client.getCurrentUser().then((value) {
-        response = value;
-      });
+      final response = await ApiProvider().getCurrentUser();
       print(response.currentUser);
       if (response.currentUser != null) {
         await _secureStorage.setCurrentUserResponse(response);

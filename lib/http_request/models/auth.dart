@@ -122,6 +122,9 @@ class CurrentUserResponse {
   factory CurrentUserResponse.fromJson(Map<String, dynamic> json) =>
       _$CurrentUserResponseFromJson(json);
   Map<String, dynamic> toJson() => _$CurrentUserResponseToJson(this);
+}
+
+@JsonSerializable()
 class SignUpRequest {
   @JsonKey(name: 'username')
   String email;
