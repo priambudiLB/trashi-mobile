@@ -6,6 +6,7 @@ import 'package:trashi/app.dart';
 import 'package:trashi/pages/edit_profile_screen/provider.dart';
 import 'package:trashi/pages/form_request_pengangkatan/provider.dart';
 import 'package:trashi/pages/profile_screen_redesign/provider.dart';
+import 'package:trashi/pages/splash_screen/provider.dart';
 import 'package:trashi/providers.dart';
 
 /// This is a reimplementation of the default Flutter application using provider + [ChangeNotifier].
@@ -26,7 +27,8 @@ void main() {
         ChangeNotifierProvider(
             create: (_) => FormRequestPengangkatanProvider()),
         ChangeNotifierProvider(create: (_) => ProfileScreenProvider()),
-        ChangeNotifierProvider(create: (_) => EditProfileScreenProvider())
+        ChangeNotifierProvider(create: (_) => EditProfileScreenProvider()),
+        ChangeNotifierProvider(create: (_) => SplashScreenProvider())
       ],
       // child: const MyApp(),
       child: const TrashiApplication(),
