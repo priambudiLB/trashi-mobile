@@ -18,6 +18,9 @@ abstract class TrashiClient {
     @Body() SignInByPhoneRequest body,
   );
 
+  @GET('/auth/currentUser')
+  Future<CurrentUserResponse> getCurrentUser();
+
   @POST('/auth/signout')
   Future<void> signOut();
 }

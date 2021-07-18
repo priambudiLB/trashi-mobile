@@ -80,3 +80,44 @@ class SignInByPhoneResponse {
       _$SignInByPhoneResponseFromJson(json);
   Map<String, dynamic> toJson() => _$SignInByPhoneResponseToJson(this);
 }
+
+@JsonSerializable()
+class CurrentUser {
+  int isAcc;
+  @JsonKey(name: 'id')
+  String id;
+  int role;
+  @JsonKey(name: 'firstname')
+  String firstName;
+  @JsonKey(name: 'lastName')
+  String lastName;
+  String phone;
+  int iat;
+  List<String> label;
+  List<dynamic> permission;
+
+  CurrentUser(
+      {this.isAcc,
+      this.id,
+      this.role,
+      this.firstName,
+      this.lastName,
+      this.phone,
+      this.iat,
+      this.label,
+      this.permission});
+
+  factory CurrentUser.fromJson(Map<String, dynamic> json) =>
+      _$CurrentUserFromJson(json);
+  Map<String, dynamic> toJson() => _$CurrentUserToJson(this);
+}
+
+@JsonSerializable()
+class CurrentUserResponse {
+  CurrentUser currentUser;
+  CurrentUserResponse({this.currentUser});
+
+  factory CurrentUserResponse.fromJson(Map<String, dynamic> json) =>
+      _$CurrentUserResponseFromJson(json);
+  Map<String, dynamic> toJson() => _$CurrentUserResponseToJson(this);
+}
