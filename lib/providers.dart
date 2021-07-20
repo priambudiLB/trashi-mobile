@@ -5,8 +5,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:formz/formz.dart';
 import 'package:intl/intl.dart';
+import 'package:trashi/http_request/api_provider.dart';
 import 'package:trashi/status_upload.dart';
 import 'package:trashi/verification.dart';
+import 'package:trashi/http_request/models/auth.dart';
 
 /// Mix-in [DiagnosticableTreeMixin] to have access to [debugFillProperties] for the devtool
 // ignore: prefer_mixin
@@ -254,9 +256,20 @@ class OTP with ChangeNotifier, DiagnosticableTreeMixin {
     }
   }
 
-  void verify() {
-    //TODO
-    setPopUpSuccessOpen(true);
+  void verify() async {
+    ValidateVerificationCodeRequest _requestBody =
+        ValidateVerificationCodeRequest(
+      code: otpComplete,
+    );
+
+    final response = await ApiProvider().validateVerificationCode(
+      _requestBody,
+    );
+
+    if (response != null) {
+      print('OTP complete');
+      setPopUpSuccessOpen(true);
+    }
   }
 }
 
