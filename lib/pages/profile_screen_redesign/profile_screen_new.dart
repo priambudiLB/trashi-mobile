@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:trashi/components/progress_indicator.dart';
 import 'package:trashi/constants/colors.dart';
 import 'package:trashi/http_request/api_provider.dart';
 import 'package:trashi/http_request/models/auth.dart';
@@ -25,11 +26,15 @@ class _ProfileScreenRedesignState extends State<ProfileScreenRedesign> {
   SecureStorage _secureStorage = SecureStorage();
 
   Future<void> _signOut() async {
+    showTrashiProgressIndicator(context);
+
     final response = await ApiProvider().signOut();
 
     if (response != null) {
       isSignOutSuccessful = true;
     }
+
+    closeTrashiProgressIndicator(context);
   }
 
   @override

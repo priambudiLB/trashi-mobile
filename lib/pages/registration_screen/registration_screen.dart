@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:trashi/components/form.dart';
 import 'package:trashi/components/layout_redesign.dart';
+import 'package:trashi/components/progress_indicator.dart';
 import 'package:trashi/components/spacings.dart';
 import 'package:trashi/constants/account_types.dart';
 import 'package:trashi/constants/colors.dart';
@@ -79,6 +80,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         child: MaterialButton(
           onPressed: () async {
             if (_formKey.currentState.validate()) {
+              showTrashiProgressIndicator(context);
+
               await _logic.signUp();
 
               if (!_logic.isSignUpSuccessful) {
@@ -92,6 +95,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 print('generate verification code failed');
                 return;
               }
+
+              closeTrashiProgressIndicator(context);
 
               Navigator.push(
                 context,

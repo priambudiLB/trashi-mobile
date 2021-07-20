@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:trashi/components/form.dart';
 import 'package:trashi/components/layout_redesign.dart';
+import 'package:trashi/components/progress_indicator.dart';
 import 'package:trashi/components/spacings.dart';
 import 'package:trashi/http_request/api_provider.dart';
 import 'package:trashi/http_request/models/auth.dart';
@@ -38,6 +39,8 @@ class _LogInScreenState extends State<LogInScreen> {
   }
 
   Future<void> _signIn() async {
+    showTrashiProgressIndicator(context);
+
     SecureStorage _secureStorage = SecureStorage();
 
     if (isPhoneNumber(_emailOrPhoneNumberController.text)) {
@@ -67,6 +70,8 @@ class _LogInScreenState extends State<LogInScreen> {
         await _secureStorage.setSignInResponse(response);
       }
     }
+
+    closeTrashiProgressIndicator(context);
   }
 
   @override
