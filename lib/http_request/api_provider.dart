@@ -187,6 +187,19 @@ class ApiProvider {
     return GenerateVerificationCodeResponse.fromJson(response.data);
   }
 
+  Future<String> validateVerificationCode(
+      ValidateVerificationCodeRequest body) async {
+    final response = await _dio.post('/token/verify', data: body).catchError(
+          _onError,
+        );
+
+    if (response == null) {
+      return null;
+    }
+
+    return response.toString();
+  }
+
   Future<CurrentUserResponse> getCurrentUser() async {
     final response = await _dio
         .get(

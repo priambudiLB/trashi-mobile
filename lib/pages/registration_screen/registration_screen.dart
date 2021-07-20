@@ -11,7 +11,6 @@ import 'package:trashi/pages/confirmation_otp_screen/confirmation_otp_screen.dar
 import 'package:trashi/pages/registration_screen/components/document_upload_button.dart';
 import 'package:trashi/pages/registration_screen/logics/registration.dart';
 import 'package:trashi/utils/commons.dart';
-import 'package:trashi/verification.dart';
 
 class RegistrationScreen extends StatefulWidget {
   static const String PATH = "registration";
@@ -81,20 +80,28 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           onPressed: () async {
             if (_formKey.currentState.validate()) {
               await _logic.signUp();
-              if (_logic.isSignUpSuccessful) {
-                // await _logic.generateVerificationCode();
 
-                if (_logic.isGenerateVerificationCodeSuccessful)
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ConfirmationOTPScreen(
-                        account: "089635",
-                        verification: Verification.phone,
-                      ),
-                    ),
-                  );
+              if (!_logic.isSignUpSuccessful) {
+                print('sign up failed');
+                return;
               }
+
+              await _logic.generateVerificationCode();
+
+              if (!_logic.isGenerateVerificationCodeSuccessful) {
+                print('generate verification code failed');
+                return;
+              }
+
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ConfirmationOTPScreen(
+                    account: _logic.accountIdentifier,
+                    verification: widget.accountType.verification,
+                  ),
+                ),
+              );
             }
           },
           child: Text(
