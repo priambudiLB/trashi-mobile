@@ -1,29 +1,29 @@
 import 'dart:convert';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:provider/provider.dart';
 import 'package:trashi/http_request/models/auth.dart';
 
 enum SecureStorageKeys {
   signInByPhoneResponse,
   signInResponse,
+  sessionToken,
   currentUserResponse,
 }
 
-class SecureStorageKeysString {
-  static String getString(SecureStorageKeys key) {
-    switch (key) {
-      case SecureStorageKeys.signInResponse:
-        return 'signInResponse';
-        break;
+extension SecureStorageKeysExtension on SecureStorageKeys {
+  String get key {
+    switch (this) {
       case SecureStorageKeys.signInByPhoneResponse:
         return 'signInByPhoneResponse';
-        break;
+      case SecureStorageKeys.signInResponse:
+        return 'signInResponse';
+      case SecureStorageKeys.sessionToken:
+        return 'sessionToken';
       case SecureStorageKeys.currentUserResponse:
         return "currentUserResponse";
-        break;
       default:
-        return "currentUserResponse";
-        break;
+        return '';
     }
   }
 }
@@ -33,7 +33,7 @@ class SecureStorage {
     final storage = new FlutterSecureStorage();
 
     String data = await storage.read(
-      key: SecureStorageKeysString.getString(key),
+      key: key.key,
     );
 
     if (data == null) {
@@ -49,6 +49,8 @@ class SecureStorage {
         return SignInResponse.fromJson(jsonData);
       case SecureStorageKeys.currentUserResponse:
         return CurrentUserResponse.fromJson(jsonData);
+      case SecureStorageKeys.sessionToken:
+        return SessionToken.fromJson(jsonData);
     }
   }
 
@@ -57,8 +59,7 @@ class SecureStorage {
 
     String jsonValue = json.encode(value);
 
-    await storage.write(
-        key: SecureStorageKeysString.getString(key), value: jsonValue);
+    await storage.write(key: key.key, value: jsonValue);
   }
 
   Future<void> deleteAll() async {
@@ -75,6 +76,10 @@ class SecureStorage {
     return await _get(SecureStorageKeys.signInByPhoneResponse);
   }
 
+  Future<SessionToken> getSessionToken() async {
+    return await _get(SecureStorageKeys.sessionToken);
+  }
+
   Future<CurrentUserResponse> getCurrentUserResponse() async {
     return await _get(SecureStorageKeys.currentUserResponse);
   }
@@ -86,6 +91,10 @@ class SecureStorage {
 
   Future<void> setSignInByPhoneResponse(SignInByPhoneResponse value) async {
     await _set(SecureStorageKeys.signInByPhoneResponse, value);
+  }
+
+  Future<void> setSessionToken(SessionToken value) async {
+    await _set(SecureStorageKeys.sessionToken, value);
   }
 
   Future<void> setCurrentUserResponse(CurrentUserResponse value) async {

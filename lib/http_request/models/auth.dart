@@ -215,3 +215,17 @@ class GenerateVerificationCodeResponse {
   Map<String, dynamic> toJson() =>
       _$GenerateVerificationCodeResponseToJson(this);
 }
+
+@JsonSerializable()
+class SessionToken {
+  String token;
+
+  SessionToken({
+    this.token,
+  });
+
+  factory SessionToken.fromJson(Map<String, dynamic> json) =>
+      _$SessionTokenFromJson(json);
+
+  Map<String, dynamic> toJson() => _$SessionTokenToJson(this);
+}
