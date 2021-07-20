@@ -212,7 +212,6 @@ class ApiProvider {
     if (response == null) {
       return null;
     }
-    print(response);
     return CurrentUserResponse.fromJson(response.data);
   }
 }
