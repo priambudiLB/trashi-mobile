@@ -60,7 +60,7 @@ class _ProfileScreenRedesignState extends State<ProfileScreenRedesign> {
       body: ListView(
         children: [
           ProfileHeader(size: size),
-          context.watch<ProfileScreenProvider>().roleType != RoleType.PEMERINTAH
+          context.watch<ProfileScreenProvider>().roleType == RoleType.PERSONAL
               ? ItemTileProfile(
                   icon: Icons.text_snippet_outlined,
                   ontap: () {},
@@ -68,8 +68,8 @@ class _ProfileScreenRedesignState extends State<ProfileScreenRedesign> {
                 )
               : Container(),
           Container(
-            height: context.watch<ProfileScreenProvider>().roleType !=
-                    RoleType.PEMERINTAH
+            height: context.watch<ProfileScreenProvider>().roleType ==
+                    RoleType.PERSONAL
                 ? 1
                 : 0,
             margin: EdgeInsets.symmetric(horizontal: 24),
@@ -86,7 +86,16 @@ class _ProfileScreenRedesignState extends State<ProfileScreenRedesign> {
             color: hexToColor("#DFDFDF"),
           ),
           ItemTileProfile(
-              icon: Icons.settings_outlined, ontap: () {}, title: "Setting"),
+              icon: Icons.settings_outlined,
+              ontap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => EditProfile(),
+                  ),
+                );
+              },
+              title: "Setting"),
           Container(
             height: 1,
             margin: EdgeInsets.symmetric(horizontal: 24),
@@ -170,7 +179,7 @@ class ProfileHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height:
-          context.watch<ProfileScreenProvider>().roleType == RoleType.PEMERINTAH
+          context.watch<ProfileScreenProvider>().roleType != RoleType.PERSONAL
               ? 420
               : 300,
       child: Stack(
@@ -180,7 +189,7 @@ class ProfileHeader extends StatelessWidget {
                 bottomLeft: Radius.circular(16),
                 bottomRight: Radius.circular(16)),
             child: Image.asset(
-              "assets/images/${context.watch<ProfileScreenProvider>().roleType == RoleType.PEMERINTAH ? 'large_green_background.png' : 'small_green_background.png'}",
+              "assets/images/${context.watch<ProfileScreenProvider>().roleType != RoleType.PERSONAL ? 'large_green_background.png' : 'small_green_background.png'}",
               width: size.width,
             ),
           ),
@@ -188,7 +197,7 @@ class ProfileHeader extends StatelessWidget {
               left: 24,
               top: 58,
               child: Text(
-                "Hello,",
+                "Hello, ${context.watch<ProfileScreenProvider>().name},",
                 style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.w800,
@@ -356,13 +365,13 @@ class ProfileHeader extends StatelessWidget {
                       ],
                     ),
                     Container(
-                      height: context.watch<ProfileScreenProvider>().roleType ==
-                              RoleType.PEMERINTAH
+                      height: context.watch<ProfileScreenProvider>().roleType !=
+                              RoleType.PERSONAL
                           ? 16
                           : 0,
                     ),
-                    context.watch<ProfileScreenProvider>().roleType ==
-                            RoleType.PEMERINTAH
+                    context.watch<ProfileScreenProvider>().roleType !=
+                            RoleType.PERSONAL
                         ? Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [

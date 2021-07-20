@@ -91,7 +91,7 @@ class CurrentUser {
   int role;
   @JsonKey(name: 'firstname')
   String firstName;
-  @JsonKey(name: 'lastName')
+  @JsonKey(name: 'lastname')
   String lastName;
   String phone;
   int iat;

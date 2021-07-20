@@ -15,11 +15,12 @@ class SplashScreenProvider with ChangeNotifier, DiagnosticableTreeMixin {
   void fetchData() async {
     Future.delayed(Duration(seconds: 2), () async {
       final response = await ApiProvider().getCurrentUser();
-      print(response.currentUser);
+
       if (response.currentUser != null) {
         await _secureStorage.setCurrentUserResponse(response);
         setIsLogin(true);
       } else {
+        await _secureStorage.deleteAll();
         setIsLogin(false);
       }
       setFetchingDone(true);
