@@ -84,6 +84,47 @@ class SignInByPhoneResponse {
 }
 
 @JsonSerializable()
+class CurrentUser {
+  int isAcc;
+  @JsonKey(name: 'id')
+  String id;
+  int role;
+  @JsonKey(name: 'firstname')
+  String firstName;
+  @JsonKey(name: 'lastname')
+  String lastName;
+  String phone;
+  int iat;
+  List<String> label;
+  List<dynamic> permission;
+
+  CurrentUser(
+      {this.isAcc,
+      this.id,
+      this.role,
+      this.firstName,
+      this.lastName,
+      this.phone,
+      this.iat,
+      this.label,
+      this.permission});
+
+  factory CurrentUser.fromJson(Map<String, dynamic> json) =>
+      _$CurrentUserFromJson(json);
+  Map<String, dynamic> toJson() => _$CurrentUserToJson(this);
+}
+
+@JsonSerializable()
+class CurrentUserResponse {
+  CurrentUser currentUser;
+  CurrentUserResponse({this.currentUser});
+
+  factory CurrentUserResponse.fromJson(Map<String, dynamic> json) =>
+      _$CurrentUserResponseFromJson(json);
+  Map<String, dynamic> toJson() => _$CurrentUserResponseToJson(this);
+}
+
+@JsonSerializable()
 class SignUpRequest {
   @JsonKey(name: 'username')
   String email;

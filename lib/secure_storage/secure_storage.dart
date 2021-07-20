@@ -8,6 +8,7 @@ enum SecureStorageKeys {
   signInByPhoneResponse,
   signInResponse,
   sessionToken,
+  currentUserResponse,
 }
 
 extension SecureStorageKeysExtension on SecureStorageKeys {
@@ -19,6 +20,8 @@ extension SecureStorageKeysExtension on SecureStorageKeys {
         return 'signInResponse';
       case SecureStorageKeys.sessionToken:
         return 'sessionToken';
+      case SecureStorageKeys.currentUserResponse:
+        return "currentUserResponse";
       default:
         return '';
     }
@@ -44,6 +47,8 @@ class SecureStorage {
         return SignInByPhoneResponse.fromJson(jsonData);
       case SecureStorageKeys.signInResponse:
         return SignInResponse.fromJson(jsonData);
+      case SecureStorageKeys.currentUserResponse:
+        return CurrentUserResponse.fromJson(jsonData);
       case SecureStorageKeys.sessionToken:
         return SessionToken.fromJson(jsonData);
     }
@@ -75,6 +80,10 @@ class SecureStorage {
     return await _get(SecureStorageKeys.sessionToken);
   }
 
+  Future<CurrentUserResponse> getCurrentUserResponse() async {
+    return await _get(SecureStorageKeys.currentUserResponse);
+  }
+
   // SETTERS
   Future<void> setSignInResponse(SignInResponse value) async {
     await _set(SecureStorageKeys.signInResponse, value);
@@ -86,5 +95,9 @@ class SecureStorage {
 
   Future<void> setSessionToken(SessionToken value) async {
     await _set(SecureStorageKeys.sessionToken, value);
+  }
+
+  Future<void> setCurrentUserResponse(CurrentUserResponse value) async {
+    await _set(SecureStorageKeys.currentUserResponse, value);
   }
 }

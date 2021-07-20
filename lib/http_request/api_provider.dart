@@ -10,7 +10,7 @@ class ApiProvider {
 
   final BaseOptions options = new BaseOptions(
     contentType: 'application/json',
-    baseUrl: 'http://192.168.100.4:5000/api',
+    baseUrl: 'http://10.0.2.2:5000/api',
     connectTimeout: 15000,
     receiveTimeout: 13000,
   );
@@ -198,6 +198,21 @@ class ApiProvider {
     }
 
     return response.toString();
+  }
+
+  Future<CurrentUserResponse> getCurrentUser() async {
+    final response = await _dio
+        .get(
+          '/auth/currentUser',
+        )
+        .catchError(
+          _onError,
+        );
+
+    if (response == null) {
+      return null;
+    }
+    return CurrentUserResponse.fromJson(response.data);
   }
 }
 
