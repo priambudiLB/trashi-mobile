@@ -188,3 +188,18 @@ class SessionToken {
 
   Map<String, dynamic> toJson() => _$SessionTokenToJson(this);
 }
+
+@JsonSerializable()
+class ValidateVerificationCodeRequest {
+  String code;
+
+  ValidateVerificationCodeRequest({
+    this.code,
+  });
+
+  factory ValidateVerificationCodeRequest.fromJson(Map<String, dynamic> json) =>
+      _$ValidateVerificationCodeRequestFromJson(json);
+
+  Map<String, dynamic> toJson() =>
+      _$ValidateVerificationCodeRequestToJson(this);
+}

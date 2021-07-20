@@ -1,3 +1,5 @@
+import 'package:trashi/verification.dart';
+
 const String accountTypeGovernment = "Pemerintah";
 const String accountTypeCompany = "Perusahaan";
 const String accountTypeRTRW = "RT/RW";
@@ -44,4 +46,16 @@ extension AccountTypeExtension on AccountType {
 
   bool get shouldInputPhoneNumberToRegister =>
       this == AccountType.RTRW || this == AccountType.public;
+
+  Verification get verification {
+    switch (this) {
+      case AccountType.government:
+      case AccountType.company:
+        return Verification.email;
+      case AccountType.RTRW:
+      case AccountType.public:
+      default:
+        return Verification.phone;
+    }
+  }
 }

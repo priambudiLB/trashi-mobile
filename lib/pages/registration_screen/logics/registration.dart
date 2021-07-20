@@ -3,6 +3,7 @@ import 'package:logger/logger.dart';
 import 'package:trashi/constants/account_types.dart';
 import 'package:trashi/http_request/api_provider.dart';
 import 'package:trashi/http_request/models/auth.dart';
+import 'package:trashi/secure_storage/secure_storage.dart';
 
 class RegistrationLogic {
   static const int maxPhoneNumberLength = 14;
@@ -20,6 +21,8 @@ class RegistrationLogic {
   bool _isSignUpSuccessful;
   bool _isGenerateVerificationCodeSuccessful;
 
+  SecureStorage _secureStorage;
+
   RegistrationLogic({
     @required this.accountType,
   }) {
@@ -31,6 +34,8 @@ class RegistrationLogic {
 
     _isSignUpSuccessful = false;
     _isGenerateVerificationCodeSuccessful = false;
+
+    _secureStorage = SecureStorage();
   }
 
   TextEditingController get nameController => _nameController;
@@ -43,6 +48,24 @@ class RegistrationLogic {
   bool get isSignUpSuccessful => _isSignUpSuccessful;
   bool get isGenerateVerificationCodeSuccessful =>
       _isGenerateVerificationCodeSuccessful;
+
+  String get phoneNumber => _phoneNumberController.text;
+  String get email => _emailController.text;
+
+  String get accountIdentifier {
+    final _phoneNumber = _phoneNumberController.text;
+    final _email = _emailController.text;
+
+    if (_email.isNotEmpty) {
+      return _email;
+    }
+
+    if (_phoneNumber.isNotEmpty) {
+      return _phoneNumber;
+    }
+
+    return null;
+  }
 
   void _separateName(String name) {
     List<String> names = name.split(' ');
@@ -169,6 +192,8 @@ class RegistrationLogic {
 
     if (response != null) {
       _isSignUpSuccessful = true;
+
+      await _secureStorage.setSignInResponse(response);
     }
   }
 
@@ -181,6 +206,8 @@ class RegistrationLogic {
 
     if (response != null) {
       _isSignUpSuccessful = true;
+
+      await _secureStorage.setSignInByPhoneResponse(response);
     }
   }
 
@@ -202,7 +229,8 @@ class RegistrationLogic {
 
     final GenerateVerificationCodeRequest _requestBody =
         GenerateVerificationCodeRequest(
-            method: this.accountType.verificationMethod);
+      method: this.accountType.verificationMethod,
+    );
 
     response = await ApiProvider().generateVerificationCode(_requestBody);
 
