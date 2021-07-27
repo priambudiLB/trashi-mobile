@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:formz/formz.dart';
 import 'package:intl/intl.dart';
+import 'package:trashi/constants/account_types.dart';
 import 'package:trashi/http_request/api_provider.dart';
 import 'package:trashi/status_upload.dart';
 import 'package:trashi/verification.dart';
@@ -364,6 +365,16 @@ class SubmitDocumentOnRegistration
   File get fileBusinessPermission => _fileBusinessPermission;
   File get filePhotoWithBusinessPermission => _filePhotoWithBusinessPermission;
 
+  void emptyAllRegistrationDocumentFiles() {
+    _fileKTP = null;
+    _fileKK = null;
+    _filePhotoWithKTPAndKK = null;
+    _fileOfficialDocument = null;
+    _filePhotoWithOfficialDocument = null;
+    _fileBusinessPermission = null;
+    _filePhotoWithBusinessPermission = null;
+  }
+
   set fileKTP(File file) {
     _fileKTP = file;
     notifyListeners();
@@ -397,5 +408,21 @@ class SubmitDocumentOnRegistration
   set filePhotoWithBusinessPermission(File file) {
     _filePhotoWithBusinessPermission = file;
     notifyListeners();
+  }
+
+  bool areAllDocumentsUploaded(AccountType accountType) {
+    switch (accountType) {
+      case AccountType.government:
+        return ![_fileOfficialDocument, _filePhotoWithOfficialDocument]
+            .contains(null);
+      case AccountType.company:
+        return ![_fileBusinessPermission, _filePhotoWithBusinessPermission]
+            .contains(null);
+      case AccountType.RTRW:
+      case AccountType.public:
+        return ![_fileKTP, _fileKK, _filePhotoWithKTPAndKK].contains(null);
+      default:
+        return null;
+    }
   }
 }

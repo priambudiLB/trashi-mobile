@@ -13,6 +13,8 @@ import 'package:trashi/pages/confirmation_otp_screen/confirmation_otp_screen.dar
 import 'package:trashi/pages/registration_screen/components/document_upload_button.dart';
 import 'package:trashi/pages/registration_screen/logics/registration.dart';
 import 'package:trashi/utils/commons.dart';
+import 'package:provider/provider.dart';
+import 'package:trashi/providers.dart';
 
 class RegistrationScreen extends StatefulWidget {
   static const String PATH = "registration";
@@ -28,6 +30,14 @@ class RegistrationScreen extends StatefulWidget {
 class _RegistrationScreenState extends State<RegistrationScreen> {
   RegistrationLogic _logic;
 
+  bool areAllDocumentsUploaded;
+
+  void setAreAllDocumentsUploadedState(bool value) {
+    setState(() {
+      areAllDocumentsUploaded = value;
+    });
+  }
+
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -36,6 +46,12 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     _logic = RegistrationLogic(
       accountType: widget.accountType,
     );
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context
+          .read<SubmitDocumentOnRegistration>()
+          .emptyAllRegistrationDocumentFiles();
+    });
   }
 
   _buildRegisterButton() {
@@ -51,6 +67,15 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         height: 48,
         child: MaterialButton(
           onPressed: () async {
+            if (context
+                .read<SubmitDocumentOnRegistration>()
+                .areAllDocumentsUploaded(widget.accountType)) {
+              setAreAllDocumentsUploadedState(true);
+            } else {
+              setAreAllDocumentsUploadedState(false);
+              return;
+            }
+
             if (_formKey.currentState.validate()) {
               showTrashiProgressIndicator(context);
 
@@ -222,8 +247,17 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 ),
                 Container(
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       _buildAccountDocumentButtons(),
+                      if (areAllDocumentsUploaded != null &&
+                          !areAllDocumentsUploaded) ...[
+                        Text(
+                          'Semua dokumen harus diupload',
+                          textAlign: TextAlign.start,
+                          style: TextStyle(color: Colors.red),
+                        ),
+                      ],
                       Padding(
                         padding: EdgeInsets.only(bottom: 24),
                       ),
