@@ -35,7 +35,6 @@ dependencies:
   smooth_star_rating: ^1.1.1
   intl: ^0.16.0
   google_maps_flutter: ^2.0.3
-  file_picker: ^3.0.1
   image_picker: ^0.6.2+3
   skeleton_text: ^3.0.0
   flutter_google_places: ^0.2.8

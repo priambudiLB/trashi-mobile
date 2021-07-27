@@ -1,3 +1,4 @@
+import 'package:trashi/constants/document_type.dart';
 import 'package:trashi/verification.dart';
 
 const String accountTypeGovernment = "Pemerintah";
@@ -56,6 +57,30 @@ extension AccountTypeExtension on AccountType {
       case AccountType.public:
       default:
         return Verification.phone;
+    }
+  }
+
+  List<DocumentType> get shouldBeUploadedDocuments {
+    switch (this) {
+      case AccountType.government:
+        return [
+          DocumentType.officialDocument,
+          DocumentType.photoWithOfficialDocument,
+        ];
+      case AccountType.company:
+        return [
+          DocumentType.businessPermission,
+          DocumentType.photoWithBusinessPermission,
+        ];
+      case AccountType.RTRW:
+      case AccountType.public:
+        return [
+          DocumentType.KTP,
+          DocumentType.KK,
+          DocumentType.photoWithKTPAndKK,
+        ];
+      default:
+        return null;
     }
   }
 }

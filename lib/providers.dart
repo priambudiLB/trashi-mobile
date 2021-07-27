@@ -345,3 +345,57 @@ class SubmitDocumentVerification with ChangeNotifier, DiagnosticableTreeMixin {
     notifyListeners();
   }
 }
+
+class SubmitDocumentOnRegistration
+    with ChangeNotifier, DiagnosticableTreeMixin {
+  File _fileKTP;
+  File _fileKK;
+  File _filePhotoWithKTPAndKK;
+  File _fileOfficialDocument;
+  File _filePhotoWithOfficialDocument;
+  File _fileBusinessPermission;
+  File _filePhotoWithBusinessPermission;
+
+  File get fileKTP => _fileKTP;
+  File get fileKK => _fileKK;
+  File get filePhotoWithKTPAndKK => _filePhotoWithKTPAndKK;
+  File get fileOfficialDocument => _fileOfficialDocument;
+  File get filePhotoWithOfficialDocument => _filePhotoWithOfficialDocument;
+  File get fileBusinessPermission => _fileBusinessPermission;
+  File get filePhotoWithBusinessPermission => _filePhotoWithBusinessPermission;
+
+  set fileKTP(File file) {
+    _fileKTP = file;
+    notifyListeners();
+  }
+
+  set fileKK(File file) {
+    _fileKK = file;
+    notifyListeners();
+  }
+
+  set filePhotoWithKTPAndKK(File file) {
+    _filePhotoWithKTPAndKK = file;
+    notifyListeners();
+  }
+
+  set fileOfficialDocument(File file) {
+    _fileOfficialDocument = file;
+    notifyListeners();
+  }
+
+  set filePhotoWithOfficialDocument(File file) {
+    _filePhotoWithOfficialDocument = file;
+    notifyListeners();
+  }
+
+  set fileBusinessPermission(File file) {
+    _fileBusinessPermission = file;
+    notifyListeners();
+  }
+
+  set filePhotoWithBusinessPermission(File file) {
+    _filePhotoWithBusinessPermission = file;
+    notifyListeners();
+  }
+}

@@ -1,14 +1,19 @@
-import 'package:file_picker/file_picker.dart';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:trashi/constants/colors.dart';
+import 'package:trashi/constants/document_type.dart';
+import 'package:trashi/providers.dart';
 import 'package:trashi/utils/commons.dart';
+import 'package:provider/provider.dart';
 
 class DocumentUploadButton extends StatefulWidget {
-  final String labelText;
+  final DocumentType documentType;
 
   const DocumentUploadButton({
     Key key,
-    this.labelText,
+    this.documentType,
   }) : super(key: key);
 
   @override
@@ -18,16 +23,83 @@ class DocumentUploadButton extends StatefulWidget {
 class _DocumentUploadButtonState extends State<DocumentUploadButton> {
   bool isUploaded = false;
 
-  void _onTapUploadDocument() async {
-    FilePickerResult result = await FilePicker.platform.pickFiles();
+  void _saveDocumentToLocal(File file) {
+    final _provider = context.read<SubmitDocumentOnRegistration>();
 
-    if (result != null) {
+    switch (widget.documentType) {
+      case DocumentType.KTP:
+        _provider.fileKTP = file;
+        return;
+      case DocumentType.KK:
+        _provider.fileKK = file;
+        return;
+      case DocumentType.photoWithKTPAndKK:
+        _provider.filePhotoWithKTPAndKK = file;
+        return;
+      case DocumentType.officialDocument:
+        _provider.fileOfficialDocument = file;
+        return;
+      case DocumentType.photoWithOfficialDocument:
+        _provider.filePhotoWithOfficialDocument = file;
+        return;
+      case DocumentType.businessPermission:
+        _provider.fileBusinessPermission = file;
+        return;
+      case DocumentType.photoWithBusinessPermission:
+        _provider.filePhotoWithBusinessPermission = file;
+        return;
+    }
+  }
+
+  void _onTapUploadFromCamera() async {
+    final pickedFile = await ImagePicker.pickImage(
+      source: ImageSource.camera,
+    );
+
+    if (pickedFile != null) {
+      _saveDocumentToLocal(pickedFile);
+
       setState(() {
         isUploaded = true;
       });
-    } else {
-      // User canceled the picker
+
+      Navigator.of(context).pop();
     }
+  }
+
+  void _onTapUploadFromGallery() async {
+    final pickedFile = await ImagePicker.pickImage(
+      source: ImageSource.gallery,
+    );
+
+    if (pickedFile != null) {
+      _saveDocumentToLocal(pickedFile);
+
+      setState(() {
+        isUploaded = true;
+      });
+
+      Navigator.of(context).pop();
+    }
+  }
+
+  void _showPickImageSource() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        title: const Text('Pilih sumber foto'),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => _onTapUploadFromCamera(),
+            child: const Text('Kamera'),
+          ),
+          TextButton(
+            onPressed: () => _onTapUploadFromGallery(),
+            child: const Text('Galeri'),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -46,12 +118,14 @@ class _DocumentUploadButtonState extends State<DocumentUploadButton> {
         height: 48,
         child: MaterialButton(
           color: isUploaded ? Color.fromRGBO(50, 163, 127, 0.05) : Colors.white,
-          onPressed: () => _onTapUploadDocument(),
+          onPressed: () => _showPickImageSource(),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                isUploaded ? "Berhasil diupload" : widget.labelText,
+                isUploaded
+                    ? "Berhasil diupload"
+                    : widget.documentType.buttonLabel,
                 style: TextStyle(
                   color: hexToColor(MAIN_COLOR),
                 ),
