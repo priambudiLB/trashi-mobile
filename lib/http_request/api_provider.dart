@@ -1,7 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:logger/logger.dart';
 import 'package:trashi/http_request/models/auth.dart';
+import 'package:trashi/models/trashi_document.dart';
 import 'package:trashi/secure_storage/secure_storage.dart';
+import 'package:trashi/constants/document_type.dart';
 
 class ApiProvider {
   Dio _dio;
@@ -9,7 +11,6 @@ class ApiProvider {
   SecureStorage _secureStorage = SecureStorage();
 
   final BaseOptions options = new BaseOptions(
-    contentType: 'application/json',
     baseUrl: 'http://10.0.2.2:5000/api',
     connectTimeout: 15000,
     receiveTimeout: 13000,
@@ -214,8 +215,27 @@ class ApiProvider {
     }
     return CurrentUserResponse.fromJson(response.data);
   }
-}
 
+  Future<void> uploadFile(TrashiDocument file) async {
+    FormData uploadFileData = FormData.fromMap({
+      'upload': await MultipartFile.fromFile(file.file.path),
+    });
+
+    final response = await _dio.post(
+      '/files/upload',
+      data: uploadFileData,
+      options: Options(
+        headers: {
+          'label': file.type.label,
+        },
+      ),
+    );
+
+    if (response == null) {
+      return null;
+    }
+  }
+}
 
 /**
  * SOURCE:

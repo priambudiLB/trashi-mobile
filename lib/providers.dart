@@ -6,7 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:formz/formz.dart';
 import 'package:intl/intl.dart';
 import 'package:trashi/constants/account_types.dart';
+import 'package:trashi/constants/document_type.dart';
 import 'package:trashi/http_request/api_provider.dart';
+import 'package:trashi/models/trashi_document.dart';
 import 'package:trashi/status_upload.dart';
 import 'package:trashi/verification.dart';
 import 'package:trashi/http_request/models/auth.dart';
@@ -421,6 +423,53 @@ class SubmitDocumentOnRegistration
       case AccountType.RTRW:
       case AccountType.public:
         return ![_fileKTP, _fileKK, _filePhotoWithKTPAndKK].contains(null);
+      default:
+        return null;
+    }
+  }
+
+  List<TrashiDocument> getDocumentsByAccountType(
+    AccountType accountType,
+  ) {
+    switch (accountType) {
+      case AccountType.government:
+        return [
+          TrashiDocument(
+            file: _fileOfficialDocument,
+            type: DocumentType.officialDocument,
+          ),
+          TrashiDocument(
+            file: _filePhotoWithOfficialDocument,
+            type: DocumentType.photoWithOfficialDocument,
+          )
+        ];
+      case AccountType.company:
+        return [
+          TrashiDocument(
+            file: _fileBusinessPermission,
+            type: DocumentType.businessPermission,
+          ),
+          TrashiDocument(
+            file: _filePhotoWithBusinessPermission,
+            type: DocumentType.photoWithBusinessPermission,
+          )
+        ];
+      case AccountType.RTRW:
+      case AccountType.public:
+        return [
+          TrashiDocument(
+            file: _fileKTP,
+            type: DocumentType.KTP,
+          ),
+          TrashiDocument(
+            file: _fileKK,
+            type: DocumentType.KK,
+          ),
+          TrashiDocument(
+            file: _filePhotoWithKTPAndKK,
+            type: DocumentType.photoWithKTPAndKK,
+          )
+        ];
       default:
         return null;
     }

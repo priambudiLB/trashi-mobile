@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:trashi/components/form.dart';
@@ -8,7 +6,6 @@ import 'package:trashi/components/progress_indicator.dart';
 import 'package:trashi/components/spacings.dart';
 import 'package:trashi/constants/account_types.dart';
 import 'package:trashi/constants/colors.dart';
-import 'package:trashi/constants/document_type.dart';
 import 'package:trashi/pages/confirmation_otp_screen/confirmation_otp_screen.dart';
 import 'package:trashi/pages/registration_screen/components/document_upload_button.dart';
 import 'package:trashi/pages/registration_screen/logics/registration.dart';
@@ -67,9 +64,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         height: 48,
         child: MaterialButton(
           onPressed: () async {
-            if (context
-                .read<SubmitDocumentOnRegistration>()
-                .areAllDocumentsUploaded(widget.accountType)) {
+            final _featureProvider =
+                context.read<SubmitDocumentOnRegistration>();
+
+            if (_featureProvider.areAllDocumentsUploaded(widget.accountType)) {
               setAreAllDocumentsUploadedState(true);
             } else {
               setAreAllDocumentsUploadedState(false);
@@ -85,6 +83,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 print('sign up failed');
                 return;
               }
+
+              await _logic.uploadRegistrationDocuments(_featureProvider
+                  .getDocumentsByAccountType(widget.accountType));
 
               await _logic.generateVerificationCode();
 
