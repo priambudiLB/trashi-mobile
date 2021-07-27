@@ -3,7 +3,9 @@ import 'package:logger/logger.dart';
 import 'package:trashi/constants/account_types.dart';
 import 'package:trashi/http_request/api_provider.dart';
 import 'package:trashi/http_request/models/auth.dart';
+import 'package:trashi/models/trashi_document.dart';
 import 'package:trashi/secure_storage/secure_storage.dart';
+import 'package:trashi/constants/document_type.dart';
 
 class RegistrationLogic {
   static const int maxPhoneNumberLength = 14;
@@ -237,5 +239,11 @@ class RegistrationLogic {
     if (response != null) {
       _isGenerateVerificationCodeSuccessful = true;
     }
+  }
+
+  Future<void> uploadRegistrationDocuments(List<TrashiDocument> files) async {
+    files.forEach((element) async {
+      await ApiProvider().uploadFile(element);
+    });
   }
 }

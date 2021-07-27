@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:trashi/components/form.dart';
@@ -12,6 +10,8 @@ import 'package:trashi/pages/confirmation_otp_screen/confirmation_otp_screen.dar
 import 'package:trashi/pages/registration_screen/components/document_upload_button.dart';
 import 'package:trashi/pages/registration_screen/logics/registration.dart';
 import 'package:trashi/utils/commons.dart';
+import 'package:provider/provider.dart';
+import 'package:trashi/providers.dart';
 
 class RegistrationScreen extends StatefulWidget {
   static const String PATH = "registration";
@@ -25,17 +25,15 @@ class RegistrationScreen extends StatefulWidget {
 }
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
-  static const String ktpLabel = "Upload foto KTP";
-  static const String kkLabel = "Upload foto KK";
-  static const String withKKAndKTPLabel = "Upload foto bersama KTP dan KK";
-  static const String officialDocumentLabel = "Upload foto dokumen resmi";
-  static const String withOfficialDocumentLabel =
-      "Upload foto bersama dokumen resmi";
-  static const String businessLicenseDocumentLabel = "Upload foto izin usaha";
-  static const String withBusinessLicenseDocumentLabel =
-      "Upload foto bersama izin usaha";
-
   RegistrationLogic _logic;
+
+  bool areAllDocumentsUploaded;
+
+  void setAreAllDocumentsUploadedState(bool value) {
+    setState(() {
+      areAllDocumentsUploaded = value;
+    });
+  }
 
   final _formKey = GlobalKey<FormState>();
 
@@ -45,26 +43,13 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     _logic = RegistrationLogic(
       accountType: widget.accountType,
     );
-  }
 
-  var _requiredDocumentLabelsRTRW = [
-    ktpLabel,
-    kkLabel,
-    withKKAndKTPLabel,
-  ];
-  var _requiredDocumentLabelsPublic = [
-    ktpLabel,
-    kkLabel,
-    withKKAndKTPLabel,
-  ];
-  var _requiredDocumentLabelsGovernment = [
-    officialDocumentLabel,
-    withOfficialDocumentLabel,
-  ];
-  var _requiredDocumentLabelsCompany = [
-    businessLicenseDocumentLabel,
-    withBusinessLicenseDocumentLabel,
-  ];
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context
+          .read<SubmitDocumentOnRegistration>()
+          .emptyAllRegistrationDocumentFiles();
+    });
+  }
 
   _buildRegisterButton() {
     return Container(
@@ -79,6 +64,16 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         height: 48,
         child: MaterialButton(
           onPressed: () async {
+            final _featureProvider =
+                context.read<SubmitDocumentOnRegistration>();
+
+            if (_featureProvider.areAllDocumentsUploaded(widget.accountType)) {
+              setAreAllDocumentsUploadedState(true);
+            } else {
+              setAreAllDocumentsUploadedState(false);
+              return;
+            }
+
             if (_formKey.currentState.validate()) {
               showTrashiProgressIndicator(context);
 
@@ -88,6 +83,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 print('sign up failed');
                 return;
               }
+
+              await _logic.uploadRegistrationDocuments(_featureProvider
+                  .getDocumentsByAccountType(widget.accountType));
 
               await _logic.generateVerificationCode();
 
@@ -120,26 +118,16 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     );
   }
 
-  Widget _buildDocumentButtons(AccountType accountType) {
-    switch (accountType) {
-      case AccountType.government:
-        return _buildAccountDocumentButtons(_requiredDocumentLabelsGovernment);
-      case AccountType.company:
-        return _buildAccountDocumentButtons(_requiredDocumentLabelsCompany);
-      case AccountType.RTRW:
-        return _buildAccountDocumentButtons(_requiredDocumentLabelsRTRW);
-      case AccountType.public:
-      default:
-        return _buildAccountDocumentButtons(_requiredDocumentLabelsPublic);
-    }
-  }
-
-  Widget _buildAccountDocumentButtons(List<String> labels) {
+  Widget _buildAccountDocumentButtons() {
     List<Widget> _children = [];
 
-    for (var i = 0; i < labels.length; i++) {
+    for (var i = 0;
+        i < widget.accountType.shouldBeUploadedDocuments.length;
+        i++) {
       _children.add(
-        DocumentUploadButton(labelText: labels[i]),
+        DocumentUploadButton(
+          documentType: widget.accountType.shouldBeUploadedDocuments[i],
+        ),
       );
 
       _children.add(
@@ -260,8 +248,17 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 ),
                 Container(
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      _buildDocumentButtons(widget.accountType),
+                      _buildAccountDocumentButtons(),
+                      if (areAllDocumentsUploaded != null &&
+                          !areAllDocumentsUploaded) ...[
+                        Text(
+                          'Semua dokumen harus diupload',
+                          textAlign: TextAlign.start,
+                          style: TextStyle(color: Colors.red),
+                        ),
+                      ],
                       Padding(
                         padding: EdgeInsets.only(bottom: 24),
                       ),

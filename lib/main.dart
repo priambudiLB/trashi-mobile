@@ -28,7 +28,8 @@ void main() {
             create: (_) => FormRequestPengangkatanProvider()),
         ChangeNotifierProvider(create: (_) => ProfileScreenProvider()),
         ChangeNotifierProvider(create: (_) => EditProfileScreenProvider()),
-        ChangeNotifierProvider(create: (_) => SplashScreenProvider())
+        ChangeNotifierProvider(create: (_) => SplashScreenProvider()),
+        ChangeNotifierProvider(create: (_) => SubmitDocumentOnRegistration()),
       ],
       // child: const MyApp(),
       child: const TrashiApplication(),

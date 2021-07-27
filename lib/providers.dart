@@ -5,7 +5,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:formz/formz.dart';
 import 'package:intl/intl.dart';
+import 'package:trashi/constants/account_types.dart';
+import 'package:trashi/constants/document_type.dart';
 import 'package:trashi/http_request/api_provider.dart';
+import 'package:trashi/models/trashi_document.dart';
 import 'package:trashi/status_upload.dart';
 import 'package:trashi/verification.dart';
 import 'package:trashi/http_request/models/auth.dart';
@@ -343,5 +346,132 @@ class SubmitDocumentVerification with ChangeNotifier, DiagnosticableTreeMixin {
   void setKtpAndKkFile(File file) {
     _fileKtpAndKK = file;
     notifyListeners();
+  }
+}
+
+class SubmitDocumentOnRegistration
+    with ChangeNotifier, DiagnosticableTreeMixin {
+  File _fileKTP;
+  File _fileKK;
+  File _filePhotoWithKTPAndKK;
+  File _fileOfficialDocument;
+  File _filePhotoWithOfficialDocument;
+  File _fileBusinessPermission;
+  File _filePhotoWithBusinessPermission;
+
+  File get fileKTP => _fileKTP;
+  File get fileKK => _fileKK;
+  File get filePhotoWithKTPAndKK => _filePhotoWithKTPAndKK;
+  File get fileOfficialDocument => _fileOfficialDocument;
+  File get filePhotoWithOfficialDocument => _filePhotoWithOfficialDocument;
+  File get fileBusinessPermission => _fileBusinessPermission;
+  File get filePhotoWithBusinessPermission => _filePhotoWithBusinessPermission;
+
+  void emptyAllRegistrationDocumentFiles() {
+    _fileKTP = null;
+    _fileKK = null;
+    _filePhotoWithKTPAndKK = null;
+    _fileOfficialDocument = null;
+    _filePhotoWithOfficialDocument = null;
+    _fileBusinessPermission = null;
+    _filePhotoWithBusinessPermission = null;
+  }
+
+  set fileKTP(File file) {
+    _fileKTP = file;
+    notifyListeners();
+  }
+
+  set fileKK(File file) {
+    _fileKK = file;
+    notifyListeners();
+  }
+
+  set filePhotoWithKTPAndKK(File file) {
+    _filePhotoWithKTPAndKK = file;
+    notifyListeners();
+  }
+
+  set fileOfficialDocument(File file) {
+    _fileOfficialDocument = file;
+    notifyListeners();
+  }
+
+  set filePhotoWithOfficialDocument(File file) {
+    _filePhotoWithOfficialDocument = file;
+    notifyListeners();
+  }
+
+  set fileBusinessPermission(File file) {
+    _fileBusinessPermission = file;
+    notifyListeners();
+  }
+
+  set filePhotoWithBusinessPermission(File file) {
+    _filePhotoWithBusinessPermission = file;
+    notifyListeners();
+  }
+
+  bool areAllDocumentsUploaded(AccountType accountType) {
+    switch (accountType) {
+      case AccountType.government:
+        return ![_fileOfficialDocument, _filePhotoWithOfficialDocument]
+            .contains(null);
+      case AccountType.company:
+        return ![_fileBusinessPermission, _filePhotoWithBusinessPermission]
+            .contains(null);
+      case AccountType.RTRW:
+      case AccountType.public:
+        return ![_fileKTP, _fileKK, _filePhotoWithKTPAndKK].contains(null);
+      default:
+        return null;
+    }
+  }
+
+  List<TrashiDocument> getDocumentsByAccountType(
+    AccountType accountType,
+  ) {
+    switch (accountType) {
+      case AccountType.government:
+        return [
+          TrashiDocument(
+            file: _fileOfficialDocument,
+            type: DocumentType.officialDocument,
+          ),
+          TrashiDocument(
+            file: _filePhotoWithOfficialDocument,
+            type: DocumentType.photoWithOfficialDocument,
+          )
+        ];
+      case AccountType.company:
+        return [
+          TrashiDocument(
+            file: _fileBusinessPermission,
+            type: DocumentType.businessPermission,
+          ),
+          TrashiDocument(
+            file: _filePhotoWithBusinessPermission,
+            type: DocumentType.photoWithBusinessPermission,
+          )
+        ];
+      case AccountType.RTRW:
+      case AccountType.public:
+        return [
+          TrashiDocument(
+            file: _fileKTP,
+            type: DocumentType.KTP,
+          ),
+          TrashiDocument(
+            file: _fileKK,
+            type: DocumentType.KK,
+          ),
+          TrashiDocument(
+            file: _filePhotoWithKTPAndKK,
+            type: DocumentType.photoWithKTPAndKK,
+          )
+        ];
+      default:
+        return null;
+    }
   }
 }
