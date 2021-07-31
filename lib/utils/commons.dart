@@ -96,3 +96,11 @@ Map<dynamic, dynamic> reverseMap(Map<dynamic, dynamic> inputMap) {
 
   return result;
 }
+
+String getLocaleDate(DateTime dateTime) {
+  final day = dateTime.day;
+  final month = getMonth(dateTime.month);
+  final year = dateTime.year;
+
+  return '$day $month $year';
+}

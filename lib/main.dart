@@ -30,6 +30,8 @@ void main() {
         ChangeNotifierProvider(create: (_) => EditProfileScreenProvider()),
         ChangeNotifierProvider(create: (_) => SplashScreenProvider()),
         ChangeNotifierProvider(create: (_) => SubmitDocumentOnRegistration()),
+        ChangeNotifierProvider(
+            create: (_) => AcceptTrashCollectionRequestScreenFilter()),
       ],
       // child: const MyApp(),
       child: const TrashiApplication(),

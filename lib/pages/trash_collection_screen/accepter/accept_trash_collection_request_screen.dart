@@ -4,7 +4,9 @@ import 'package:trashi/components/button.dart';
 import 'package:trashi/components/layout_redesign.dart';
 import 'package:trashi/constants/colors.dart';
 import 'package:trashi/pages/trash_collection_screen/accepter/components/row_button_wrapper.dart';
+import 'package:trashi/providers.dart';
 import 'package:trashi/utils/commons.dart';
+import 'package:provider/provider.dart';
 
 import 'components/filter_button.dart';
 import 'components/trash_collection_requests.dart';
@@ -75,15 +77,19 @@ class _AcceptTrashCollectionRequestScreenState
             ),
           ),
           Text(
-            "1 Januari 2021",
+            context
+                        .watch<AcceptTrashCollectionRequestScreenFilter>()
+                        .dateTime !=
+                    null
+                ? getLocaleDate(
+                    context
+                        .watch<AcceptTrashCollectionRequestScreenFilter>()
+                        .dateTime,
+                  )
+                : getLocaleDate(DateTime.now()),
             style: TextStyle(
               color: hexToColor("#4C4C4C"),
               fontSize: 14,
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(
-              right: 30,
             ),
           ),
           Icon(
@@ -98,9 +104,25 @@ class _AcceptTrashCollectionRequestScreenState
       backgroundColor: Colors.white,
       foregroundColor: hexToColor("#4C4C4C"),
       onPressed: () {
-        print("calendar");
+        _selectDate();
       },
     );
+  }
+
+  Future<void> _selectDate() async {
+    final DateTime picked = await showDatePicker(
+      context: context,
+      initialDate:
+          context.read<AcceptTrashCollectionRequestScreenFilter>().dateTime ??
+              DateTime.now(),
+      firstDate: DateTime(DateTime.now().year),
+      lastDate: DateTime(2101),
+    );
+
+    if (picked != null) {
+      context.read<AcceptTrashCollectionRequestScreenFilter>().dateTime =
+          picked;
+    }
   }
 
   @override

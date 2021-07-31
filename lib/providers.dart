@@ -475,3 +475,14 @@ class SubmitDocumentOnRegistration
     }
   }
 }
+
+class AcceptTrashCollectionRequestScreenFilter
+    with ChangeNotifier, DiagnosticableTreeMixin {
+  DateTime _dateTime;
+
+  DateTime get dateTime => _dateTime;
+
+  set dateTime(DateTime dateTime) {
+    _dateTime = dateTime;
+  }
+}
