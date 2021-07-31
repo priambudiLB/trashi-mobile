@@ -34,7 +34,7 @@ class DetailPengangkatan extends StatelessWidget {
           height: 8,
         ),
         Text(
-          context.read<FormRequestPengangkatanProvider>().selectedBarang.name,
+          context.read<FormRequestPengangkatanProvider>().selectedBarang.nama,
           style: TextStyle(
               fontSize: 14,
               color: hexToColor("#4D4D4D"),
@@ -57,7 +57,7 @@ class DetailPengangkatan extends StatelessWidget {
           context
               .read<FormRequestPengangkatanProvider>()
               .selectedBeratBarang
-              .name,
+              .range,
           style: TextStyle(
               fontSize: 14,
               color: hexToColor("#4D4D4D"),
@@ -78,9 +78,15 @@ class DetailPengangkatan extends StatelessWidget {
         ),
         Text(
           context
-              .read<FormRequestPengangkatanProvider>()
-              .selectedKendaraan
-              .name,
+                  .read<FormRequestPengangkatanProvider>()
+                  .selectedKendaraan
+                  .kendaraan +
+              " & " +
+              context
+                  .read<FormRequestPengangkatanProvider>()
+                  .selectedKendaraan
+                  .dp
+                  .toString(),
           style: TextStyle(
               fontSize: 14,
               color: hexToColor("#4D4D4D"),

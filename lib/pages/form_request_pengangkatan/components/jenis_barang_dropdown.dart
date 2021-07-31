@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:formz/formz.dart';
 import 'package:provider/provider.dart';
 import 'package:skeleton_text/skeleton_text.dart';
-import 'package:trashi/pages/form_request_pengangkatan/model/barang.dart';
+import 'package:trashi/http_request/models/barang.dart';
 import 'package:trashi/pages/form_request_pengangkatan/provider.dart';
 import 'package:trashi/utils/commons.dart';
 
@@ -41,7 +41,7 @@ class JenisBarangDropdown extends StatelessWidget {
                   .map<DropdownMenuItem<Barang>>((Barang item) {
                 return DropdownMenuItem<Barang>(
                   value: item,
-                  child: Text(item.name),
+                  child: Text(item.nama),
                 );
               }).toList(),
               onChanged: (Barang newBarang) {

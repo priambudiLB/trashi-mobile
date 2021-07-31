@@ -4,19 +4,21 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:formz/formz.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:trashi/pages/form_request_pengangkatan/model/barang.dart';
-import 'package:trashi/pages/form_request_pengangkatan/model/berat_barang.dart';
-import 'package:trashi/pages/form_request_pengangkatan/model/kendaraan.dart';
+import 'package:trashi/http_request/api_provider.dart';
+import 'package:trashi/http_request/models/barang.dart';
+import 'package:trashi/http_request/models/kendaraan_dp.dart';
+import 'package:trashi/http_request/models/range_berat.dart';
+
 import 'package:trashi/pages/form_request_pengangkatan/time_type.dart';
 
 class FormRequestPengangkatanProvider
     with ChangeNotifier, DiagnosticableTreeMixin {
   Barang _selectedBarang;
-  BeratBarang _selectedBeratBarang;
-  Kendaraan _selectedKendaraan;
+  RangeBerat _selectedBeratBarang;
+  KendaraanDanDP _selectedKendaraan;
   List<Barang> _listBarang = [];
-  List<BeratBarang> _listBeratBarang = [];
-  List<Kendaraan> _listKendaraan = [];
+  List<RangeBerat> _listBeratBarang = [];
+  List<KendaraanDanDP> _listKendaraan = [];
   FormzStatus _statusFetchData = FormzStatus.pure;
   TimeType _selectedTimeType = TimeType.NOW;
   DateTime _selectedDate;
@@ -27,11 +29,11 @@ class FormRequestPengangkatanProvider
   String _descriptionLocation = "";
 
   Barang get selectedBarang => _selectedBarang;
-  BeratBarang get selectedBeratBarang => _selectedBeratBarang;
-  Kendaraan get selectedKendaraan => _selectedKendaraan;
+  RangeBerat get selectedBeratBarang => _selectedBeratBarang;
+  KendaraanDanDP get selectedKendaraan => _selectedKendaraan;
   List<Barang> get listBarang => _listBarang;
-  List<BeratBarang> get listBeratBarang => _listBeratBarang;
-  List<Kendaraan> get listKendaraan => _listKendaraan;
+  List<RangeBerat> get listBeratBarang => _listBeratBarang;
+  List<KendaraanDanDP> get listKendaraan => _listKendaraan;
   FormzStatus get statusFetchData => _statusFetchData;
   TimeType get selectedTimeType => _selectedTimeType;
   DateTime get selectedDate => _selectedDate;
@@ -58,27 +60,23 @@ class FormRequestPengangkatanProvider
 
   void fetchData() async {
     setStatusFetchData(FormzStatus.submissionInProgress);
-    Future.delayed(Duration(seconds: 1), () {
-      setListBarang([
-        Barang(name: "Barang 1"),
-        Barang(name: "Barang 2"),
-        Barang(name: "Barang 3")
-      ]);
 
-      setListBeratBarang([
-        BeratBarang(name: "Berat 1"),
-        BeratBarang(name: "Berat 2"),
-        BeratBarang(name: "Berat 3")
-      ]);
+    final getBarangResponse = await ApiProvider().getBarang();
+    if (getBarangResponse != null) {
+      setListBarang(getBarangResponse.list);
+    }
 
-      setListKendaraan([
-        Kendaraan(name: "Kendaraan 1"),
-        Kendaraan(name: "Kendaraan 2"),
-        Kendaraan(name: "Kendaraan 3")
-      ]);
+    final getKenderaanResponse = await ApiProvider().getKendaraanDanDP();
+    if (getKenderaanResponse != null) {
+      setListKendaraan(getKenderaanResponse.list);
+    }
 
-      setStatusFetchData(FormzStatus.submissionSuccess);
-    });
+    final getRangeBeratResponse = await ApiProvider().getRangeBerat();
+    if (getRangeBeratResponse != null) {
+      setListBeratBarang(getRangeBeratResponse.list);
+    }
+
+    setStatusFetchData(FormzStatus.submissionSuccess);
   }
 
   void setSelectedLocation(LatLng location) {
@@ -121,12 +119,12 @@ class FormRequestPengangkatanProvider
     notifyListeners();
   }
 
-  void setSelectedBeratBarang(BeratBarang beratBarang) {
+  void setSelectedBeratBarang(RangeBerat beratBarang) {
     _selectedBeratBarang = beratBarang;
     notifyListeners();
   }
 
-  void setSelectedKendaraan(Kendaraan kendaraan) {
+  void setSelectedKendaraan(KendaraanDanDP kendaraan) {
     _selectedKendaraan = kendaraan;
     notifyListeners();
   }
@@ -136,12 +134,12 @@ class FormRequestPengangkatanProvider
     notifyListeners();
   }
 
-  void setListBeratBarang(List<BeratBarang> list) {
+  void setListBeratBarang(List<RangeBerat> list) {
     _listBeratBarang = list;
     notifyListeners();
   }
 
-  void setListKendaraan(List<Kendaraan> list) {
+  void setListKendaraan(List<KendaraanDanDP> list) {
     _listKendaraan = list;
     notifyListeners();
   }
