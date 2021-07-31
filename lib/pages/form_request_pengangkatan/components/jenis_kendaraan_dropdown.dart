@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:formz/formz.dart';
 import 'package:provider/provider.dart';
 import 'package:skeleton_text/skeleton_text.dart';
-import 'package:trashi/pages/form_request_pengangkatan/model/kendaraan.dart';
+import 'package:trashi/http_request/models/kendaraan_dp.dart';
 import 'package:trashi/pages/form_request_pengangkatan/provider.dart';
 import 'package:trashi/utils/commons.dart';
 
@@ -38,13 +38,13 @@ class JenisKendaraanDropdown extends StatelessWidget {
               items: context
                   .watch<FormRequestPengangkatanProvider>()
                   .listKendaraan
-                  .map<DropdownMenuItem<Kendaraan>>((Kendaraan item) {
-                return DropdownMenuItem<Kendaraan>(
+                  .map<DropdownMenuItem<KendaraanDanDP>>((KendaraanDanDP item) {
+                return DropdownMenuItem<KendaraanDanDP>(
                   value: item,
-                  child: Text(item.name),
+                  child: Text(item.kendaraan + " & " + item.dp.toString()),
                 );
               }).toList(),
-              onChanged: (Kendaraan newKendaraan) {
+              onChanged: (KendaraanDanDP newKendaraan) {
                 context
                     .read<FormRequestPengangkatanProvider>()
                     .setSelectedKendaraan(newKendaraan);

@@ -1,6 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:logger/logger.dart';
 import 'package:trashi/http_request/models/auth.dart';
+import 'package:trashi/http_request/models/barang.dart';
+import 'package:trashi/http_request/models/kendaraan_dp.dart';
+import 'package:trashi/http_request/models/range_berat.dart';
 import 'package:trashi/models/trashi_document.dart';
 import 'package:trashi/secure_storage/secure_storage.dart';
 import 'package:trashi/constants/document_type.dart';
@@ -214,6 +217,54 @@ class ApiProvider {
       return null;
     }
     return CurrentUserResponse.fromJson(response.data);
+  }
+
+  Future<ListBarangReponse> getBarang() async {
+    final response = await _dio
+        .get(
+          '/map/barang',
+        )
+        .catchError(
+          _onError,
+        );
+
+    if (response == null) {
+      return null;
+    }
+
+    return ListBarangReponse.fromJson(response.data);
+  }
+
+  Future<ListKendaraanDanDPReponse> getKendaraanDanDP() async {
+    final response = await _dio
+        .get(
+          '/map/kendaraandandp',
+        )
+        .catchError(
+          _onError,
+        );
+
+    if (response == null) {
+      return null;
+    }
+
+    return ListKendaraanDanDPReponse.fromJson(response.data);
+  }
+
+  Future<ListRangeBeratReponse> getRangeBerat() async {
+    final response = await _dio
+        .get(
+          '/map/rangeberat',
+        )
+        .catchError(
+          _onError,
+        );
+
+    if (response == null) {
+      return null;
+    }
+
+    return ListRangeBeratReponse.fromJson(response.data);
   }
 
   Future<void> uploadFile(TrashiDocument file) async {
