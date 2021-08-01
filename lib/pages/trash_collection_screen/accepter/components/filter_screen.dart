@@ -35,7 +35,7 @@ class _FilterScreenState extends State<FilterScreen> {
       items:
           context.watch<AcceptTrashCollectionRequestScreenFilter>().kabupatens,
       getLabel: (Kabupaten value) {
-        return value.name;
+        return value.name ?? 'Nama tidak tersedia';
       },
       onChanged: (Kabupaten value) {
         context.read<AcceptTrashCollectionRequestScreenFilter>().kabupaten =
@@ -49,7 +49,7 @@ class _FilterScreenState extends State<FilterScreen> {
       items:
           context.watch<AcceptTrashCollectionRequestScreenFilter>().kecamatans,
       getLabel: (Kecamatan value) {
-        return value.name;
+        return value.name ?? 'Nama tidak tersedia';
       },
       onChanged: (Kecamatan value) {
         context.read<AcceptTrashCollectionRequestScreenFilter>().kecamatan =

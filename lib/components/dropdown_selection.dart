@@ -58,7 +58,7 @@ class _DropdownSelectionState<T> extends State<DropdownSelection<T>> {
             (T value) {
               return DropdownMenuItem<T>(
                 value: value,
-                child: Text(widget.getLabel(value) ?? ''),
+                child: Text(widget.getLabel(value)),
               );
             },
           )?.toList(),
