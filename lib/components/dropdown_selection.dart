@@ -40,6 +40,7 @@ class _DropdownSelectionState<T> extends State<DropdownSelection<T>> {
       ),
       child: DropdownButtonHideUnderline(
         child: DropdownButton<T>(
+          isExpanded: true,
           value: _value,
           icon: const Icon(Icons.keyboard_arrow_down),
           iconSize: 24,
