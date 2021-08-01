@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:skeleton_text/skeleton_text.dart';
 import 'package:trashi/components/dropdown_selection.dart';
 import 'package:trashi/components/layout_redesign.dart';
+import 'package:trashi/components/progress_indicator.dart';
 import 'package:trashi/components/spacings.dart';
 import 'package:trashi/http_request/models/kabupaten.dart';
 import 'package:trashi/http_request/models/kecamatan.dart';
@@ -116,10 +118,16 @@ class _FilterScreenState extends State<FilterScreen> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<AcceptTrashCollectionRequestScreenFilter>().getKabupatens();
-      context.read<AcceptTrashCollectionRequestScreenFilter>().getKecamatans();
-      context.read<AcceptTrashCollectionRequestScreenFilter>().getUPSTs();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      showTrashiProgressIndicator(context);
+      await context
+          .read<AcceptTrashCollectionRequestScreenFilter>()
+          .getKabupatens();
+      await context
+          .read<AcceptTrashCollectionRequestScreenFilter>()
+          .getKecamatans();
+      await context.read<AcceptTrashCollectionRequestScreenFilter>().getUPSTs();
+      closeTrashiProgressIndicator(context);
     });
   }
 
