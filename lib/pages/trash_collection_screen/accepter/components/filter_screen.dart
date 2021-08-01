@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:skeleton_text/skeleton_text.dart';
 import 'package:trashi/components/dropdown_selection.dart';
 import 'package:trashi/components/layout_redesign.dart';
 import 'package:trashi/components/progress_indicator.dart';
@@ -8,7 +7,7 @@ import 'package:trashi/http_request/models/kabupaten.dart';
 import 'package:trashi/http_request/models/kecamatan.dart';
 import 'package:trashi/http_request/models/upst.dart';
 import 'package:trashi/pages/trash_collection_screen/accepter/components/row_button_wrapper.dart';
-import 'package:trashi/providers.dart';
+import 'package:trashi/pages/trash_collection_screen/accepter/provider/provider.dart';
 import 'package:trashi/utils/commons.dart';
 import 'package:provider/provider.dart';
 
@@ -20,13 +19,13 @@ class _FilterScreenState extends State<FilterScreen> {
   Widget _buildProvinceDropdown() {
     return DropdownSelection<String>(
       items: [
-        context.watch<AcceptTrashCollectionRequestScreenFilter>().provinsi
+        context.watch<AcceptTrashCollectionRequestScreenProvider>().provinsi
       ],
       getLabel: (String value) {
         return value;
       },
       onChanged: (String value) {
-        context.read<AcceptTrashCollectionRequestScreenFilter>().provinsi =
+        context.read<AcceptTrashCollectionRequestScreenProvider>().provinsi =
             value;
       },
     );
@@ -34,13 +33,14 @@ class _FilterScreenState extends State<FilterScreen> {
 
   Widget _buildKabupatenDropdown() {
     return DropdownSelection<Kabupaten>(
-      items:
-          context.watch<AcceptTrashCollectionRequestScreenFilter>().kabupatens,
+      items: context
+          .watch<AcceptTrashCollectionRequestScreenProvider>()
+          .kabupatens,
       getLabel: (Kabupaten value) {
         return value.name ?? 'Nama tidak tersedia';
       },
       onChanged: (Kabupaten value) {
-        context.read<AcceptTrashCollectionRequestScreenFilter>().kabupaten =
+        context.read<AcceptTrashCollectionRequestScreenProvider>().kabupaten =
             value;
       },
     );
@@ -48,13 +48,14 @@ class _FilterScreenState extends State<FilterScreen> {
 
   Widget _buildKecamatanDropdown() {
     return DropdownSelection<Kecamatan>(
-      items:
-          context.watch<AcceptTrashCollectionRequestScreenFilter>().kecamatans,
+      items: context
+          .watch<AcceptTrashCollectionRequestScreenProvider>()
+          .kecamatans,
       getLabel: (Kecamatan value) {
         return value.name ?? 'Nama tidak tersedia';
       },
       onChanged: (Kecamatan value) {
-        context.read<AcceptTrashCollectionRequestScreenFilter>().kecamatan =
+        context.read<AcceptTrashCollectionRequestScreenProvider>().kecamatan =
             value;
       },
     );
@@ -62,7 +63,7 @@ class _FilterScreenState extends State<FilterScreen> {
 
   Widget _buildUPSTDropdown() {
     return DropdownSelection<UPSTHTTPModel>(
-      items: context.watch<AcceptTrashCollectionRequestScreenFilter>().upsts,
+      items: context.watch<AcceptTrashCollectionRequestScreenProvider>().upsts,
       getLabel: (UPSTHTTPModel value) {
         final name = value.name;
         final kelurahanName = value.kelurahan.name;
@@ -70,7 +71,7 @@ class _FilterScreenState extends State<FilterScreen> {
         return '$name, Kelurahan $kelurahanName';
       },
       onChanged: (UPSTHTTPModel value) {
-        context.read<AcceptTrashCollectionRequestScreenFilter>().upst = value;
+        context.read<AcceptTrashCollectionRequestScreenProvider>().upst = value;
       },
     );
   }
@@ -121,12 +122,14 @@ class _FilterScreenState extends State<FilterScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       showTrashiProgressIndicator(context);
       await context
-          .read<AcceptTrashCollectionRequestScreenFilter>()
+          .read<AcceptTrashCollectionRequestScreenProvider>()
           .getKabupatens();
       await context
-          .read<AcceptTrashCollectionRequestScreenFilter>()
+          .read<AcceptTrashCollectionRequestScreenProvider>()
           .getKecamatans();
-      await context.read<AcceptTrashCollectionRequestScreenFilter>().getUPSTs();
+      await context
+          .read<AcceptTrashCollectionRequestScreenProvider>()
+          .getUPSTs();
       closeTrashiProgressIndicator(context);
     });
   }

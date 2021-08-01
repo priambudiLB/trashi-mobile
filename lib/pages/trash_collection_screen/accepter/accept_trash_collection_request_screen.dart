@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:trashi/components/layout_redesign.dart';
 import 'package:trashi/constants/colors.dart';
 import 'package:trashi/pages/trash_collection_screen/accepter/components/row_button_wrapper.dart';
-import 'package:trashi/providers.dart';
+import 'package:trashi/pages/trash_collection_screen/accepter/provider/provider.dart';
 import 'package:trashi/utils/commons.dart';
 import 'package:provider/provider.dart';
 
@@ -76,12 +76,12 @@ class _AcceptTrashCollectionRequestScreenState
           ),
           Text(
             context
-                        .watch<AcceptTrashCollectionRequestScreenFilter>()
+                        .watch<AcceptTrashCollectionRequestScreenProvider>()
                         .dateTime !=
                     null
                 ? getLocaleDate(
                     context
-                        .watch<AcceptTrashCollectionRequestScreenFilter>()
+                        .watch<AcceptTrashCollectionRequestScreenProvider>()
                         .dateTime,
                   )
                 : getLocaleDate(DateTime.now()),
@@ -111,14 +111,14 @@ class _AcceptTrashCollectionRequestScreenState
     final DateTime picked = await showDatePicker(
       context: context,
       initialDate:
-          context.read<AcceptTrashCollectionRequestScreenFilter>().dateTime ??
+          context.read<AcceptTrashCollectionRequestScreenProvider>().dateTime ??
               DateTime.now(),
       firstDate: DateTime(DateTime.now().year),
       lastDate: DateTime(2101),
     );
 
     if (picked != null) {
-      context.read<AcceptTrashCollectionRequestScreenFilter>().dateTime =
+      context.read<AcceptTrashCollectionRequestScreenProvider>().dateTime =
           picked;
     }
   }
