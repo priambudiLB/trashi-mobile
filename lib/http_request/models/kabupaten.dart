@@ -21,3 +21,17 @@ class Kabupaten {
       _$KabupatenFromJson(json);
   Map<String, dynamic> toJson() => _$KabupatenToJson(this);
 }
+
+class KabupatenResponse {
+  final List<Kabupaten> list;
+
+  KabupatenResponse({this.list});
+
+  factory KabupatenResponse.fromJson(List<dynamic> json) => KabupatenResponse(
+        list: json
+            .map(
+              (item) => Kabupaten.fromJson(item),
+            )
+            .toList(),
+      );
+}

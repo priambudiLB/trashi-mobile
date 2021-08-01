@@ -53,14 +53,14 @@ class _DropdownSelectionState<T> extends State<DropdownSelection<T>> {
             value = newValue;
           },
           isDense: true,
-          items: widget.items.map<DropdownMenuItem<T>>(
+          items: widget.items?.map<DropdownMenuItem<T>>(
             (T value) {
               return DropdownMenuItem<T>(
                 value: value,
-                child: Text(widget.getLabel(value)),
+                child: Text(widget.getLabel(value) ?? ''),
               );
             },
-          ).toList(),
+          )?.toList(),
         ),
       ),
     );

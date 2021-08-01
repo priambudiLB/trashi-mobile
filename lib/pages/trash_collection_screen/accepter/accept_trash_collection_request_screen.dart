@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:trashi/components/button.dart';
 import 'package:trashi/components/layout_redesign.dart';
 import 'package:trashi/constants/colors.dart';
 import 'package:trashi/pages/trash_collection_screen/accepter/components/row_button_wrapper.dart';
