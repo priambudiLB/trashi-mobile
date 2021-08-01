@@ -252,7 +252,7 @@ class ApiProvider {
     return response;
   }
 
-  Future<Response<dynamic>> getKecamatans({String kabupatenID}) async {
+  Future<Response<dynamic>> getKecamatans({int kabupatenID}) async {
     String path = '/map/kecamatan';
 
     if (kabupatenID != null) {
@@ -271,8 +271,8 @@ class ApiProvider {
   }
 
   Future<Response<dynamic>> getUPSTs({
-    String kabupatenID,
-    String kecamatanID,
+    int kabupatenID,
+    int kecamatanID,
   }) async {
     String path = '/map/upst';
 
@@ -288,8 +288,8 @@ class ApiProvider {
       if (kecamatanID != null) {
         String filterKecamatanID = 'kecamatan._id=$kecamatanID';
 
-        if (path.endsWith('?')) {
-          filterKecamatanID = filterKecamatanID + '&';
+        if (!path.endsWith('?')) {
+          path = path + '&';
         }
         path = path + filterKecamatanID;
       }

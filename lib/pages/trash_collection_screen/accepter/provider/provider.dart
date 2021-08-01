@@ -82,7 +82,7 @@ class AcceptTrashCollectionRequestScreenProvider
     notifyListeners();
   }
 
-  Future<void> getKecamatans({String kabupatenID}) async {
+  Future<void> getKecamatans({int kabupatenID}) async {
     _isFetching = true;
     notifyListeners();
 
@@ -104,7 +104,7 @@ class AcceptTrashCollectionRequestScreenProvider
     notifyListeners();
   }
 
-  Future<void> getUPSTs({String kabupatenID, String kecamatanID}) async {
+  Future<void> getUPSTs({int kabupatenID, int kecamatanID}) async {
     _isFetching = true;
     notifyListeners();
 

@@ -39,9 +39,17 @@ class _FilterScreenState extends State<FilterScreen> {
       getLabel: (Kabupaten value) {
         return value.name ?? 'Nama tidak tersedia';
       },
-      onChanged: (Kabupaten value) {
+      onChanged: (Kabupaten value) async {
         context.read<AcceptTrashCollectionRequestScreenProvider>().kabupaten =
             value;
+        showTrashiProgressIndicator(context);
+        await context
+            .read<AcceptTrashCollectionRequestScreenProvider>()
+            .getKecamatans(kabupatenID: value.id);
+        await context
+            .read<AcceptTrashCollectionRequestScreenProvider>()
+            .getUPSTs(kabupatenID: value.id);
+        closeTrashiProgressIndicator(context);
       },
     );
   }
@@ -54,9 +62,14 @@ class _FilterScreenState extends State<FilterScreen> {
       getLabel: (Kecamatan value) {
         return value.name ?? 'Nama tidak tersedia';
       },
-      onChanged: (Kecamatan value) {
+      onChanged: (Kecamatan value) async {
         context.read<AcceptTrashCollectionRequestScreenProvider>().kecamatan =
             value;
+        showTrashiProgressIndicator(context);
+        await context
+            .read<AcceptTrashCollectionRequestScreenProvider>()
+            .getUPSTs(kecamatanID: value.id);
+        closeTrashiProgressIndicator(context);
       },
     );
   }
