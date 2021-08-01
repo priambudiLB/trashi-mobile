@@ -1,51 +1,91 @@
 import 'package:flutter/material.dart';
+import 'package:trashi/components/dropdown_selection.dart';
 import 'package:trashi/components/layout_redesign.dart';
+import 'package:trashi/components/progress_indicator.dart';
 import 'package:trashi/components/spacings.dart';
-import 'package:trashi/pages/trash_collection_screen/accepter/components/drop_down_filter.dart';
+import 'package:trashi/http_request/models/kabupaten.dart';
+import 'package:trashi/http_request/models/kecamatan.dart';
+import 'package:trashi/http_request/models/upst.dart';
 import 'package:trashi/pages/trash_collection_screen/accepter/components/row_button_wrapper.dart';
+import 'package:trashi/pages/trash_collection_screen/accepter/provider/provider.dart';
 import 'package:trashi/utils/commons.dart';
+import 'package:provider/provider.dart';
 
-class FilterScreen extends StatelessWidget {
+class FilterScreen extends StatefulWidget {
+  _FilterScreenState createState() => _FilterScreenState();
+}
+
+class _FilterScreenState extends State<FilterScreen> {
   Widget _buildProvinceDropdown() {
-    return DropdownFilter(
-      initValue: "DKI Jakarta",
-      list: [
-        "DKI Jakarta",
-        "Jawa Barat",
+    return DropdownSelection<String>(
+      items: [
+        context.watch<AcceptTrashCollectionRequestScreenProvider>().provinsi
       ],
+      getLabel: (String value) {
+        return value;
+      },
+      onChanged: (String value) {
+        context.read<AcceptTrashCollectionRequestScreenProvider>().provinsi =
+            value;
+      },
     );
   }
 
   Widget _buildKabupatenDropdown() {
-    return DropdownFilter(
-      initValue: "Jakarta Pusat",
-      list: [
-        "Jakarta Pusat",
-        "Jakarta Selatan",
-        "Jakarta Timur",
-        "Jakarta Utara",
-        "Jakarta Barat",
-      ],
+    return DropdownSelection<Kabupaten>(
+      items: context
+          .watch<AcceptTrashCollectionRequestScreenProvider>()
+          .kabupatens,
+      getLabel: (Kabupaten value) {
+        return value.name ?? 'Nama tidak tersedia';
+      },
+      onChanged: (Kabupaten value) async {
+        context.read<AcceptTrashCollectionRequestScreenProvider>().kabupaten =
+            value;
+        showTrashiProgressIndicator(context);
+        await context
+            .read<AcceptTrashCollectionRequestScreenProvider>()
+            .getKecamatans(kabupatenID: value.id);
+        await context
+            .read<AcceptTrashCollectionRequestScreenProvider>()
+            .getUPSTs(kabupatenID: value.id);
+        closeTrashiProgressIndicator(context);
+      },
     );
   }
 
   Widget _buildKecamatanDropdown() {
-    return DropdownFilter(
-      initValue: "Mampang Prapatan",
-      list: [
-        "Mampang Prapatan",
-        "Tebet",
-      ],
+    return DropdownSelection<Kecamatan>(
+      items: context
+          .watch<AcceptTrashCollectionRequestScreenProvider>()
+          .kecamatans,
+      getLabel: (Kecamatan value) {
+        return value.name ?? 'Nama tidak tersedia';
+      },
+      onChanged: (Kecamatan value) async {
+        context.read<AcceptTrashCollectionRequestScreenProvider>().kecamatan =
+            value;
+        showTrashiProgressIndicator(context);
+        await context
+            .read<AcceptTrashCollectionRequestScreenProvider>()
+            .getUPSTs(kecamatanID: value.id);
+        closeTrashiProgressIndicator(context);
+      },
     );
   }
 
   Widget _buildUPSTDropdown() {
-    return DropdownFilter(
-      initValue: "UPST 1",
-      list: [
-        "UPST 1",
-        "UPST 2",
-      ],
+    return DropdownSelection<UPSTHTTPModel>(
+      items: context.watch<AcceptTrashCollectionRequestScreenProvider>().upsts,
+      getLabel: (UPSTHTTPModel value) {
+        final name = value.name;
+        final kelurahanName = value.kelurahan.name;
+
+        return '$name, Kelurahan $kelurahanName';
+      },
+      onChanged: (UPSTHTTPModel value) {
+        context.read<AcceptTrashCollectionRequestScreenProvider>().upst = value;
+      },
     );
   }
 
@@ -87,6 +127,24 @@ class FilterScreen extends StatelessWidget {
         print("apply filter");
       },
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      showTrashiProgressIndicator(context);
+      await context
+          .read<AcceptTrashCollectionRequestScreenProvider>()
+          .getKabupatens();
+      await context
+          .read<AcceptTrashCollectionRequestScreenProvider>()
+          .getKecamatans();
+      await context
+          .read<AcceptTrashCollectionRequestScreenProvider>()
+          .getUPSTs();
+      closeTrashiProgressIndicator(context);
+    });
   }
 
   @override

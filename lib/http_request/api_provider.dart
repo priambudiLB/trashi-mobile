@@ -57,6 +57,10 @@ class ApiProvider {
     }
   }
 
+  static bool isStatusCodeOK(int statusCode) {
+    return statusCode >= 200 && statusCode <= 399;
+  }
+
   Future<void> _saveTokenFromCookies(List<String> cookies) async {
     if (cookies.isNotEmpty && cookies.length > 0) {
       List<String> splittedCookies = cookies[0].split(';');
@@ -285,6 +289,72 @@ class ApiProvider {
     if (response == null) {
       return null;
     }
+  }
+
+  Future<Response<dynamic>> getKabupatens() async {
+    final response = await _dio
+        .get(
+          '/map/kabupaten',
+        )
+        .catchError(
+          _onError,
+        );
+
+    return response;
+  }
+
+  Future<Response<dynamic>> getKecamatans({int kabupatenID}) async {
+    String path = '/map/kecamatan';
+
+    if (kabupatenID != null) {
+      path = path + '?kabupaten._id=$kabupatenID';
+    }
+
+    final response = await _dio
+        .get(
+          path,
+        )
+        .catchError(
+          _onError,
+        );
+
+    return response;
+  }
+
+  Future<Response<dynamic>> getUPSTs({
+    int kabupatenID,
+    int kecamatanID,
+  }) async {
+    String path = '/map/upst';
+
+    if (kabupatenID != null || kecamatanID != null) {
+      path = path + '?';
+
+      if (kabupatenID != null) {
+        String filterKabupatenID = 'kabupaten._id=$kabupatenID';
+
+        path = path + filterKabupatenID;
+      }
+
+      if (kecamatanID != null) {
+        String filterKecamatanID = 'kecamatan._id=$kecamatanID';
+
+        if (!path.endsWith('?')) {
+          path = path + '&';
+        }
+        path = path + filterKecamatanID;
+      }
+    }
+
+    final response = await _dio
+        .get(
+          path,
+        )
+        .catchError(
+          _onError,
+        );
+
+    return response;
   }
 }
 
