@@ -9,6 +9,7 @@ import 'package:trashi/pages/profile_screen_redesign/provider.dart';
 import 'package:trashi/pages/profile_screen_redesign/role_type.dart';
 import 'package:trashi/pages/request_screen/request_screen.dart';
 import 'package:trashi/pages/retribution_screen/retribution_screen.dart';
+import 'package:trashi/pages/trash_collection_screen/accepter/accept_trash_collection_request_screen.dart';
 import 'package:trashi/secure_storage/secure_storage.dart';
 import 'package:trashi/utils/commons.dart';
 
@@ -316,12 +317,25 @@ class ProfileHeader extends StatelessWidget {
                         ),
                         InkWell(
                           onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => RequestScreen(),
-                              ),
-                            );
+                            if (context
+                                    .read<ProfileScreenProvider>()
+                                    .roleType ==
+                                RoleType.ADMIN)
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      AcceptTrashCollectionRequestScreen(),
+                                ),
+                              );
+                            else {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => RequestScreen(),
+                                ),
+                              );
+                            }
                           },
                           child: Container(
                               height: 115,
@@ -380,51 +394,11 @@ class ProfileHeader extends StatelessWidget {
                         ? Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Container(
-                                height: 115,
-                                width: 148,
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(8),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.black.withOpacity(0.08),
-                                      blurRadius: 7,
-                                      offset: Offset(
-                                          0, 4), // changes position of shadow
-                                    ),
-                                  ],
-                                ),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    ClipOval(
-                                      child: Container(
-                                        padding: EdgeInsets.all(6),
-                                        height: 32,
-                                        width: 32,
-                                        color: hexToColor(MAIN_COLOR),
-                                        child: Center(
-                                          child: Icon(
-                                            Icons.text_snippet_outlined,
-                                            color: Colors.white,
-                                            size: 18,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    Container(
-                                      height: 12,
-                                    ),
-                                    Text(
-                                      "Daftar Harga\nPengangkatan",
-                                      textAlign: TextAlign.center,
-                                    )
-                                  ],
-                                ),
-                              ),
-                              Container(
+                              InkWell(
+                                onTap: () {
+                                  print('on tap daftar harga');
+                                },
+                                child: Container(
                                   height: 115,
                                   width: 148,
                                   decoration: BoxDecoration(
@@ -451,10 +425,10 @@ class ProfileHeader extends StatelessWidget {
                                           width: 32,
                                           color: hexToColor(MAIN_COLOR),
                                           child: Center(
-                                            child: Image.asset(
-                                              "assets/images/donate_icon.png",
-                                              width: 15,
-                                              height: 15,
+                                            child: Icon(
+                                              Icons.text_snippet_outlined,
+                                              color: Colors.white,
+                                              size: 18,
                                             ),
                                           ),
                                         ),
@@ -463,11 +437,63 @@ class ProfileHeader extends StatelessWidget {
                                         height: 12,
                                       ),
                                       Text(
-                                        "Buat\nDonasi",
+                                        "Daftar Harga\nPengangkatan",
                                         textAlign: TextAlign.center,
                                       )
                                     ],
-                                  )),
+                                  ),
+                                ),
+                              ),
+                              InkWell(
+                                onTap: () {
+                                  print('on tap buat donasi');
+                                },
+                                child: Container(
+                                    height: 115,
+                                    width: 148,
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(8),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.black.withOpacity(0.08),
+                                          blurRadius: 7,
+                                          offset: Offset(0,
+                                              4), // changes position of shadow
+                                        ),
+                                      ],
+                                    ),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        ClipOval(
+                                          child: Container(
+                                            padding: EdgeInsets.all(6),
+                                            height: 32,
+                                            width: 32,
+                                            color: hexToColor(MAIN_COLOR),
+                                            child: Center(
+                                              child: Image.asset(
+                                                "assets/images/donate_icon.png",
+                                                width: 15,
+                                                height: 15,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        Container(
+                                          height: 12,
+                                        ),
+                                        Text(
+                                          "Buat\nDonasi",
+                                          textAlign: TextAlign.center,
+                                        )
+                                      ],
+                                    )),
+                              ),
                             ],
                           )
                         : Container(),
