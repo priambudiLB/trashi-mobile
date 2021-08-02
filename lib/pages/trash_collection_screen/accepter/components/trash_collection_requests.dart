@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:trashi/constants/colors.dart';
+import 'package:trashi/pages/trash_collection_screen/accepter/provider/provider.dart';
 import 'package:trashi/utils/commons.dart';
 
 import 'trash_collection_request_card.dart';
+import 'package:provider/provider.dart';
 
 class TrashCollectionRequests extends StatefulWidget {
   @override
@@ -21,82 +23,106 @@ class _TrashCollectionRequestsState extends State<TrashCollectionRequests>
     super.initState();
   }
 
-  Widget _buildRequestCards() {
+  Widget _buildNowRequestCards() {
     return ListView(
-      children: [
-        TrashCollectionRequestCard(
-          requesterName: "Mikey",
-          requesterAddress:
-              "Jl. M. Nasir No.18, Cilodong, Kec. Cilodong, Kota Depok, Jawa Barat 16415",
-          requesterPhotoURL:
-              "https://i.pinimg.com/736x/1e/1c/3e/1e1c3e4adbd53afaa0b7f2f999c46887.jpg",
-          requestStatus: "Menunggu Pengambilan",
-          requestTime: "22 Jan, 15:00",
-          trashType: "Batu > 100kg",
-          pickUpDeliveryType: "Pickup",
-        ),
-        TrashCollectionRequestCard(
-          requesterName: "Adisti Lailan",
-          requesterAddress:
-              "Jl. M. Nasir No.18, Cilodong, Kec. Cilodong, Kota Depok, Jawa Barat 16415",
-          requestStatus: "Menunggu Pengambilan",
-          requestTime: "22 Jan, 15:00",
-          trashType: "Batu > 100kg",
-          pickUpDeliveryType: "Pickup",
-        ),
-      ],
+      children: context
+          .watch<AcceptTrashCollectionRequestScreenProvider>()
+          .pengangkatanListAdminResponse
+          .isNow
+          .map(
+            (element) => TrashCollectionRequestCard(
+              pengangkatan: element,
+            ),
+          )
+          .toList(),
+    );
+  }
+
+  Widget _buildNotNowRequestCards() {
+    return ListView(
+      children: context
+          .watch<AcceptTrashCollectionRequestScreenProvider>()
+          .pengangkatanListAdminResponse
+          .notIsNow
+          .map(
+            (element) => TrashCollectionRequestCard(
+              pengangkatan: element,
+            ),
+          )
+          .toList(),
+    );
+  }
+
+  Widget _buildDoneRequestCards() {
+    return ListView(
+      children: context
+          .watch<AcceptTrashCollectionRequestScreenProvider>()
+          .pengangkatanListAdminResponse
+          .done
+          .map(
+            (element) => TrashCollectionRequestCard(
+              pengangkatan: element,
+            ),
+          )
+          .toList(),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          TabBar(
-            indicator: BoxDecoration(
-              border: Border(
-                bottom: BorderSide(
-                  color: hexToColor(MAIN_COLOR),
-                  width: 2,
-                ),
-              ),
-            ),
-            unselectedLabelColor: hexToColor("#909090"),
-            labelColor: Colors.black,
-            tabs: [
-              Tab(
-                text: 'Sekarang',
-              ),
-              Tab(
-                text: 'Terjadwal',
-              ),
-              Tab(
-                text: 'Selesai',
-              )
-            ],
-            controller: _tabController,
-            indicatorSize: TabBarIndicatorSize.tab,
-          ),
-          Padding(
-            padding: EdgeInsets.only(
-              bottom: 16,
-            ),
-          ),
-          Expanded(
-            child: TabBarView(
+    return context
+            .watch<AcceptTrashCollectionRequestScreenProvider>()
+            .isFetching
+        ? Center(
+            child: CircularProgressIndicator(),
+          )
+        : Expanded(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
-                _buildRequestCards(),
-                _buildRequestCards(),
-                _buildRequestCards(),
+                TabBar(
+                  indicator: BoxDecoration(
+                    border: Border(
+                      bottom: BorderSide(
+                        color: hexToColor(MAIN_COLOR),
+                        width: 2,
+                      ),
+                    ),
+                  ),
+                  unselectedLabelColor: hexToColor("#909090"),
+                  labelColor: Colors.black,
+                  tabs: [
+                    Tab(
+                      text: 'Sekarang',
+                    ),
+                    Tab(
+                      text: 'Terjadwal',
+                    ),
+                    Tab(
+                      text: 'Selesai',
+                    )
+                  ],
+                  controller: _tabController,
+                  indicatorSize: TabBarIndicatorSize.tab,
+                ),
+                Padding(
+                  padding: EdgeInsets.only(
+                    bottom: 16,
+                  ),
+                ),
+                Expanded(
+                  child: TabBarView(
+                    children: [
+                      _buildNowRequestCards(),
+                      _buildNotNowRequestCards(),
+                      _buildDoneRequestCards(),
+                    ],
+                    controller: _tabController,
+                  ),
+                ),
               ],
-              controller: _tabController,
             ),
-          ),
-        ],
-      ),
-    );
+          );
   }
 }
 

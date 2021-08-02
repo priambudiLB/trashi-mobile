@@ -3,12 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:trashi/http_request/api_provider.dart';
 import 'package:trashi/http_request/models/kabupaten.dart';
 import 'package:trashi/http_request/models/kecamatan.dart';
+import 'package:trashi/http_request/models/pengangkatan.dart';
 import 'package:trashi/http_request/models/upst.dart';
 
 class AcceptTrashCollectionRequestScreenProvider
     with ChangeNotifier, DiagnosticableTreeMixin {
   String _errorMessage = 'Terjadi kesalahan. Silakan coba beberapa saat lagi.';
-  bool _isFetching;
+  bool _isFetching = true;
 
   DateTime _dateTime;
   String _provinsi = 'DKI Jakarta';
@@ -19,6 +20,8 @@ class AcceptTrashCollectionRequestScreenProvider
   List<Kabupaten> _kabupatens;
   List<Kecamatan> _kecamatans;
   List<UPSTHTTPModel> _upsts;
+
+  PengangkatanListAdminResponse _pengangkatanListAdminResponse;
 
   bool get isFetching => _isFetching;
   String get errorMessage => _errorMessage;
@@ -32,6 +35,9 @@ class AcceptTrashCollectionRequestScreenProvider
   List<Kabupaten> get kabupatens => _kabupatens;
   List<Kecamatan> get kecamatans => _kecamatans;
   List<UPSTHTTPModel> get upsts => _upsts;
+
+  PengangkatanListAdminResponse get pengangkatanListAdminResponse =>
+      _pengangkatanListAdminResponse;
 
   set isFetching(bool value) {
     _isFetching = value;
@@ -123,6 +129,60 @@ class AcceptTrashCollectionRequestScreenProvider
     _upsts = upstResponse.list;
 
     _isFetching = false;
+
+    notifyListeners();
+  }
+
+  Future<void> getPengangkatanListAdmin() async {
+    final response = await ApiProvider().getPengangkatanListAdmin();
+
+    if (!ApiProvider.isStatusCodeOK(response.statusCode)) {
+      return;
+    }
+
+    _pengangkatanListAdminResponse =
+        PengangkatanListAdminResponse.fromJson(response.data);
+
+    notifyListeners();
+  }
+}
+
+class TrashCollectionRequestDetailProvider
+    with ChangeNotifier, DiagnosticableTreeMixin {
+  bool _isFetching = true;
+  bool get isFetching => _isFetching;
+  set isFetching(bool value) {
+    _isFetching = value;
+    notifyListeners();
+  }
+
+  Pengangkatan _pengangkatan;
+
+  Pengangkatan get pengangkatan => _pengangkatan;
+
+  Future<void> getPengangkatanDetail(int id) async {
+    final response = await ApiProvider().getPengangkatanDetail(id);
+
+    if (!ApiProvider.isStatusCodeOK(response.statusCode)) {
+      return;
+    }
+
+    _pengangkatan = Pengangkatan.fromJson(response.data);
+
+    notifyListeners();
+  }
+
+  Future<void> finishPengangkatan(int id) async {
+    FinishPengangkatanRequest body =
+        FinishPengangkatanRequest(idPengangkatan: id);
+
+    final response = await ApiProvider().finishPengangkatan(body);
+
+    if (!ApiProvider.isStatusCodeOK(response.statusCode)) {
+      return;
+    }
+
+    _pengangkatan = Pengangkatan.fromJson(response.data);
 
     notifyListeners();
   }

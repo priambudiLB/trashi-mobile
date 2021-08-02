@@ -1,32 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:trashi/constants/pengangkatan.dart';
+import 'package:trashi/http_request/models/pengangkatan.dart';
 import 'package:trashi/pages/trash_collection_screen/accepter/components/row_button_wrapper.dart';
 import 'package:trashi/pages/trash_collection_screen/accepter/trash_collection_request_detail_screen.dart';
 import 'package:trashi/utils/commons.dart';
 
 class TrashCollectionRequestCard extends StatefulWidget {
-  final String requesterName;
-  final String requesterPhotoURL;
-  final String requesterAddress;
-  final String requestStatus;
-  final String requestTime;
-  final String trashType;
-  final String pickUpDeliveryType;
-  final String trashWeightFormatted;
-  final String costFormatted;
+  final Pengangkatan pengangkatan;
 
   const TrashCollectionRequestCard({
     Key key,
-    this.requesterName = "",
-    this.requesterPhotoURL =
-        "https://ak.picdn.net/shutterstock/videos/14582785/thumb/4.jpg",
-    this.requesterAddress = "",
-    this.requestStatus = "",
-    this.requestTime = "",
-    this.trashType = "",
-    this.pickUpDeliveryType = "",
-    this.trashWeightFormatted = "",
-    this.costFormatted = "",
+    this.pengangkatan,
   }) : super(key: key);
 
   @override
@@ -36,44 +21,100 @@ class TrashCollectionRequestCard extends StatefulWidget {
 
 class _TrashCollectionRequestCardState
     extends State<TrashCollectionRequestCard> {
+  Widget get statusSection {
+    if (widget.pengangkatan.statusPengangkatan == StatusPengangkatan.selesai &&
+        widget.pengangkatan.statusPembayaran == StatusPembayaran.lunas) {
+      return Text(
+        'Selesai',
+        style: TextStyle(
+          color: hexToColor("#909090"),
+          fontSize: 12,
+          fontWeight: FontWeight.w500,
+          fontStyle: FontStyle.italic,
+        ),
+      );
+    }
+
+    if (widget.pengangkatan.statusPengangkatan ==
+        StatusPengangkatan.menungguPengambilan) {
+      return Text(
+        widget.pengangkatan.statusPengangkatan.text,
+        style: TextStyle(
+          color: hexToColor("#32A37F"),
+          fontSize: 12,
+          fontWeight: FontWeight.w500,
+          fontStyle: FontStyle.italic,
+        ),
+      );
+    }
+
+    if (widget.pengangkatan.statusPengangkatan == StatusPengangkatan.selesai &&
+        widget.pengangkatan.statusPembayaran == StatusPembayaran.belumLunas) {
+      return Text(
+        'Menunggu Sisa Pembayaran',
+        style: TextStyle(
+          color: hexToColor("#FF9059"),
+          fontSize: 12,
+          fontWeight: FontWeight.w500,
+          fontStyle: FontStyle.italic,
+        ),
+      );
+    }
+
+    return SizedBox.shrink();
+  }
+
+  Widget get timeOfCollectionSection {
+    String timeOfCollection;
+
+    if (widget.pengangkatan.isNow) {
+      timeOfCollection = 'Sekarang';
+    } else if (widget.pengangkatan.statusPengangkatan ==
+            StatusPengangkatan.selesai &&
+        widget.pengangkatan.statusPembayaran == StatusPembayaran.lunas) {
+      return SizedBox.shrink();
+    } else {
+      timeOfCollection =
+          getAccepterScreenLocaleDate(widget.pengangkatan.waktuPengangkatan);
+    }
+
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.all(
+          Radius.circular(4),
+        ),
+        border: Border.all(
+          color: hexToColor("#FF9059"),
+        ),
+        color: Color.fromRGBO(255, 144, 89, 0.1),
+      ),
+      child: Text(
+        timeOfCollection,
+        style: TextStyle(
+          color: hexToColor("#FF9059"),
+          fontSize: 12,
+          fontWeight: FontWeight.w500,
+        ),
+      ),
+      padding: EdgeInsets.fromLTRB(16, 4, 16, 4),
+    );
+  }
+
   Widget _buildStatusAndTimeOfCollectionSection() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(
-          widget.requestStatus,
-          style: TextStyle(
-            color: hexToColor("#32A37F"),
-            fontSize: 12,
-            fontWeight: FontWeight.w500,
-            fontStyle: FontStyle.italic,
-          ),
-        ),
-        Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(
-              Radius.circular(4),
-            ),
-            border: Border.all(
-              color: hexToColor("#FF9059"),
-            ),
-            color: Color.fromRGBO(255, 144, 89, 0.1),
-          ),
-          child: Text(
-            widget.requestTime,
-            style: TextStyle(
-              color: hexToColor("#FF9059"),
-              fontSize: 12,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-          padding: EdgeInsets.fromLTRB(16, 4, 16, 4),
-        )
+        statusSection,
+        timeOfCollectionSection,
       ],
     );
   }
 
   Widget _buildRequesterIdentitySection() {
+    ImageProvider image;
+
+    image = Image.asset('assets/images/profile-active.png').image;
+
     return Row(
       children: [
         Container(
@@ -82,9 +123,7 @@ class _TrashCollectionRequestCardState
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             image: DecorationImage(
-              image: NetworkImage(
-                widget.requesterPhotoURL,
-              ),
+              image: image,
               fit: BoxFit.fill,
             ),
           ),
@@ -95,7 +134,7 @@ class _TrashCollectionRequestCardState
           ),
         ),
         Text(
-          widget.requesterName,
+          widget.pengangkatan.username,
           style: TextStyle(
             color: hexToColor("#4D4D4D"),
             fontSize: 12,
@@ -123,7 +162,7 @@ class _TrashCollectionRequestCardState
                 ),
               ),
               Text(
-                widget.trashType,
+                widget.pengangkatan.jenisBarang,
                 style: TextStyle(
                   fontWeight: FontWeight.w400,
                   color: hexToColor("#909090"),
@@ -151,7 +190,7 @@ class _TrashCollectionRequestCardState
                 ),
               ),
               Text(
-                widget.pickUpDeliveryType,
+                widget.pengangkatan.jenisKendaraan,
                 style: TextStyle(
                   fontWeight: FontWeight.w400,
                   color: hexToColor("#909090"),
@@ -183,19 +222,12 @@ class _TrashCollectionRequestCardState
           ),
         ],
       ),
-      onPressed: () {
+      onPressed: () async {
         Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => TrashCollectionRequestDetailScreen(
-              trashType: widget.trashType,
-              trashWeightFormatted: widget.trashWeightFormatted,
-              pickUpDeliveryType: widget.pickUpDeliveryType,
-              costFormatted: widget.costFormatted,
-              requestTimeFormatted: widget.requestTime,
-              requesterAddress: widget.requesterAddress,
-              paymentStatus: widget.requestStatus,
-              isCollected: false,
+              id: widget.pengangkatan.id,
             ),
           ),
         );
@@ -241,7 +273,7 @@ class _TrashCollectionRequestCardState
                 ),
               ),
               Text(
-                widget.requesterAddress,
+                widget.pengangkatan.lokasi,
                 style: TextStyle(
                     fontWeight: FontWeight.w400, color: hexToColor("#909090")),
               ),

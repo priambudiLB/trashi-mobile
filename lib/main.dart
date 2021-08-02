@@ -33,6 +33,8 @@ void main() {
         ChangeNotifierProvider(create: (_) => SubmitDocumentOnRegistration()),
         ChangeNotifierProvider(
             create: (_) => AcceptTrashCollectionRequestScreenProvider()),
+        ChangeNotifierProvider(
+            create: (_) => TrashCollectionRequestDetailProvider()),
       ],
       // child: const MyApp(),
       child: const TrashiApplication(),

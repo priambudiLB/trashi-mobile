@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:trashi/components/layout_redesign.dart';
+import 'package:trashi/components/progress_indicator.dart';
 import 'package:trashi/constants/colors.dart';
 import 'package:trashi/pages/trash_collection_screen/accepter/components/row_button_wrapper.dart';
 import 'package:trashi/pages/trash_collection_screen/accepter/provider/provider.dart';
@@ -121,6 +122,20 @@ class _AcceptTrashCollectionRequestScreenState
       context.read<AcceptTrashCollectionRequestScreenProvider>().dateTime =
           picked;
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      context.read<AcceptTrashCollectionRequestScreenProvider>().isFetching =
+          true;
+      await context
+          .read<AcceptTrashCollectionRequestScreenProvider>()
+          .getPengangkatanListAdmin();
+      context.read<AcceptTrashCollectionRequestScreenProvider>().isFetching =
+          false;
+    });
   }
 
   @override
