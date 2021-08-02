@@ -356,6 +356,18 @@ class ApiProvider {
 
     return response;
   }
+
+  Future<Response<dynamic>> getPengangkatanListAdmin() async {
+    final response = await _dio
+        .get(
+          '/pengangkatan/list/admin',
+        )
+        .catchError(
+          _onError,
+        );
+
+    return response;
+  }
 }
 
 /**

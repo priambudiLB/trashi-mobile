@@ -1,29 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:trashi/components/layout_redesign.dart';
 import 'package:trashi/components/spacings.dart';
+import 'package:trashi/constants/pengangkatan.dart';
+import 'package:trashi/http_request/models/pengangkatan.dart';
 import 'package:trashi/pages/trash_collection_screen/accepter/components/row_button_wrapper.dart';
 import 'package:trashi/utils/commons.dart';
 
 class TrashCollectionRequestDetailScreen extends StatefulWidget {
-  final String trashType;
-  final String trashWeightFormatted;
-  final String pickUpDeliveryType;
-  final String costFormatted;
-  final String requestTimeFormatted;
-  final String requesterAddress;
-  final String paymentStatus;
-  final bool isCollected;
+  final Pengangkatan pengangkatan;
 
   const TrashCollectionRequestDetailScreen({
     Key key,
-    this.trashType,
-    this.trashWeightFormatted,
-    this.pickUpDeliveryType,
-    this.costFormatted,
-    this.requestTimeFormatted,
-    this.requesterAddress,
-    this.paymentStatus,
-    this.isCollected,
+    this.pengangkatan,
   }) : super(key: key);
 
   @override
@@ -37,7 +25,8 @@ class _TrashCollectionRequestDetailScreenState
 
   @override
   void initState() {
-    isCollected = widget.isCollected;
+    isCollected =
+        widget.pengangkatan.statusPengangkatan == StatusPengangkatan.selesai;
     super.initState();
   }
 
@@ -81,13 +70,17 @@ class _TrashCollectionRequestDetailScreenState
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _buildDetailItem("Jenis Barang", widget.trashType),
-        _buildDetailItem("Berat", widget.trashWeightFormatted),
-        _buildDetailItem("Jenis Kendaraan", widget.pickUpDeliveryType),
-        _buildDetailItem("Harga", widget.costFormatted),
-        _buildDetailItem("Waktu", widget.requestTimeFormatted),
-        _buildDetailItem("Lokasi", widget.requesterAddress),
-        _buildDetailItem("Status Pembayaran", widget.paymentStatus),
+        _buildDetailItem("Jenis Barang", widget.pengangkatan.jenisBarang),
+        _buildDetailItem("Berat", widget.pengangkatan.berat),
+        _buildDetailItem("Jenis Kendaraan", widget.pengangkatan.jenisKendaraan),
+        _buildDetailItem("Harga", widget.pengangkatan.harga.toString()),
+        _buildDetailItem(
+            "Waktu",
+            getAccepterScreenCompleteLocaleDate(
+                widget.pengangkatan.waktuPengangkatan)),
+        _buildDetailItem("Lokasi", widget.pengangkatan.lokasi),
+        _buildDetailItem(
+            "Status Pembayaran", widget.pengangkatan.statusPembayaran.text),
       ],
     );
   }

@@ -104,3 +104,22 @@ String getLocaleDate(DateTime dateTime) {
 
   return '$day $month $year';
 }
+
+String getAccepterScreenLocaleDate(DateTime dateTime) {
+  final day = dateTime.day;
+  final month = getMonth(dateTime.month);
+  final hour = dateTime.hour;
+  final minute = dateTime.minute;
+
+  return '$day $month, $hour:$minute';
+}
+
+String getAccepterScreenCompleteLocaleDate(DateTime dateTime) {
+  final day = dateTime.day;
+  final month = getMonth(dateTime.month);
+  final year = dateTime.year;
+  final hour = dateTime.hour;
+  final minute = dateTime.minute;
+
+  return '$day $month $year - $hour:$minute';
+}
