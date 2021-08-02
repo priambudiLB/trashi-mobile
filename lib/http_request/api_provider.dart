@@ -3,6 +3,7 @@ import 'package:logger/logger.dart';
 import 'package:trashi/http_request/models/auth.dart';
 import 'package:trashi/http_request/models/barang.dart';
 import 'package:trashi/http_request/models/kendaraan_dp.dart';
+import 'package:trashi/http_request/models/pengangkatan.dart';
 import 'package:trashi/http_request/models/range_berat.dart';
 import 'package:trashi/models/trashi_document.dart';
 import 'package:trashi/secure_storage/secure_storage.dart';
@@ -361,6 +362,35 @@ class ApiProvider {
     final response = await _dio
         .get(
           '/pengangkatan/list/admin',
+        )
+        .catchError(
+          _onError,
+        );
+
+    return response;
+  }
+
+  Future<Response<dynamic>> finishPengangkatan(
+    FinishPengangkatanRequest body,
+  ) async {
+    final response = await _dio
+        .post(
+          '/pengangkatan/selesai',
+          data: body,
+        )
+        .catchError(
+          _onError,
+        );
+
+    return response;
+  }
+
+  Future<Response<dynamic>> getPengangkatanDetail(
+    int id,
+  ) async {
+    final response = await _dio
+        .get(
+          '/pengangkatan/$id',
         )
         .catchError(
           _onError,

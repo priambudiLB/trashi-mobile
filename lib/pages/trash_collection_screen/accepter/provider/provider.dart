@@ -9,7 +9,7 @@ import 'package:trashi/http_request/models/upst.dart';
 class AcceptTrashCollectionRequestScreenProvider
     with ChangeNotifier, DiagnosticableTreeMixin {
   String _errorMessage = 'Terjadi kesalahan. Silakan coba beberapa saat lagi.';
-  bool _isFetching = false;
+  bool _isFetching = true;
 
   DateTime _dateTime;
   String _provinsi = 'DKI Jakarta';
@@ -142,6 +142,47 @@ class AcceptTrashCollectionRequestScreenProvider
 
     _pengangkatanListAdminResponse =
         PengangkatanListAdminResponse.fromJson(response.data);
+
+    notifyListeners();
+  }
+}
+
+class TrashCollectionRequestDetailProvider
+    with ChangeNotifier, DiagnosticableTreeMixin {
+  bool _isFetching = true;
+  bool get isFetching => _isFetching;
+  set isFetching(bool value) {
+    _isFetching = value;
+    notifyListeners();
+  }
+
+  Pengangkatan _pengangkatan;
+
+  Pengangkatan get pengangkatan => _pengangkatan;
+
+  Future<void> getPengangkatanDetail(int id) async {
+    final response = await ApiProvider().getPengangkatanDetail(id);
+
+    if (!ApiProvider.isStatusCodeOK(response.statusCode)) {
+      return;
+    }
+
+    _pengangkatan = Pengangkatan.fromJson(response.data);
+
+    notifyListeners();
+  }
+
+  Future<void> finishPengangkatan(int id) async {
+    FinishPengangkatanRequest body =
+        FinishPengangkatanRequest(idPengangkatan: id);
+
+    final response = await ApiProvider().finishPengangkatan(body);
+
+    if (!ApiProvider.isStatusCodeOK(response.statusCode)) {
+      return;
+    }
+
+    _pengangkatan = Pengangkatan.fromJson(response.data);
 
     notifyListeners();
   }

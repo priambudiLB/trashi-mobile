@@ -222,12 +222,12 @@ class _TrashCollectionRequestCardState
           ),
         ],
       ),
-      onPressed: () {
+      onPressed: () async {
         Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => TrashCollectionRequestDetailScreen(
-              pengangkatan: widget.pengangkatan,
+              id: widget.pengangkatan.id,
             ),
           ),
         );

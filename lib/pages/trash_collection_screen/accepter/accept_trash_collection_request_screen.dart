@@ -128,7 +128,6 @@ class _AcceptTrashCollectionRequestScreenState
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      showTrashiProgressIndicator(context);
       context.read<AcceptTrashCollectionRequestScreenProvider>().isFetching =
           true;
       await context
@@ -136,7 +135,6 @@ class _AcceptTrashCollectionRequestScreenState
           .getPengangkatanListAdmin();
       context.read<AcceptTrashCollectionRequestScreenProvider>().isFetching =
           false;
-      closeTrashiProgressIndicator(context);
     });
   }
 

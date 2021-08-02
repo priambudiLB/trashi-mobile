@@ -5,13 +5,16 @@ import 'package:trashi/constants/pengangkatan.dart';
 import 'package:trashi/http_request/models/pengangkatan.dart';
 import 'package:trashi/pages/trash_collection_screen/accepter/components/row_button_wrapper.dart';
 import 'package:trashi/utils/commons.dart';
+import 'package:provider/provider.dart';
+import 'package:trashi/pages/trash_collection_screen/accepter/provider/provider.dart';
+import 'package:trashi/components/progress_indicator.dart';
 
 class TrashCollectionRequestDetailScreen extends StatefulWidget {
-  final Pengangkatan pengangkatan;
+  final int id;
 
   const TrashCollectionRequestDetailScreen({
     Key key,
-    this.pengangkatan,
+    this.id,
   }) : super(key: key);
 
   @override
@@ -21,22 +24,29 @@ class TrashCollectionRequestDetailScreen extends StatefulWidget {
 
 class _TrashCollectionRequestDetailScreenState
     extends State<TrashCollectionRequestDetailScreen> {
-  bool isCollected;
-
   @override
   void initState() {
-    isCollected =
-        widget.pengangkatan.statusPengangkatan == StatusPengangkatan.selesai;
+    // widget.pengangkatan.statusPengangkatan == StatusPengangkatan.selesai;
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      context.read<TrashCollectionRequestDetailProvider>().isFetching = true;
+      await context
+          .read<TrashCollectionRequestDetailProvider>()
+          .getPengangkatanDetail(widget.id);
+      context.read<TrashCollectionRequestDetailProvider>().isFetching = false;
+    });
     super.initState();
   }
 
-  void _onPressedConfirmationButton() {
-    Future.delayed(Duration(milliseconds: 500), () {
-      setState(() {
-        isCollected = true;
-      });
-      Navigator.of(context).pop();
-    });
+  Future<void> _onPressedConfirmationButton() async {
+    await context
+        .read<TrashCollectionRequestDetailProvider>()
+        .finishPengangkatan(widget.id);
+
+    await context
+        .read<AcceptTrashCollectionRequestScreenProvider>()
+        .getPengangkatanListAdmin();
+
+    Navigator.of(context).pop();
   }
 
   Widget _buildDetailItem(String title, String value) {
@@ -70,17 +80,50 @@ class _TrashCollectionRequestDetailScreenState
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _buildDetailItem("Jenis Barang", widget.pengangkatan.jenisBarang),
-        _buildDetailItem("Berat", widget.pengangkatan.berat),
-        _buildDetailItem("Jenis Kendaraan", widget.pengangkatan.jenisKendaraan),
-        _buildDetailItem("Harga", widget.pengangkatan.harga.toString()),
+        _buildDetailItem(
+            "Jenis Barang",
+            context
+                .watch<TrashCollectionRequestDetailProvider>()
+                .pengangkatan
+                .jenisBarang),
+        _buildDetailItem(
+            "Berat",
+            context
+                .watch<TrashCollectionRequestDetailProvider>()
+                .pengangkatan
+                .berat),
+        _buildDetailItem(
+            "Jenis Kendaraan",
+            context
+                .watch<TrashCollectionRequestDetailProvider>()
+                .pengangkatan
+                .jenisKendaraan),
+        _buildDetailItem(
+            "Harga",
+            context
+                .watch<TrashCollectionRequestDetailProvider>()
+                .pengangkatan
+                .harga
+                .toString()),
         _buildDetailItem(
             "Waktu",
-            getAccepterScreenCompleteLocaleDate(
-                widget.pengangkatan.waktuPengangkatan)),
-        _buildDetailItem("Lokasi", widget.pengangkatan.lokasi),
+            getAccepterScreenCompleteLocaleDate(context
+                .watch<TrashCollectionRequestDetailProvider>()
+                .pengangkatan
+                .waktuPengangkatan)),
         _buildDetailItem(
-            "Status Pembayaran", widget.pengangkatan.statusPembayaran.text),
+            "Lokasi",
+            context
+                .watch<TrashCollectionRequestDetailProvider>()
+                .pengangkatan
+                .lokasi),
+        _buildDetailItem(
+            "Status Pembayaran",
+            context
+                .watch<TrashCollectionRequestDetailProvider>()
+                .pengangkatan
+                .statusPembayaran
+                .text),
       ],
     );
   }
@@ -115,8 +158,20 @@ class _TrashCollectionRequestDetailScreenState
     return RowButtonWrapper(
       padding: EdgeInsets.fromLTRB(0, 11, 0, 11),
       circularBorderRadius: 8,
-      borderColor: isCollected ? Colors.white : hexToColor("#32A37F"),
-      backgroundColor: isCollected ? Colors.white : hexToColor("#32A37F"),
+      borderColor: context
+                  .watch<TrashCollectionRequestDetailProvider>()
+                  .pengangkatan
+                  .statusPengangkatan ==
+              StatusPengangkatan.selesai
+          ? Colors.white
+          : hexToColor("#32A37F"),
+      backgroundColor: context
+                  .watch<TrashCollectionRequestDetailProvider>()
+                  .pengangkatan
+                  .statusPengangkatan ==
+              StatusPengangkatan.selesai
+          ? Colors.white
+          : hexToColor("#32A37F"),
       height: 48,
       content: Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -126,7 +181,13 @@ class _TrashCollectionRequestDetailScreenState
             style: TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.w800,
-              color: isCollected ? hexToColor("#909090") : Colors.white,
+              color: context
+                          .watch<TrashCollectionRequestDetailProvider>()
+                          .pengangkatan
+                          .statusPengangkatan ==
+                      StatusPengangkatan.selesai
+                  ? hexToColor("#909090")
+                  : Colors.white,
             ),
           ),
         ],
@@ -235,25 +296,29 @@ class _TrashCollectionRequestDetailScreenState
 
   @override
   Widget build(BuildContext context) {
-    return Layout(
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            "Detail Pengambilan",
-            style: TextStyle(
-              fontWeight: FontWeight.w800,
-              fontSize: 18,
+    return context.watch<TrashCollectionRequestDetailProvider>().isFetching
+        ? Layout(
+            body: CircularProgressIndicator(),
+          )
+        : Layout(
+            body: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Detail Pengambilan",
+                  style: TextStyle(
+                    fontWeight: FontWeight.w800,
+                    fontSize: 18,
+                  ),
+                ),
+                Spacings.verticalSpace(24),
+                _buildDetailItems(),
+                Spacings.verticalSpace(8),
+                _buildOpenGoogleMapsButton(),
+                Spacings.verticalSpace(16),
+                _buildFinishRequestButton(),
+              ],
             ),
-          ),
-          Spacings.verticalSpace(24),
-          _buildDetailItems(),
-          Spacings.verticalSpace(8),
-          _buildOpenGoogleMapsButton(),
-          Spacings.verticalSpace(16),
-          _buildFinishRequestButton(),
-        ],
-      ),
-    );
+          );
   }
 }

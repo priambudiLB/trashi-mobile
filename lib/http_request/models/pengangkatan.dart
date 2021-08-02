@@ -73,3 +73,17 @@ class PengangkatanListAdminResponse {
 
   Map<String, dynamic> toJson() => _$PengangkatanListAdminResponseToJson(this);
 }
+
+@JsonSerializable()
+class FinishPengangkatanRequest {
+  final int idPengangkatan;
+
+  FinishPengangkatanRequest({
+    this.idPengangkatan,
+  });
+
+  factory FinishPengangkatanRequest.fromJson(Map<String, dynamic> json) =>
+      _$FinishPengangkatanRequestFromJson(json);
+
+  Map<String, dynamic> toJson() => _$FinishPengangkatanRequestToJson(this);
+}

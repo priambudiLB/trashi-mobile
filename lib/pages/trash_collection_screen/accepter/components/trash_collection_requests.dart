@@ -73,7 +73,9 @@ class _TrashCollectionRequestsState extends State<TrashCollectionRequests>
     return context
             .watch<AcceptTrashCollectionRequestScreenProvider>()
             .isFetching
-        ? SizedBox.shrink()
+        ? Center(
+            child: CircularProgressIndicator(),
+          )
         : Expanded(
             child: Column(
               mainAxisSize: MainAxisSize.min,
