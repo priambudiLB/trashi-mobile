@@ -1,24 +1,49 @@
 import 'package:flutter/material.dart';
 import 'package:trashi/components/layout_redesign.dart';
 import 'package:trashi/components/spacings.dart';
-import 'package:trashi/constants/trash_collections.dart';
+import 'package:trashi/constants/pengangkatan.dart';
+import 'package:trashi/pages/request_screen/provider.dart';
 import 'package:trashi/pages/trash_collection_screen/accepter/components/row_button_wrapper.dart';
 import 'package:trashi/utils/commons.dart';
-
-import 'models/collection_history_model.dart';
+import 'package:provider/provider.dart';
 
 class RequestDetailScreen extends StatefulWidget {
-  final CollectionHistoryModel collectionHistoryModel;
+  final int id;
 
   const RequestDetailScreen({
     Key key,
-    this.collectionHistoryModel,
+    this.id,
   }) : super(key: key);
+
   @override
   _RequestDetailScreen createState() => _RequestDetailScreen();
 }
 
 class _RequestDetailScreen extends State<RequestDetailScreen> {
+  bool isFirstTimeOpened = true;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      context.read<CollectionHistoryProvider>().isFetching = true;
+      await context
+          .read<CollectionHistoryProvider>()
+          .getPengangkatanDetail(widget.id);
+      context.read<CollectionHistoryProvider>().isFetching = false;
+
+      setState(() {
+        isFirstTimeOpened = false;
+      });
+    });
+  }
+
+  Future<void> _onPressedConfirmationButton() async {
+    await context.read<CollectionHistoryProvider>().getHistoriPengangkatan();
+
+    Navigator.of(context).pop();
+  }
+
   Widget _buildDetailItem(String title, String value) {
     return Padding(
       padding: EdgeInsets.only(bottom: 16),
@@ -47,82 +72,124 @@ class _RequestDetailScreen extends State<RequestDetailScreen> {
   }
 
   Widget _buildDetailItems() {
-    String pickUpDeliveryType =
-        widget.collectionHistoryModel.pickUpDeliveryType;
-    String downPayment = widget.collectionHistoryModel.downPayment;
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _buildDetailItem(
-            "Jenis Barang", widget.collectionHistoryModel.trashType),
+            "Jenis Barang",
+            context
+                .watch<CollectionHistoryProvider>()
+                .pengangkatan
+                .jenisBarang),
+        _buildDetailItem("Berat",
+            context.watch<CollectionHistoryProvider>().pengangkatan.berat),
         _buildDetailItem(
-            "Berat", widget.collectionHistoryModel.trashWeightFormatted),
+            "Jenis Kendaraan",
+            context
+                .watch<CollectionHistoryProvider>()
+                .pengangkatan
+                .jenisKendaraan),
         _buildDetailItem(
-            "Jenis Kendaraan dan DP", "$pickUpDeliveryType (DP $downPayment)"),
+            "Harga",
+            context
+                .watch<CollectionHistoryProvider>()
+                .pengangkatan
+                .harga
+                .toString()),
         _buildDetailItem(
-            "Sisa Pembayaran", widget.collectionHistoryModel.remainingPayment),
-        _buildDetailItem("Waktu", widget.collectionHistoryModel.requestTime),
-        _buildDetailItem("Lokasi", widget.collectionHistoryModel.address),
+            "Waktu",
+            getAccepterScreenCompleteLocaleDate(context
+                .watch<CollectionHistoryProvider>()
+                .pengangkatan
+                .waktuPengangkatan)),
+        _buildDetailItem("Lokasi",
+            context.watch<CollectionHistoryProvider>().pengangkatan.lokasi),
         _buildDetailItem(
-            "Status Pembayaran", widget.collectionHistoryModel.paymentStatus),
+            "Status Pembayaran",
+            context
+                .watch<CollectionHistoryProvider>()
+                .pengangkatan
+                .statusPembayaran
+                .text),
       ],
     );
   }
 
-  Widget _buildPayButton() {
+  Widget _buildLunasiPembayaranButton() {
     return RowButtonWrapper(
       padding: EdgeInsets.fromLTRB(0, 11, 0, 11),
       circularBorderRadius: 8,
-      borderColor: hexToColor("#32A37F"),
-      backgroundColor: hexToColor("#32A37F"),
+      borderColor: context
+                  .watch<CollectionHistoryProvider>()
+                  .pengangkatan
+                  .statusPengangkatan ==
+              StatusPengangkatan.selesai
+          ? Colors.white
+          : hexToColor("#32A37F"),
+      backgroundColor: context
+                  .watch<CollectionHistoryProvider>()
+                  .pengangkatan
+                  .statusPengangkatan ==
+              StatusPengangkatan.selesai
+          ? Colors.white
+          : hexToColor("#32A37F"),
       height: 48,
       content: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            "Lunasi Pembayaran",
+            'Lunasi Pembayaran',
             style: TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.w800,
-              color: Colors.white,
+              color: context
+                          .watch<CollectionHistoryProvider>()
+                          .pengangkatan
+                          .statusPengangkatan ==
+                      StatusPengangkatan.selesai
+                  ? hexToColor("#909090")
+                  : Colors.white,
             ),
           ),
         ],
       ),
       onPressed: () {
-        // showDialog(
-        //   context: context,
-        //   builder: (BuildContext context) {
-        //     return _buildDialog();
-        //   },
-        // );
-        print("pay");
+        print('pressed');
       },
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Layout(
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            "Detail Pengambilan",
-            style: TextStyle(
-              fontWeight: FontWeight.w800,
-              fontSize: 18,
+    return context.watch<CollectionHistoryProvider>().isFetching ||
+            isFirstTimeOpened
+        ? Layout(
+            body: Center(
+              child: CircularProgressIndicator(),
             ),
-          ),
-          Spacings.verticalSpace(24),
-          _buildDetailItems(),
-          Spacings.verticalSpace(24),
-          if (widget.collectionHistoryModel.paymentStatus ==
-              paymentStatusNotPaid)
-            _buildPayButton(),
-        ],
-      ),
-    );
+          )
+        : Layout(
+            body: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Detail Pengangkatan",
+                  style: TextStyle(
+                    fontWeight: FontWeight.w800,
+                    fontSize: 18,
+                  ),
+                ),
+                Spacings.verticalSpace(24),
+                _buildDetailItems(),
+                Spacings.verticalSpace(16),
+                if (context
+                        .watch<CollectionHistoryProvider>()
+                        .pengangkatan
+                        .statusPengangkatan !=
+                    StatusPengangkatan.selesai)
+                  _buildLunasiPembayaranButton(),
+              ],
+            ),
+          );
   }
 }
