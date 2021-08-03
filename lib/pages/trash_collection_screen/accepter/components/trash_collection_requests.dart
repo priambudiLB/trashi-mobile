@@ -70,59 +70,53 @@ class _TrashCollectionRequestsState extends State<TrashCollectionRequests>
 
   @override
   Widget build(BuildContext context) {
-    return context
-            .watch<AcceptTrashCollectionRequestScreenProvider>()
-            .isFetching
-        ? Center(
-            child: CircularProgressIndicator(),
-          )
-        : Expanded(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                TabBar(
-                  indicator: BoxDecoration(
-                    border: Border(
-                      bottom: BorderSide(
-                        color: hexToColor(MAIN_COLOR),
-                        width: 2,
-                      ),
-                    ),
-                  ),
-                  unselectedLabelColor: hexToColor("#909090"),
-                  labelColor: Colors.black,
-                  tabs: [
-                    Tab(
-                      text: 'Sekarang',
-                    ),
-                    Tab(
-                      text: 'Terjadwal',
-                    ),
-                    Tab(
-                      text: 'Selesai',
-                    )
-                  ],
-                  controller: _tabController,
-                  indicatorSize: TabBarIndicatorSize.tab,
+    return Expanded(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          TabBar(
+            indicator: BoxDecoration(
+              border: Border(
+                bottom: BorderSide(
+                  color: hexToColor(MAIN_COLOR),
+                  width: 2,
                 ),
-                Padding(
-                  padding: EdgeInsets.only(
-                    bottom: 16,
-                  ),
-                ),
-                Expanded(
-                  child: TabBarView(
-                    children: [
-                      _buildNowRequestCards(),
-                      _buildNotNowRequestCards(),
-                      _buildDoneRequestCards(),
-                    ],
-                    controller: _tabController,
-                  ),
-                ),
-              ],
+              ),
             ),
-          );
+            unselectedLabelColor: hexToColor("#909090"),
+            labelColor: Colors.black,
+            tabs: [
+              Tab(
+                text: 'Sekarang',
+              ),
+              Tab(
+                text: 'Terjadwal',
+              ),
+              Tab(
+                text: 'Selesai',
+              )
+            ],
+            controller: _tabController,
+            indicatorSize: TabBarIndicatorSize.tab,
+          ),
+          Padding(
+            padding: EdgeInsets.only(
+              bottom: 16,
+            ),
+          ),
+          Expanded(
+            child: TabBarView(
+              children: [
+                _buildNowRequestCards(),
+                _buildNotNowRequestCards(),
+                _buildDoneRequestCards(),
+              ],
+              controller: _tabController,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
 

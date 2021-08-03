@@ -9,7 +9,7 @@ import 'package:trashi/http_request/models/upst.dart';
 class AcceptTrashCollectionRequestScreenProvider
     with ChangeNotifier, DiagnosticableTreeMixin {
   String _errorMessage = 'Terjadi kesalahan. Silakan coba beberapa saat lagi.';
-  bool _isFetching = true;
+  bool _isFetching = false;
 
   DateTime _dateTime;
   String _provinsi = 'DKI Jakarta';
@@ -149,7 +149,7 @@ class AcceptTrashCollectionRequestScreenProvider
 
 class TrashCollectionRequestDetailProvider
     with ChangeNotifier, DiagnosticableTreeMixin {
-  bool _isFetching = true;
+  bool _isFetching = false;
   bool get isFetching => _isFetching;
   set isFetching(bool value) {
     _isFetching = value;

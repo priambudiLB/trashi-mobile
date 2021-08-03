@@ -398,6 +398,18 @@ class ApiProvider {
 
     return response;
   }
+
+  Future<Response<dynamic>> getHistoriPengangkatan() async {
+    final response = await _dio
+        .get(
+          '/pengangkatan/histori',
+        )
+        .catchError(
+          _onError,
+        );
+
+    return response;
+  }
 }
 
 /**
