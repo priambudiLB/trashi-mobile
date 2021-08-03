@@ -24,6 +24,8 @@ class TrashCollectionRequestDetailScreen extends StatefulWidget {
 
 class _TrashCollectionRequestDetailScreenState
     extends State<TrashCollectionRequestDetailScreen> {
+  bool isFirstTimeOpened = true;
+
   @override
   void initState() {
     // widget.pengangkatan.statusPengangkatan == StatusPengangkatan.selesai;
@@ -33,6 +35,10 @@ class _TrashCollectionRequestDetailScreenState
           .read<TrashCollectionRequestDetailProvider>()
           .getPengangkatanDetail(widget.id);
       context.read<TrashCollectionRequestDetailProvider>().isFetching = false;
+
+      setState(() {
+        isFirstTimeOpened = false;
+      });
     });
     super.initState();
   }
@@ -296,9 +302,12 @@ class _TrashCollectionRequestDetailScreenState
 
   @override
   Widget build(BuildContext context) {
-    return context.watch<TrashCollectionRequestDetailProvider>().isFetching
+    return context.watch<TrashCollectionRequestDetailProvider>().isFetching ||
+            isFirstTimeOpened
         ? Layout(
-            body: CircularProgressIndicator(),
+            body: Center(
+              child: CircularProgressIndicator(),
+            ),
           )
         : Layout(
             body: Column(

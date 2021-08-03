@@ -19,6 +19,8 @@ class AcceptTrashCollectionRequestScreen extends StatefulWidget {
 
 class _AcceptTrashCollectionRequestScreenState
     extends State<AcceptTrashCollectionRequestScreen> {
+  bool isFirstTimeOpened = true;
+
   BoxDecoration _buildBoxDecoration() {
     return BoxDecoration(
       borderRadius: BorderRadius.all(
@@ -134,6 +136,10 @@ class _AcceptTrashCollectionRequestScreenState
           .getPengangkatanListAdmin();
       context.read<AcceptTrashCollectionRequestScreenProvider>().isFetching =
           false;
+
+      setState(() {
+        isFirstTimeOpened = false;
+      });
     });
   }
 
@@ -168,7 +174,14 @@ class _AcceptTrashCollectionRequestScreenState
               bottom: 21,
             ),
           ),
-          TrashCollectionRequests(),
+          context
+                      .watch<AcceptTrashCollectionRequestScreenProvider>()
+                      .isFetching ||
+                  isFirstTimeOpened
+              ? Center(
+                  child: CircularProgressIndicator(),
+                )
+              : TrashCollectionRequests(),
         ],
       ),
     );
