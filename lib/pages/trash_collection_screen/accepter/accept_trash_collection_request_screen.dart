@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:trashi/components/layout_redesign.dart';
-import 'package:trashi/components/progress_indicator.dart';
 import 'package:trashi/constants/colors.dart';
 import 'package:trashi/pages/trash_collection_screen/accepter/components/row_button_wrapper.dart';
 import 'package:trashi/pages/trash_collection_screen/accepter/provider/provider.dart';
