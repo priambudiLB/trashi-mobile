@@ -1,9 +1,14 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:formz/formz.dart';
+import 'package:trashi/http_request/api_provider.dart';
+import 'package:trashi/http_request/models/auth.dart';
 import 'package:trashi/pages/profile_screen_redesign/role_type.dart';
+import 'package:trashi/secure_storage/secure_storage.dart';
+import 'package:trashi/utils/commons.dart';
 
 class EditProfileScreenProvider with ChangeNotifier, DiagnosticableTreeMixin {
+  SecureStorage _secureStorage = SecureStorage();
   RoleType _roleType;
   String _name;
   String _emailOrPhone;
@@ -50,11 +55,51 @@ class EditProfileScreenProvider with ChangeNotifier, DiagnosticableTreeMixin {
 
   void fetchData() async {
     setStatusFetchData(FormzStatus.submissionInProgress);
-    Future.delayed(Duration(seconds: 1), () {
-      setName("Indras");
-      setEmailOrPhone("value");
-      setPassword("password");
-    });
+    CurrentUserResponse currentUser =
+        await _secureStorage.getCurrentUserResponse();
+    if (currentUser != null) {
+      setName(currentUser.currentUser.firstName +
+          " " +
+          currentUser.currentUser.lastName);
+      setEmailOrPhone(currentUser.currentUser.phone);
+      setRoleType(getRoleType(currentUser.currentUser.role));
+      setPassword("");
+    }
     setStatusFetchData(FormzStatus.submissionSuccess);
+  }
+
+  void editData() async {
+    CurrentUserResponse currentUser =
+        await _secureStorage.getCurrentUserResponse();
+    dynamic body = {};
+    List<String> names = _name.trim().split(" ");
+    String firstnameChanged = names[0];
+    String lastnameChanged = names.sublist(1).join(" ");
+
+    if (currentUser.currentUser.firstName != firstnameChanged)
+      body["firstname"] = firstnameChanged;
+    if (currentUser.currentUser.lastName != lastnameChanged)
+      body["lastname"] = lastnameChanged;
+    if (currentUser.currentUser.phone != emailOrPhone) {
+      if (currentUser.currentUser.role == 5)
+        body["phone"] = emailOrPhone;
+      else
+        body["username"] = emailOrPhone;
+    }
+    if (password != "") body["password"] = password;
+
+    if (body.length > 0) {
+      setStatusFetchData(FormzStatus.submissionInProgress);
+      final response = await ApiProvider().editProfileApi(body);
+      if (response != null) {
+        final responseCurrentUser = await ApiProvider().getCurrentUser();
+        print(responseCurrentUser.currentUser.lastName);
+        if (responseCurrentUser != null) {
+          await _secureStorage.setCurrentUserResponse(responseCurrentUser);
+          fetchData();
+        }
+      }
+      setStatusFetchData(FormzStatus.submissionSuccess);
+    }
   }
 }

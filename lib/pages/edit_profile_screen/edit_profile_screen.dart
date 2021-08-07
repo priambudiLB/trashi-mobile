@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:formz/formz.dart';
 import 'package:provider/provider.dart';
+import 'package:trashi/components/button.dart';
 import 'package:trashi/components/layout_redesign.dart';
 import 'package:trashi/pages/edit_profile_screen/provider.dart';
+import 'package:trashi/pages/profile_screen_redesign/role_type.dart';
 import 'package:trashi/utils/commons.dart';
 
 class EditProfile extends StatefulWidget {
@@ -16,7 +19,7 @@ class _EditProfileState extends State<EditProfile> {
   FocusNode _usernameFocusNode = FocusNode();
   FocusNode _emailOrPhoneFocusNode = FocusNode();
   FocusNode _passwordFocusNode = FocusNode();
-
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   TextEditingController _usernameEditingController = TextEditingController();
   TextEditingController _emailOrPhoneEditingController =
       TextEditingController();
@@ -55,119 +58,155 @@ class _EditProfileState extends State<EditProfile> {
     return Layout(
       body: SingleChildScrollView(
         physics: AlwaysScrollableScrollPhysics(),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              "Edit Profile",
-              style: TextStyle(
-                  color: hexToColor("#4D4D4D"),
-                  fontSize: 16,
-                  fontWeight: FontWeight.w800),
-            ),
-            Container(
-              height: 16,
-            ),
-            Center(
-              child: ClipOval(
-                  child: Container(
-                      height: 64,
-                      width: 64,
-                      color: Colors.white,
-                      child: Image.asset("assets/images/Icon_success.png"))),
-            ),
-            Container(
-              height: 12,
-            ),
-            Center(
-              child: Text(
-                "Adista Lailin",
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "Edit Profile",
+                style: TextStyle(
+                    color: hexToColor("#4D4D4D"),
+                    fontSize: 16,
+                    fontWeight: FontWeight.w800),
               ),
-            ),
-            Container(
-              height: 4,
-            ),
-            Center(
-              child: Text(
-                "Masyarakat Umum",
-                style: TextStyle(fontSize: 12),
+              Container(
+                height: 16,
               ),
-            ),
-            Container(
-              height: 24,
-            ),
-            Text("Name"),
-            Container(
-              height: 8,
-            ),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 14),
-              decoration: BoxDecoration(
-                color: hexToColor("#F2F2F2"),
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(width: 1, color: hexToColor("#DFDFDF")),
+              Center(
+                child: ClipOval(
+                    child: Container(
+                        height: 64,
+                        width: 64,
+                        color: Colors.white,
+                        child: Image.asset("assets/images/Icon_success.png"))),
               ),
-              child: TextField(
-                enabled: false,
+              Container(
+                height: 12,
+              ),
+              Center(
+                child: Text(
+                  context.watch<EditProfileScreenProvider>().name,
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800),
+                ),
+              ),
+              Container(
+                height: 4,
+              ),
+              Center(
+                child: Text(
+                  "Masyarakat Umum",
+                  style: TextStyle(fontSize: 12),
+                ),
+              ),
+              Container(
+                height: 24,
+              ),
+              Text("Name"),
+              Container(
+                height: 8,
+              ),
+              TextFormField(
+                enabled: context
+                        .watch<EditProfileScreenProvider>()
+                        .statusFetchData !=
+                    FormzStatus.submissionInProgress,
                 focusNode: _usernameFocusNode,
+                validator: validateName,
                 controller: _usernameEditingController,
                 decoration: InputDecoration(
-                  border: InputBorder.none,
-                  focusedBorder: InputBorder.none,
-                  enabledBorder: InputBorder.none,
-                  errorBorder: InputBorder.none,
-                  disabledBorder: InputBorder.none,
-                  contentPadding: EdgeInsets.all(0),
+                  filled: true,
+                  fillColor: hexToColor("#F2F2F2"),
+                  focusColor: hexToColor("#F2F2F2"),
+                  border: OutlineInputBorder(
+                    borderSide:
+                        BorderSide(color: hexToColor("#DFDFDF"), width: 1.0),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide:
+                        BorderSide(color: hexToColor("#DFDFDF"), width: 1.0),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide:
+                        BorderSide(color: hexToColor("#DFDFDF"), width: 1.0),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  errorBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.red, width: 1.0),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  disabledBorder: OutlineInputBorder(
+                    borderSide:
+                        BorderSide(color: hexToColor("#DFDFDF"), width: 1.0),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  contentPadding: EdgeInsets.fromLTRB(14, 0, 14, 0),
                 ),
               ),
-            ),
-            Container(
-              height: 16,
-            ),
-            Text("Email"),
-            Container(
-              height: 8,
-            ),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 14),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(width: 1, color: hexToColor("#DFDFDF")),
+              Container(
+                height: 16,
               ),
-              child: TextField(
+              Text("Email"),
+              Container(
+                height: 8,
+              ),
+              TextFormField(
+                enabled: context
+                        .watch<EditProfileScreenProvider>()
+                        .statusFetchData !=
+                    FormzStatus.submissionInProgress,
                 focusNode: _emailOrPhoneFocusNode,
                 controller: _emailOrPhoneEditingController,
+                validator: emailOrPhoneValidator,
                 decoration: InputDecoration(
-                  border: InputBorder.none,
-                  focusedBorder: InputBorder.none,
-                  enabledBorder: InputBorder.none,
-                  errorBorder: InputBorder.none,
-                  disabledBorder: InputBorder.none,
-                  contentPadding: EdgeInsets.all(0),
+                  border: OutlineInputBorder(
+                    borderSide:
+                        BorderSide(color: hexToColor("#DFDFDF"), width: 1.0),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide:
+                        BorderSide(color: hexToColor("#DFDFDF"), width: 1.0),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide:
+                        BorderSide(color: hexToColor("#DFDFDF"), width: 1.0),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  errorBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.red, width: 1.0),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  disabledBorder: OutlineInputBorder(
+                    borderSide:
+                        BorderSide(color: hexToColor("#DFDFDF"), width: 1.0),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  contentPadding: EdgeInsets.fromLTRB(14, 0, 14, 0),
                 ),
               ),
-            ),
-            Container(
-              height: 16,
-            ),
-            Text("Password"),
-            Container(
-              height: 8,
-            ),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 14),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(width: 1, color: hexToColor("#DFDFDF")),
+              Container(
+                height: 16,
               ),
-              child: TextField(
+              Text("Password"),
+              Container(
+                height: 8,
+              ),
+              TextFormField(
+                enabled: context
+                        .watch<EditProfileScreenProvider>()
+                        .statusFetchData !=
+                    FormzStatus.submissionInProgress,
                 obscureText: !context
                     .watch<EditProfileScreenProvider>()
                     .isPasswordVisible,
                 focusNode: _passwordFocusNode,
                 controller: _passwordEditingController,
                 textAlignVertical: TextAlignVertical.center,
+                validator: passwordValidatorEditProfile,
                 decoration: InputDecoration(
                   suffixIcon: IconButton(
                       onPressed: () => context
@@ -180,18 +219,116 @@ class _EditProfileState extends State<EditProfile> {
                               .isPasswordVisible
                           ? Icon(Icons.visibility)
                           : Icon(Icons.visibility_off)),
-                  border: InputBorder.none,
-                  focusedBorder: InputBorder.none,
-                  enabledBorder: InputBorder.none,
-                  errorBorder: InputBorder.none,
-                  disabledBorder: InputBorder.none,
-                  contentPadding: EdgeInsets.all(0),
+                  border: OutlineInputBorder(
+                    borderSide:
+                        BorderSide(color: hexToColor("#DFDFDF"), width: 1.0),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide:
+                        BorderSide(color: hexToColor("#DFDFDF"), width: 1.0),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide:
+                        BorderSide(color: hexToColor("#DFDFDF"), width: 1.0),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  errorBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.red, width: 1.0),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  disabledBorder: OutlineInputBorder(
+                    borderSide:
+                        BorderSide(color: hexToColor("#DFDFDF"), width: 1.0),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  contentPadding: EdgeInsets.fromLTRB(14, 0, 14, 0),
                 ),
               ),
-            ),
-          ],
+              Container(
+                height: 32,
+              ),
+              context.watch<EditProfileScreenProvider>().statusFetchData ==
+                      FormzStatus.submissionInProgress
+                  ? Center(child: CircularProgressIndicator())
+                  : Button(
+                      width: double.infinity,
+                      onTap: () {
+                        if (!_formKey.currentState.validate()) {
+                          return;
+                        }
+                        context
+                            .read<EditProfileScreenProvider>()
+                            .setName(_usernameEditingController.text);
+                        context
+                            .read<EditProfileScreenProvider>()
+                            .setEmailOrPhone(
+                                _emailOrPhoneEditingController.text);
+                        context
+                            .read<EditProfileScreenProvider>()
+                            .setPassword(_passwordEditingController.text);
+                        context.read<EditProfileScreenProvider>().editData();
+                      },
+                      title: "Edit Profile")
+            ],
+          ),
         ),
       ),
     );
+  }
+
+  String passwordValidatorEditProfile(String value) {
+    if (value.isEmpty) {
+      return null;
+    }
+
+    if (value.length < 8 || value.length > 20) {
+      return 'Password harus sepanjang 8 hingga 20 karakter.';
+    }
+    return null;
+  }
+
+  String emailOrPhoneValidator(String value) {
+    if (context.read<EditProfileScreenProvider>().roleType != RoleType.RTRW) {
+      if (value.isEmpty) {
+        return "Email tidak boleh kosong";
+      }
+
+      if (!isEmail(value)) {
+        return "Email tidak valid";
+      }
+    } else {
+      if (value.isEmpty) {
+        return "Nomor telepon tidak boleh kosong";
+      }
+
+      if (int.tryParse(value) == null || value.length > 24) {
+        return "Nomor telepon tidak valid";
+      }
+    }
+    return null;
+  }
+
+  String validateName(String value) {
+    if (value.isEmpty) {
+      return "Nama tidak boleh kosong";
+    }
+
+    List<String> names = value.trim().split(" ");
+    if (names.length < 2) {
+      return "Harus mengisi nama depan dan nama belakang";
+    }
+    String firstnameChanged = names[0];
+    String lastnameChanged = names.sublist(1).join(" ");
+    if (firstnameChanged.length < 8 || firstnameChanged.length > 20) {
+      return 'Nama depan harus sepanjang 8 hingga 20 karakter.';
+    }
+
+    if (lastnameChanged.length < 8 || lastnameChanged.length > 20) {
+      return 'Nama belakang harus sepanjang 8 hingga 20 karakter.';
+    }
+
+    return null;
   }
 }

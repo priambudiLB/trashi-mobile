@@ -99,7 +99,8 @@ class _ProfileScreenRedesignState extends State<ProfileScreenRedesign> {
                   MaterialPageRoute(
                     builder: (context) => EditProfile(),
                   ),
-                );
+                ).then((value) =>
+                    context.read<ProfileScreenProvider>().fetchData());
               },
               title: "Setting"),
           Container(
