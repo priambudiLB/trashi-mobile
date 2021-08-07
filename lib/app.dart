@@ -4,8 +4,8 @@ import 'package:trashi/constants/theme.dart';
 import 'package:trashi/pages/confirmation_otp_screen/confirmation_otp_screen.dart';
 import 'package:trashi/pages/edit_profile_screen/edit_profile_screen.dart';
 import 'package:trashi/pages/form_request_pengangkatan/form_request_pengangkatan.dart';
-import 'package:trashi/pages/home_screen/home_screen.dart';
 import 'package:trashi/pages/onboarding_redesign_screen/on_boarding_screen_view.dart';
+import 'package:trashi/pages/payment/payment_web_view_screen.dart';
 import 'package:trashi/pages/profile_screen/profile_screen.dart';
 import 'package:trashi/pages/profile_screen_redesign/profile_screen_new.dart';
 import 'package:trashi/pages/registration_document_confirmation/profile_example.dart';
@@ -14,7 +14,6 @@ import 'package:trashi/pages/request_screen/request_screen.dart';
 import 'package:trashi/pages/retribution_screen/retribution_screen.dart';
 import 'package:trashi/pages/splash_screen/splash_screen.dart';
 import 'package:trashi/pages/trash_collection_screen/accepter/accept_trash_collection_request_screen.dart';
-import 'package:trashi/providers.dart';
 import 'package:trashi/verification.dart';
 
 class TrashiApplication extends StatelessWidget {
@@ -44,7 +43,8 @@ class TrashiApplication extends StatelessWidget {
         AcceptTrashCollectionRequestScreen.PATH: (_) =>
             AcceptTrashCollectionRequestScreen(),
         RequestScreen.PATH: (_) => RequestScreen(),
-        EditProfile.PATH: (_) => EditProfile()
+        EditProfile.PATH: (_) => EditProfile(),
+        PaymentWebViewScreen.PATH: (_) => PaymentWebViewScreen()
         // HomeScreen.PATH: (_) => HomeScreen(),
       },
     );
