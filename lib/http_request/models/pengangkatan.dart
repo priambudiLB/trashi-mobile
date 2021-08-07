@@ -87,3 +87,19 @@ class FinishPengangkatanRequest {
 
   Map<String, dynamic> toJson() => _$FinishPengangkatanRequestToJson(this);
 }
+
+@JsonSerializable()
+class HistoriPengangkatanResponse {
+  final List<Pengangkatan> pengangkatan;
+  final bool hasInvalidPayment;
+
+  HistoriPengangkatanResponse({
+    this.pengangkatan,
+    this.hasInvalidPayment,
+  });
+
+  factory HistoriPengangkatanResponse.fromJson(Map<String, dynamic> json) =>
+      _$HistoriPengangkatanResponseFromJson(json);
+
+  Map<String, dynamic> toJson() => _$HistoriPengangkatanResponseToJson(this);
+}

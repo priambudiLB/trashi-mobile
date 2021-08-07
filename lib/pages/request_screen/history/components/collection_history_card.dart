@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:trashi/components/spacings.dart';
-import 'package:trashi/constants/trash_collections.dart';
-import 'package:trashi/pages/request_screen/history/models/collection_history_model.dart';
+import 'package:trashi/constants/pengangkatan.dart';
+import 'package:trashi/http_request/models/pengangkatan.dart';
 import 'package:trashi/pages/request_screen/history/request_detail_screen.dart';
 import 'package:trashi/utils/commons.dart';
 
 class CollectionHistoryCard extends StatefulWidget {
-  final CollectionHistoryModel collectionHistoryModel;
+  final Pengangkatan pengangkatan;
 
   const CollectionHistoryCard({
     Key key,
-    this.collectionHistoryModel,
+    this.pengangkatan,
   }) : super(key: key);
 
   @override
@@ -19,11 +19,90 @@ class CollectionHistoryCard extends StatefulWidget {
 }
 
 class _CollectionHistoryCardState extends State<CollectionHistoryCard> {
+  Widget get statusSection {
+    if (widget.pengangkatan.statusPengangkatan == StatusPengangkatan.selesai &&
+        widget.pengangkatan.statusPembayaran == StatusPembayaran.lunas) {
+      return Text(
+        'Selesai',
+        style: TextStyle(
+          color: hexToColor("#909090"),
+          fontSize: 12,
+          fontWeight: FontWeight.w500,
+          fontStyle: FontStyle.italic,
+        ),
+      );
+    }
+
+    if (widget.pengangkatan.statusPengangkatan ==
+        StatusPengangkatan.menungguPengambilan) {
+      return Text(
+        widget.pengangkatan.statusPengangkatan.text,
+        style: TextStyle(
+          color: hexToColor("#32A37F"),
+          fontSize: 12,
+          fontWeight: FontWeight.w500,
+          fontStyle: FontStyle.italic,
+        ),
+      );
+    }
+
+    if (widget.pengangkatan.statusPengangkatan == StatusPengangkatan.selesai &&
+        widget.pengangkatan.statusPembayaran == StatusPembayaran.belumLunas) {
+      return Text(
+        'Menunggu Sisa Pembayaran',
+        style: TextStyle(
+          color: hexToColor("#FF9059"),
+          fontSize: 12,
+          fontWeight: FontWeight.w500,
+          fontStyle: FontStyle.italic,
+        ),
+      );
+    }
+
+    return SizedBox.shrink();
+  }
+
+  Widget get timeOfCollectionSection {
+    String timeOfCollection;
+
+    if (widget.pengangkatan.isNow) {
+      timeOfCollection = 'Sekarang';
+    } else if (widget.pengangkatan.statusPengangkatan ==
+            StatusPengangkatan.selesai &&
+        widget.pengangkatan.statusPembayaran == StatusPembayaran.lunas) {
+      return SizedBox.shrink();
+    } else {
+      timeOfCollection =
+          getAccepterScreenLocaleDate(widget.pengangkatan.waktuPengangkatan);
+    }
+
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.all(
+          Radius.circular(4),
+        ),
+        border: Border.all(
+          color: hexToColor("#FF9059"),
+        ),
+        color: Color.fromRGBO(255, 144, 89, 0.1),
+      ),
+      child: Text(
+        timeOfCollection,
+        style: TextStyle(
+          color: hexToColor("#FF9059"),
+          fontSize: 12,
+          fontWeight: FontWeight.w500,
+        ),
+      ),
+      padding: EdgeInsets.fromLTRB(16, 4, 16, 4),
+    );
+  }
+
   Color _getPaymentStatusColor() {
-    switch (widget.collectionHistoryModel.paymentStatus) {
-      case paymentStatusPaid:
+    switch (widget.pengangkatan.statusPembayaran) {
+      case StatusPembayaran.lunas:
         return hexToColor("#32A37F");
-      case paymentStatusNotPaid:
+      case StatusPembayaran.belumBayar:
         return hexToColor("#ED7D31");
       default:
         return hexToColor("#909090");
@@ -31,10 +110,10 @@ class _CollectionHistoryCardState extends State<CollectionHistoryCard> {
   }
 
   Color _getRequestStatusColor() {
-    switch (widget.collectionHistoryModel.requestStatus) {
-      case requestStatusFinished:
+    switch (widget.pengangkatan.statusPengangkatan) {
+      case StatusPengangkatan.selesai:
         return hexToColor("#909090");
-      case requestStatusWaiting:
+      case StatusPengangkatan.menungguPengambilan:
         return hexToColor("#32A37F");
       default:
         return hexToColor("#32A37F");
@@ -45,35 +124,8 @@ class _CollectionHistoryCardState extends State<CollectionHistoryCard> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(
-          widget.collectionHistoryModel.requestStatus,
-          style: TextStyle(
-            color: _getRequestStatusColor(),
-            fontSize: 12,
-            fontWeight: FontWeight.w500,
-            fontStyle: FontStyle.italic,
-          ),
-        ),
-        Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(
-              Radius.circular(4),
-            ),
-            border: Border.all(
-              color: hexToColor("#FF9059"),
-            ),
-            color: Color.fromRGBO(255, 144, 89, 0.1),
-          ),
-          child: Text(
-            widget.collectionHistoryModel.requestTime,
-            style: TextStyle(
-              color: hexToColor("#FF9059"),
-              fontSize: 12,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-          padding: EdgeInsets.fromLTRB(16, 4, 16, 4),
-        )
+        statusSection,
+        timeOfCollectionSection,
       ],
     );
   }
@@ -91,7 +143,7 @@ class _CollectionHistoryCardState extends State<CollectionHistoryCard> {
               ),
               Spacings.horizontalSpace(8),
               Text(
-                widget.collectionHistoryModel.trashType,
+                widget.pengangkatan.jenisBarang,
                 style: TextStyle(
                   fontWeight: FontWeight.w400,
                   color: hexToColor("#909090"),
@@ -111,7 +163,7 @@ class _CollectionHistoryCardState extends State<CollectionHistoryCard> {
               ),
               Spacings.horizontalSpace(8),
               Text(
-                widget.collectionHistoryModel.pickUpDeliveryType,
+                widget.pengangkatan.jenisKendaraan,
                 style: TextStyle(
                   fontWeight: FontWeight.w400,
                   color: hexToColor("#909090"),
@@ -131,7 +183,7 @@ class _CollectionHistoryCardState extends State<CollectionHistoryCard> {
               ),
               Spacings.horizontalSpace(8),
               Text(
-                widget.collectionHistoryModel.paymentDetail,
+                widget.pengangkatan.harga.toString(), // unfinished
                 style: TextStyle(
                   fontWeight: FontWeight.w400,
                   color: hexToColor("#909090"),
@@ -156,7 +208,7 @@ class _CollectionHistoryCardState extends State<CollectionHistoryCard> {
             context,
             MaterialPageRoute(
               builder: (context) => RequestDetailScreen(
-                collectionHistoryModel: widget.collectionHistoryModel,
+                id: widget.pengangkatan.id,
               ),
             ),
           );
@@ -195,7 +247,7 @@ class _CollectionHistoryCardState extends State<CollectionHistoryCard> {
                     children: [
                       TextSpan(text: "Status Pembayaran: "),
                       TextSpan(
-                        text: widget.collectionHistoryModel.paymentStatus,
+                        text: widget.pengangkatan.statusPembayaran.text,
                         style: TextStyle(
                           color: _getPaymentStatusColor(),
                           fontWeight: FontWeight.w500,
