@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:logger/logger.dart';
 import 'package:trashi/http_request/models/auth.dart';
@@ -409,6 +411,17 @@ class ApiProvider {
         );
 
     return response;
+  }
+
+  Future<EditProfileResponse> editProfileApi(dynamic body) async {
+    String path = '/users/info';
+    final response =
+        await _dio.put(path, data: jsonEncode(body)).catchError(_onError);
+    final cookies = response.headers.map['set-cookie'];
+
+    await _saveTokenFromCookies(cookies);
+    print(response);
+    return EditProfileResponse.fromJson(response.data);
   }
 }
 

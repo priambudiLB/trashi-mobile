@@ -94,6 +94,7 @@ class CurrentUser {
   @JsonKey(name: 'lastname')
   String lastName;
   String phone;
+  String username;
   int iat;
   List<String> label;
   List<dynamic> permission;
@@ -105,6 +106,7 @@ class CurrentUser {
       this.firstName,
       this.lastName,
       this.phone,
+      this.username,
       this.iat,
       this.label,
       this.permission});
@@ -243,4 +245,30 @@ class ValidateVerificationCodeRequest {
 
   Map<String, dynamic> toJson() =>
       _$ValidateVerificationCodeRequestToJson(this);
+}
+
+@JsonSerializable()
+class EditProfileResponse {
+  int isAcc;
+  @JsonKey(name: "_id")
+  String id;
+  String username;
+  int role;
+  String firstname;
+  String lastname;
+  String phone;
+
+  EditProfileResponse(
+      {this.isAcc,
+      this.id,
+      this.username,
+      this.firstname,
+      this.lastname,
+      this.phone,
+      this.role});
+
+  factory EditProfileResponse.fromJson(Map<String, dynamic> json) =>
+      _$EditProfileResponseFromJson(json);
+
+  Map<String, dynamic> toJson() => _$EditProfileResponseToJson(this);
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:trashi/pages/profile_screen_redesign/role_type.dart';
 
 const int FIGMA_HEIGHT = 640;
 const int FIGMA_WIDTH = 480;
@@ -28,6 +29,35 @@ String getMonth(int monthNumber) {
 Color hexToColor(String hexColorCode) {
   return new Color(
       int.parse(hexColorCode.substring(1, 7), radix: 16) + COLOR_STARTING_HEX);
+}
+
+bool isEmail(String text) {
+  return RegExp(
+          r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+      .hasMatch(text);
+}
+
+RoleType getRoleType(int code) {
+  switch (code) {
+    case 1:
+      return RoleType.ADMIN;
+      break;
+    case 2:
+      return RoleType.PEMERINTAH;
+      break;
+    case 3:
+      return RoleType.SWASTA;
+      break;
+    case 4:
+      return RoleType.PERSONAL;
+      break;
+    case 5:
+      return RoleType.RTRW;
+      break;
+    default:
+      return RoleType.PERSONAL;
+      break;
+  }
 }
 
 double fitScreenSize(double main, double unit) {
