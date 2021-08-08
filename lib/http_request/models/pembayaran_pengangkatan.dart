@@ -16,7 +16,7 @@ class PembayaranPengangkatan {
   @JsonKey(name: 'idPengangkatan')
   final int pengangkatanID;
   final String status;
-  final String internalStatus;
+  final int internalStatus;
   @JsonKey(name: 'userId')
   final String userID;
   final int amount;
@@ -43,7 +43,7 @@ class PembayaranPengangkatan {
 /// response of this endpoint: /api/pengangkatan/:id/pembayaran/list
 @JsonSerializable()
 class GetPembayaranListOfPengangkatanResponse {
-  final PembayaranPengangkatan pembayaranPengangkatan;
+  final List<PembayaranPengangkatan> pembayaranPengangkatan;
   final bool hasInvalidPayment;
   final bool shouldCreateNewPayment;
 

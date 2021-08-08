@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:trashi/components/layout_redesign.dart';
 import 'package:trashi/components/spacings.dart';
 import 'package:trashi/constants/pengangkatan.dart';
+import 'package:trashi/pages/payment/payment_web_view_screen.dart';
 import 'package:trashi/pages/request_screen/provider.dart';
 import 'package:trashi/pages/trash_collection_screen/accepter/components/row_button_wrapper.dart';
 import 'package:trashi/utils/commons.dart';
@@ -30,6 +31,11 @@ class _RequestDetailScreen extends State<RequestDetailScreen> {
       await context
           .read<CollectionHistoryProvider>()
           .getPengangkatanDetail(widget.id);
+
+      await context
+          .read<CollectionHistoryProvider>()
+          .getPembayaranListOfPengangkatan(widget.id);
+
       context.read<CollectionHistoryProvider>().isFetching = false;
 
       setState(() {
@@ -153,8 +159,22 @@ class _RequestDetailScreen extends State<RequestDetailScreen> {
           ),
         ],
       ),
-      onPressed: () {
-        print('pressed');
+      onPressed: () async {
+        await context
+            .read<CollectionHistoryProvider>()
+            .onPressedLunasiPembayaran();
+
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => PaymentWebViewScreen(
+              url: context
+                  .watch<CollectionHistoryProvider>()
+                  .pembayaranPengangkatan
+                  .invoiceURL,
+            ),
+          ),
+        );
       },
     );
   }
@@ -185,8 +205,8 @@ class _RequestDetailScreen extends State<RequestDetailScreen> {
                 if (context
                         .watch<CollectionHistoryProvider>()
                         .pengangkatan
-                        .statusPengangkatan !=
-                    StatusPengangkatan.selesai)
+                        .statusPembayaran !=
+                    StatusPembayaran.lunas)
                   _buildLunasiPembayaranButton(),
               ],
             ),
