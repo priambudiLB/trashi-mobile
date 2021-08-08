@@ -5,6 +5,7 @@ import 'package:logger/logger.dart';
 import 'package:trashi/http_request/models/auth.dart';
 import 'package:trashi/http_request/models/barang.dart';
 import 'package:trashi/http_request/models/kendaraan_dp.dart';
+import 'package:trashi/http_request/models/pembayaran_pengangkatan.dart';
 import 'package:trashi/http_request/models/pengangkatan.dart';
 import 'package:trashi/http_request/models/range_berat.dart';
 import 'package:trashi/models/trashi_document.dart';
@@ -422,6 +423,39 @@ class ApiProvider {
     await _saveTokenFromCookies(cookies);
     print(response);
     return EditProfileResponse.fromJson(response.data);
+  }
+
+  Future<Response<dynamic>> getPembayaranListOfPengangkatan(
+    int pengangkatanID,
+  ) async {
+    final path = '/pengangkatan/$pengangkatanID/pembayaran/list';
+
+    final response = await _dio
+        .get(
+          path,
+        )
+        .catchError(
+          _onError,
+        );
+
+    return response;
+  }
+
+  Future<Response<dynamic>> createPengangkatanPembayaranInvoice(
+    CreatePengangkatanPembayaranInvoiceRequest body,
+  ) async {
+    final path = '/pengangkatan/pembayaran/invoice/create';
+
+    final response = await _dio
+        .post(
+          path,
+          data: body,
+        )
+        .catchError(
+          _onError,
+        );
+
+    return response;
   }
 }
 

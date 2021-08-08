@@ -20,18 +20,25 @@ class Pengangkatan {
   final double latitude;
   @JsonKey(name: 'long')
   final double longitude;
-  final String username;
-  @JsonKey(name: 'isnow')
-  final bool isNow;
   final int harga;
+  final int hargaterbayar;
   @JsonKey(name: 'statuspembayaran')
   final StatusPembayaran statusPembayaran;
   @JsonKey(name: 'statuspengangkatan')
   final StatusPengangkatan statusPengangkatan;
+  @JsonKey(name: 'isnow')
+  final bool isNow;
+  final String username;
+  final String userId;
+  final String userfirstname;
+  final String userlastname;
   final DateTime createdAt;
   final DateTime updatedAt;
 
   Pengangkatan({
+    this.userId,
+    this.userfirstname,
+    this.userlastname,
     this.id,
     this.berat,
     this.jenisBarang,
@@ -48,6 +55,7 @@ class Pengangkatan {
     this.statusPengangkatan,
     this.createdAt,
     this.updatedAt,
+    this.hargaterbayar,
   });
 
   factory Pengangkatan.fromJson(Map<String, dynamic> json) =>
