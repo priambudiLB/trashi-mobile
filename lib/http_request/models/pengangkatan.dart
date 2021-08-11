@@ -65,6 +65,47 @@ class Pengangkatan {
 }
 
 @JsonSerializable()
+class CreatePengangkatanRequest {
+  String berat;
+  String jenisbarang;
+  String jeniskendaraan;
+  int dp;
+  DateTime waktupengangkatan;
+  String lokasi;
+  double lat;
+  double long;
+  int harga;
+  bool isnow;
+
+  CreatePengangkatanRequest(
+      {this.berat,
+      this.dp,
+      this.harga,
+      this.isnow,
+      this.jenisbarang,
+      this.jeniskendaraan,
+      this.lat,
+      this.lokasi,
+      this.long,
+      this.waktupengangkatan});
+
+  factory CreatePengangkatanRequest.fromJson(Map<String, dynamic> json) =>
+      _$CreatePengangkatanRequestFromJson(json);
+
+  Map<String, dynamic> toJson() => _$CreatePengangkatanRequestToJson(this);
+}
+
+@JsonSerializable()
+class CreatePengangkatanResponse {
+  Pengangkatan pengangkatan;
+  CreatePengangkatanResponse({this.pengangkatan});
+
+  factory CreatePengangkatanResponse.fromJson(Map<String, dynamic> json) =>
+      _$CreatePengangkatanResponseFromJson(json);
+  Map<String, dynamic> toJson() => _$CreatePengangkatanResponseToJson(this);
+}
+
+@JsonSerializable()
 class PengangkatanListAdminResponse {
   final List<Pengangkatan> isNow;
   final List<Pengangkatan> notIsNow;

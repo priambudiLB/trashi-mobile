@@ -144,7 +144,7 @@ class _LocationPickerFormState extends State<LocationPickerForm> {
                                 .read<FormRequestPengangkatanProvider>()
                                 .setDescriptionLocation(
                                     _textDescriptionEditingController.text);
-                            Navigator.push(
+                            Navigator.pushReplacement(
                                 context,
                                 SlideLeftRoute(
                                     page: FormRequestPengangkatan()));
