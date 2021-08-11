@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:formz/formz.dart';
 import 'package:trashi/components/button.dart';
 import 'package:trashi/components/layout_redesign.dart';
+import 'package:trashi/components/routes.dart';
 import 'package:trashi/pages/form_request_pengangkatan/provider.dart';
+import 'package:trashi/pages/payment/payment_web_view_screen.dart';
 import 'package:trashi/utils/commons.dart';
 
 import 'package:provider/provider.dart';
@@ -9,6 +13,27 @@ import 'package:provider/provider.dart';
 class DetailPengangkatan extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    if (context
+            .watch<FormRequestPengangkatanProvider>()
+            .statusSubmitLanjutPembayaran ==
+        FormzStatus.submissionSuccess) {
+      SchedulerBinding.instance.addPostFrameCallback((_) {
+        context
+            .read<FormRequestPengangkatanProvider>()
+            .setStatusSubmitLanjutPembayaran(FormzStatus.pure);
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => PaymentWebViewScreen(
+              url: context
+                  .read<FormRequestPengangkatanProvider>()
+                  .pembayaranPengatan
+                  .invoiceURL,
+            ),
+          ),
+        );
+      });
+    }
     return Layout(
         body: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -118,7 +143,21 @@ class DetailPengangkatan extends StatelessWidget {
         Container(
           height: 32,
         ),
-        Button(onTap: () {}, width: double.infinity, title: "Lanjut Pembayaran")
+        context
+                    .watch<FormRequestPengangkatanProvider>()
+                    .statusSubmitLanjutPembayaran ==
+                FormzStatus.submissionInProgress
+            ? Center(
+                child: CircularProgressIndicator(),
+              )
+            : Button(
+                onTap: () {
+                  context
+                      .read<FormRequestPengangkatanProvider>()
+                      .submitLanjutPembayaran();
+                },
+                width: double.infinity,
+                title: "Lanjut Pembayaran")
       ],
     ));
   }

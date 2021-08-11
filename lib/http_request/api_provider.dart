@@ -457,6 +457,24 @@ class ApiProvider {
 
     return response;
   }
+
+  Future<CreatePengangkatanResponse> submitRequestPengangkatan(
+      CreatePengangkatanRequest body) async {
+    final response = await _dio
+        .post(
+          '/pengangkatan/create',
+          data: body,
+        )
+        .catchError(
+          _onError,
+        );
+
+    if (response == null) {
+      return null;
+    }
+
+    return CreatePengangkatanResponse.fromJson(response.data);
+  }
 }
 
 /**

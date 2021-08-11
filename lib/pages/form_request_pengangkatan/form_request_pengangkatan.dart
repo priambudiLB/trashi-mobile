@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:formz/formz.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:trashi/components/button.dart';
 import 'package:trashi/components/layout_redesign.dart';
@@ -70,6 +72,18 @@ class _FormRequestPengangkatanState extends State<FormRequestPengangkatan> {
 
   @override
   Widget build(BuildContext context) {
+    if (context
+            .watch<FormRequestPengangkatanProvider>()
+            .statusSubmitRequestPengangkatan ==
+        FormzStatus.submissionSuccess) {
+      SchedulerBinding.instance.addPostFrameCallback((_) {
+        context
+            .read<FormRequestPengangkatanProvider>()
+            .setStatusSubmitRequestPengangkatan(FormzStatus.pure);
+        Navigator.pushReplacement(
+            context, SlideLeftRoute(page: DetailPengangkatan()));
+      });
+    }
     return WillPopScope(
       onWillPop: _onWillPop,
       child: Layout(
@@ -192,37 +206,50 @@ class _FormRequestPengangkatanState extends State<FormRequestPengangkatan> {
               Container(
                 height: 24,
               ),
-              Button(
-                onTap: () {
-                  if (context.read<FormRequestPengangkatanProvider>().isValid) {
-                    if (context
+              context
+                          .watch<FormRequestPengangkatanProvider>()
+                          .statusSubmitRequestPengangkatan ==
+                      FormzStatus.submissionInProgress
+                  ? CircularProgressIndicator()
+                  : Button(
+                      onTap: () {
+                        if (context
                             .read<FormRequestPengangkatanProvider>()
-                            .selectedTimeType ==
-                        TimeType.NOW) {
-                      DateTime now = DateTime.now();
-                      context
-                          .read<FormRequestPengangkatanProvider>()
-                          .setSelectedDate(
-                              DateTime(now.year, now.month, now.day));
-                      context
-                          .read<FormRequestPengangkatanProvider>()
-                          .setSelectedTime(TimeOfDay.fromDateTime(now));
-                    }
-                    Navigator.push(
-                        context, SlideLeftRoute(page: DetailPengangkatan()));
-                  }
-                },
-                title: "Lanjut",
-                fontColor:
-                    context.watch<FormRequestPengangkatanProvider>().isValid
-                        ? Colors.white
-                        : hexToColor("#C4C4C4"),
-                width: double.infinity,
-                backgroundColor:
-                    context.watch<FormRequestPengangkatanProvider>().isValid
-                        ? hexToColor(MAIN_COLOR)
-                        : Colors.grey[200],
-              ),
+                            .isValid) {
+                          if (context
+                                  .read<FormRequestPengangkatanProvider>()
+                                  .selectedTimeType ==
+                              TimeType.NOW) {
+                            DateTime now = DateTime.now();
+                            context
+                                .read<FormRequestPengangkatanProvider>()
+                                .setSelectedDate(
+                                    DateTime(now.year, now.month, now.day));
+                            context
+                                .read<FormRequestPengangkatanProvider>()
+                                .setSelectedTime(TimeOfDay.fromDateTime(now));
+                            context
+                                .read<FormRequestPengangkatanProvider>()
+                                .setIsNow(true);
+                          }
+                          context
+                              .read<FormRequestPengangkatanProvider>()
+                              .submitRequestPengangkatan();
+                        }
+                      },
+                      title: "Lanjut",
+                      fontColor: context
+                              .watch<FormRequestPengangkatanProvider>()
+                              .isValid
+                          ? Colors.white
+                          : hexToColor("#C4C4C4"),
+                      width: double.infinity,
+                      backgroundColor: context
+                              .watch<FormRequestPengangkatanProvider>()
+                              .isValid
+                          ? hexToColor(MAIN_COLOR)
+                          : Colors.grey[200],
+                    ),
               Container(
                 height: 30,
               )
