@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:trashi/components/button.dart';
-import 'package:trashi/constants/colors.dart';
 import 'package:trashi/constants/pengangkatan.dart';
 import 'package:trashi/http_request/models/pengangkatan.dart';
-import 'package:trashi/pages/trash_collection_screen/accepter/components/row_button_wrapper.dart';
+import 'package:trashi/pages/trash_collection_screen/accepter/components/simple_button.dart';
 import 'package:trashi/pages/trash_collection_screen/accepter/trash_collection_request_detail_screen.dart';
 import 'package:trashi/utils/commons.dart';
 
@@ -211,30 +209,18 @@ class _TrashCollectionRequestCardState
   }
 
   Widget _buildDetailButton() {
-    return SizedBox(
-      width: double.infinity,
-      height: 40,
-      child: Container(
-        decoration: BoxDecoration(
-          border: Border.all(
-            color: hexToColor(MAIN_COLOR),
+    return SimpleTextButton(
+      label: 'Lihat Detail',
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => TrashCollectionRequestDetailScreen(
+              id: widget.pengangkatan.id,
+            ),
           ),
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: TextButton(
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => TrashCollectionRequestDetailScreen(
-                  id: widget.pengangkatan.id,
-                ),
-              ),
-            );
-          },
-          child: Text('Lihat Detail'),
-        ),
-      ),
+        );
+      },
     );
   }
 

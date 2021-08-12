@@ -310,8 +310,7 @@ class _TrashCollectionRequestDetailScreenState
             ),
           )
         : Layout(
-            body: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            body: ListView(
               children: [
                 Text(
                   "Detail Pengambilan",
@@ -326,6 +325,7 @@ class _TrashCollectionRequestDetailScreenState
                 _buildOpenGoogleMapsButton(),
                 Spacings.verticalSpace(16),
                 _buildFinishRequestButton(),
+                Spacings.verticalSpace(16),
               ],
             ),
           );
