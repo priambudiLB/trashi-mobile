@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:trashi/constants/pengangkatan.dart';
 import 'package:trashi/http_request/models/pengangkatan.dart';
-import 'package:trashi/pages/trash_collection_screen/accepter/components/row_button_wrapper.dart';
+import 'package:trashi/pages/trash_collection_screen/accepter/components/simple_button.dart';
 import 'package:trashi/pages/trash_collection_screen/accepter/trash_collection_request_detail_screen.dart';
 import 'package:trashi/utils/commons.dart';
 
@@ -115,6 +115,11 @@ class _TrashCollectionRequestCardState
 
     image = Image.asset('assets/images/profile-active.png').image;
 
+    final userfirstname = widget.pengangkatan.userfirstname ?? '';
+    final userlastname = widget.pengangkatan.userlastname ?? '';
+
+    String userFullName = '$userfirstname $userlastname';
+
     return Row(
       children: [
         Container(
@@ -134,7 +139,7 @@ class _TrashCollectionRequestCardState
           ),
         ),
         Text(
-          widget.pengangkatan.username,
+          userFullName,
           style: TextStyle(
             color: hexToColor("#4D4D4D"),
             fontSize: 12,
@@ -162,7 +167,7 @@ class _TrashCollectionRequestCardState
                 ),
               ),
               Text(
-                widget.pengangkatan.jenisBarang,
+                widget.pengangkatan.jenisBarang ?? '',
                 style: TextStyle(
                   fontWeight: FontWeight.w400,
                   color: hexToColor("#909090"),
@@ -190,7 +195,7 @@ class _TrashCollectionRequestCardState
                 ),
               ),
               Text(
-                widget.pengangkatan.jenisKendaraan,
+                widget.pengangkatan.jenisKendaraan ?? '',
                 style: TextStyle(
                   fontWeight: FontWeight.w400,
                   color: hexToColor("#909090"),
@@ -203,26 +208,10 @@ class _TrashCollectionRequestCardState
     );
   }
 
-  Widget _buildShowDetailButton() {
-    return RowButtonWrapper(
-      padding: EdgeInsets.fromLTRB(105, 11, 105, 11),
-      circularBorderRadius: 8,
-      borderColor: hexToColor("#32A37F"),
-      backgroundColor: Colors.white,
-      height: 40,
-      content: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            "Lihat Detail",
-            style: TextStyle(
-              color: hexToColor("#32A37F"),
-              fontSize: 14,
-            ),
-          ),
-        ],
-      ),
-      onPressed: () async {
+  Widget _buildDetailButton() {
+    return SimpleTextButton(
+      label: 'Lihat Detail',
+      onPressed: () {
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -232,6 +221,7 @@ class _TrashCollectionRequestCardState
           ),
         );
       },
+      width: double.infinity,
     );
   }
 
@@ -273,7 +263,7 @@ class _TrashCollectionRequestCardState
                 ),
               ),
               Text(
-                widget.pengangkatan.lokasi,
+                widget.pengangkatan.lokasi ?? '',
                 style: TextStyle(
                     fontWeight: FontWeight.w400, color: hexToColor("#909090")),
               ),
@@ -282,7 +272,7 @@ class _TrashCollectionRequestCardState
                   bottom: 12,
                 ),
               ),
-              _buildShowDetailButton(),
+              _buildDetailButton(),
               Padding(
                 padding: EdgeInsets.only(
                   bottom: 16,

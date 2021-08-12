@@ -105,19 +105,19 @@ class _DocumentUploadButtonState extends State<DocumentUploadButton> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.all(
-          Radius.circular(8),
-        ),
-        border: Border.all(
-          color: hexToColor(MAIN_COLOR),
-        ),
-      ),
       child: ButtonTheme(
         minWidth: double.infinity,
         height: 48,
         child: MaterialButton(
-          color: isUploaded ? Color.fromRGBO(50, 163, 127, 0.05) : Colors.white,
+          shape: RoundedRectangleBorder(
+            side: BorderSide(
+              color: hexToColor(MAIN_COLOR),
+            ),
+            borderRadius: BorderRadius.all(
+              Radius.circular(8),
+            ),
+          ),
+          color: isUploaded ? Colors.white.withOpacity(0.7) : Colors.white,
           onPressed: () => _showPickImageSource(),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
