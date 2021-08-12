@@ -115,6 +115,11 @@ class _TrashCollectionRequestCardState
 
     image = Image.asset('assets/images/profile-active.png').image;
 
+    final userfirstname = widget.pengangkatan.userfirstname ?? '';
+    final userlastname = widget.pengangkatan.userlastname ?? '';
+
+    String userFullName = '$userfirstname $userlastname';
+
     return Row(
       children: [
         Container(
@@ -134,7 +139,7 @@ class _TrashCollectionRequestCardState
           ),
         ),
         Text(
-          widget.pengangkatan.username,
+          userFullName,
           style: TextStyle(
             color: hexToColor("#4D4D4D"),
             fontSize: 12,
@@ -162,7 +167,7 @@ class _TrashCollectionRequestCardState
                 ),
               ),
               Text(
-                widget.pengangkatan.jenisBarang,
+                widget.pengangkatan.jenisBarang ?? '',
                 style: TextStyle(
                   fontWeight: FontWeight.w400,
                   color: hexToColor("#909090"),
@@ -190,7 +195,7 @@ class _TrashCollectionRequestCardState
                 ),
               ),
               Text(
-                widget.pengangkatan.jenisKendaraan,
+                widget.pengangkatan.jenisKendaraan ?? '',
                 style: TextStyle(
                   fontWeight: FontWeight.w400,
                   color: hexToColor("#909090"),
@@ -273,7 +278,7 @@ class _TrashCollectionRequestCardState
                 ),
               ),
               Text(
-                widget.pengangkatan.lokasi,
+                widget.pengangkatan.lokasi ?? '',
                 style: TextStyle(
                     fontWeight: FontWeight.w400, color: hexToColor("#909090")),
               ),
