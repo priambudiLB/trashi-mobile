@@ -7,19 +7,21 @@ class SimpleTextButton extends StatelessWidget {
   final Color backgroundColor;
   final Color textColor;
   final Function() onPressed;
+  final double width;
 
   const SimpleTextButton({
     Key key,
     @required this.label,
     this.backgroundColor = Colors.white,
     this.textColor,
+    this.width,
     @required this.onPressed,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: double.infinity,
+      width: width ?? null,
       height: 40,
       child: Container(
         child: TextButton(

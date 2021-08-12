@@ -221,6 +221,7 @@ class _TrashCollectionRequestCardState
           ),
         );
       },
+      width: double.infinity,
     );
   }
 

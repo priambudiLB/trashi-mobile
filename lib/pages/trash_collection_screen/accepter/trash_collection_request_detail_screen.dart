@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:trashi/components/layout_redesign.dart';
 import 'package:trashi/components/spacings.dart';
+import 'package:trashi/constants/colors.dart';
 import 'package:trashi/constants/pengangkatan.dart';
 import 'package:trashi/http_request/models/pengangkatan.dart';
 import 'package:trashi/pages/trash_collection_screen/accepter/components/row_button_wrapper.dart';
+import 'package:trashi/pages/trash_collection_screen/accepter/components/simple_button.dart';
 import 'package:trashi/utils/commons.dart';
 import 'package:provider/provider.dart';
 import 'package:trashi/pages/trash_collection_screen/accepter/provider/provider.dart';
@@ -210,54 +212,26 @@ class _TrashCollectionRequestDetailScreenState
   }
 
   Widget _buildCancelButton() {
-    return RowButtonWrapper(
-      padding: EdgeInsets.fromLTRB(46, 11, 46, 11),
-      circularBorderRadius: 8,
-      borderColor: hexToColor("#32A37F"),
-      backgroundColor: Colors.white,
-      height: 40,
-      content: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            "Batal",
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-              color: hexToColor("#32A37F"),
-            ),
-          ),
-        ],
+    return Expanded(
+      child: SimpleTextButton(
+        label: 'Batal',
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
       ),
-      onPressed: () {
-        Navigator.of(context).pop();
-      },
     );
   }
 
   Widget _buildConfirmationButton() {
-    return RowButtonWrapper(
-      padding: EdgeInsets.fromLTRB(46, 11, 46, 11),
-      circularBorderRadius: 8,
-      borderColor: hexToColor("#32A37F"),
-      backgroundColor: hexToColor("#32A37F"),
-      height: 40,
-      content: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            "Yakin",
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-              color: Colors.white,
-            ),
-          ),
-        ],
+    return Expanded(
+      child: SimpleTextButton(
+        label: 'Yakin',
+        onPressed: () {
+          _onPressedConfirmationButton();
+        },
+        backgroundColor: hexToColor(MAIN_COLOR),
+        textColor: Colors.white,
       ),
-      onPressed: () {
-        _onPressedConfirmationButton();
-      },
     );
   }
 
@@ -266,15 +240,12 @@ class _TrashCollectionRequestDetailScreenState
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
       ),
-      insetPadding: EdgeInsets.symmetric(
-        vertical: 230,
-        horizontal: 24,
-      ),
       backgroundColor: Colors.white,
       child: Padding(
         padding: EdgeInsets.fromLTRB(24, 32, 24, 32),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
           children: [
             Text(
               "Apakah Anda yakin sudah selesai mengambil sampah?",
