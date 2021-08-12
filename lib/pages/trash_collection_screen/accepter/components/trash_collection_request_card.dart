@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:trashi/components/button.dart';
+import 'package:trashi/constants/colors.dart';
 import 'package:trashi/constants/pengangkatan.dart';
 import 'package:trashi/http_request/models/pengangkatan.dart';
 import 'package:trashi/pages/trash_collection_screen/accepter/components/row_button_wrapper.dart';
@@ -208,35 +210,31 @@ class _TrashCollectionRequestCardState
     );
   }
 
-  Widget _buildShowDetailButton() {
-    return RowButtonWrapper(
-      padding: EdgeInsets.fromLTRB(105, 11, 105, 11),
-      circularBorderRadius: 8,
-      borderColor: hexToColor("#32A37F"),
-      backgroundColor: Colors.white,
+  Widget _buildDetailButton() {
+    return SizedBox(
+      width: double.infinity,
       height: 40,
-      content: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            "Lihat Detail",
-            style: TextStyle(
-              color: hexToColor("#32A37F"),
-              fontSize: 14,
-            ),
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(
+            color: hexToColor(MAIN_COLOR),
           ),
-        ],
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: TextButton(
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => TrashCollectionRequestDetailScreen(
+                  id: widget.pengangkatan.id,
+                ),
+              ),
+            );
+          },
+          child: Text('Lihat Detail'),
+        ),
       ),
-      onPressed: () async {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => TrashCollectionRequestDetailScreen(
-              id: widget.pengangkatan.id,
-            ),
-          ),
-        );
-      },
     );
   }
 
@@ -287,7 +285,7 @@ class _TrashCollectionRequestCardState
                   bottom: 12,
                 ),
               ),
-              _buildShowDetailButton(),
+              _buildDetailButton(),
               Padding(
                 padding: EdgeInsets.only(
                   bottom: 16,
