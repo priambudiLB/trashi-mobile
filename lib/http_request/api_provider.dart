@@ -61,6 +61,43 @@ class ApiProvider {
     }
   }
 
+  Future<Response<dynamic>> postWithDio(String path, dynamic data) async {
+    Response<dynamic> response;
+
+    try {
+      response = await _dio.post(
+        path,
+        data: data,
+      );
+    } on DioError catch (e) {
+      response = e.response;
+      _logError(response);
+    }
+
+    return response;
+  }
+
+  Future<Response<dynamic>> getWithDio(String path) async {
+    Response<dynamic> response;
+
+    try {
+      response = await _dio.get(
+        path,
+      );
+    } on DioError catch (e) {
+      response = e.response;
+      _logError(response);
+    }
+
+    return response;
+  }
+
+  void _logError(Response<dynamic> response) {
+    Logger logger = Logger();
+    logger.e('Got error : ${response.statusCode} -> ${response.statusMessage}');
+    logger.e('Data : ${response.data}');
+  }
+
   static bool isStatusCodeOK(int statusCode) {
     return statusCode >= 200 && statusCode <= 399;
   }
@@ -78,46 +115,32 @@ class ApiProvider {
     }
   }
 
-  Future<SignInByPhoneResponse> signInByPhone(SignInByPhoneRequest body) async {
-    final response = await _dio
-        .post(
-          '/auth/signin/byphone',
-          data: body,
-        )
-        .catchError(
-          _onError,
-        );
+  Future<Response<dynamic>> signInByPhone(SignInByPhoneRequest body) async {
+    final response = await postWithDio('/auth/signin/byphone', body);
 
-    if (response == null) {
-      return null;
+    if (!isStatusCodeOK(response.statusCode)) {
+      return response;
     }
 
     final cookies = response.headers.map['set-cookie'];
 
     await _saveTokenFromCookies(cookies);
 
-    return SignInByPhoneResponse.fromJson(response.data);
+    return response;
   }
 
-  Future<SignInResponse> signIn(SignInRequest body) async {
-    final response = await _dio
-        .post(
-          '/auth/signin',
-          data: body,
-        )
-        .catchError(
-          _onError,
-        );
+  Future<Response<dynamic>> signIn(SignInRequest body) async {
+    final response = await postWithDio('/auth/signin', body);
 
-    if (response == null) {
-      return null;
+    if (!isStatusCodeOK(response.statusCode)) {
+      return response;
     }
 
     final cookies = response.headers.map['set-cookie'];
 
     await _saveTokenFromCookies(cookies);
 
-    return SignInResponse.fromJson(response.data);
+    return response;
   }
 
   Future<dynamic> signOut() async {
