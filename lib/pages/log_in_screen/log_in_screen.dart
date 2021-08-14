@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:trashi/components/snack_bar.dart';
 import 'package:trashi/components/form.dart';
 import 'package:trashi/components/layout_redesign.dart';
 import 'package:trashi/components/progress_indicator.dart';
 import 'package:trashi/components/spacings.dart';
 import 'package:trashi/http_request/api_provider.dart';
 import 'package:trashi/http_request/models/auth.dart';
+import 'package:trashi/http_request/models/errors.dart';
 import 'package:trashi/pages/navbar_screen/bottom_navbar.dart';
 import 'package:trashi/pages/registration_screen/account_type_selection_screen.dart';
 import 'package:trashi/pages/trash_collection_screen/accepter/components/row_button_wrapper.dart';
@@ -41,6 +43,9 @@ class _LogInScreenState extends State<LogInScreen> {
   Future<void> _signIn() async {
     showTrashiProgressIndicator(context);
 
+    bool isError = false;
+    String errorMessage;
+
     SecureStorage _secureStorage = SecureStorage();
 
     if (isPhoneNumber(_emailOrPhoneNumberController.text)) {
@@ -51,10 +56,18 @@ class _LogInScreenState extends State<LogInScreen> {
 
       final response = await ApiProvider().signInByPhone(body);
 
-      if (response != null) {
+      if (ApiProvider.isStatusCodeOK(response.statusCode)) {
         isSignInSuccessful = true;
 
-        await _secureStorage.setSignInByPhoneResponse(response);
+        final signInByPhoneResponse =
+            SignInByPhoneResponse.fromJson(response.data);
+
+        await _secureStorage.setSignInByPhoneResponse(signInByPhoneResponse);
+      } else {
+        isError = true;
+
+        final errorResponse = ErrorResponse.fromJson(response.data);
+        errorMessage = errorResponse.errorMessage;
       }
     } else if (isEmail(_emailOrPhoneNumberController.text)) {
       SignInRequest body = SignInRequest(
@@ -64,11 +77,23 @@ class _LogInScreenState extends State<LogInScreen> {
 
       final response = await ApiProvider().signIn(body);
 
-      if (response != null) {
+      if (ApiProvider.isStatusCodeOK(response.statusCode)) {
         isSignInSuccessful = true;
 
-        await _secureStorage.setSignInResponse(response);
+        final signInResponse = SignInResponse.fromJson(response.data);
+
+        await _secureStorage.setSignInResponse(signInResponse);
+      } else {
+        isError = true;
+
+        final errorResponse = ErrorResponse.fromJson(response.data);
+        errorMessage = errorResponse.errorMessage;
       }
+    }
+
+    if (isError) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(buildErrorSnackBar(message: errorMessage));
     }
 
     closeTrashiProgressIndicator(context);

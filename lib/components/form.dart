@@ -39,9 +39,6 @@ class _TrashiTextFormFieldState extends State<TrashiTextFormField> {
       keyboardType: widget.keyboardType,
       decoration: InputDecoration(
         floatingLabelBehavior: FloatingLabelBehavior.never,
-        contentPadding: EdgeInsets.symmetric(
-          horizontal: 16,
-        ),
         labelText: widget.label,
         labelStyle: TextStyle(
           fontSize: 14,

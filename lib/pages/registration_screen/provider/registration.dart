@@ -1,62 +1,47 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:logger/logger.dart';
 import 'package:trashi/constants/account_types.dart';
 import 'package:trashi/http_request/api_provider.dart';
 import 'package:trashi/http_request/models/auth.dart';
+import 'package:trashi/http_request/models/errors.dart';
 import 'package:trashi/models/trashi_document.dart';
 import 'package:trashi/secure_storage/secure_storage.dart';
-import 'package:trashi/constants/document_type.dart';
+import 'package:dio/dio.dart';
 
-class RegistrationLogic {
+class RegistrationProvider with ChangeNotifier, DiagnosticableTreeMixin {
   static const int maxPhoneNumberLength = 14;
 
-  TextEditingController _nameController;
-  TextEditingController _phoneNumberController;
-  TextEditingController _emailController;
-  TextEditingController _passwordController;
-  TextEditingController _confirmPasswordController;
-  final AccountType accountType;
+  String _errorMessage = 'Terjadi kesalahan. Silakan coba beberapa saat lagi.';
 
   String _firstName;
   String _lastName;
 
-  bool _isSignUpSuccessful;
-  bool _isGenerateVerificationCodeSuccessful;
+  bool _isSignUpSuccessful = false;
+  bool _isGenerateVerificationCodeSuccessful = false;
 
-  SecureStorage _secureStorage;
+  SecureStorage _secureStorage = SecureStorage();
 
-  RegistrationLogic({
-    @required this.accountType,
-  }) {
-    _nameController = TextEditingController();
-    _phoneNumberController = TextEditingController();
-    _emailController = TextEditingController();
-    _passwordController = TextEditingController();
-    _confirmPasswordController = TextEditingController();
+  AccountType _accountType;
 
-    _isSignUpSuccessful = false;
-    _isGenerateVerificationCodeSuccessful = false;
+  AccountType get accountType => _accountType;
 
-    _secureStorage = SecureStorage();
+  set accountType(AccountType value) {
+    _accountType = value;
+    notifyListeners();
   }
-
-  TextEditingController get nameController => _nameController;
-  TextEditingController get phoneNumberController => _phoneNumberController;
-  TextEditingController get emailController => _emailController;
-  TextEditingController get passwordController => _passwordController;
-  TextEditingController get confirmPasswordController =>
-      _confirmPasswordController;
 
   bool get isSignUpSuccessful => _isSignUpSuccessful;
   bool get isGenerateVerificationCodeSuccessful =>
       _isGenerateVerificationCodeSuccessful;
 
-  String get phoneNumber => _phoneNumberController.text;
-  String get email => _emailController.text;
+  String get errorMessage => _errorMessage;
 
-  String get accountIdentifier {
-    final _phoneNumber = _phoneNumberController.text;
-    final _email = _emailController.text;
+  String accountIdentifier(
+    TextEditingController phoneNumberController,
+    TextEditingController emailController,
+  ) {
+    final _phoneNumber = phoneNumberController.text;
+    final _email = emailController.text;
 
     if (_email.isNotEmpty) {
       return _email;
@@ -144,8 +129,13 @@ class RegistrationLogic {
     return null;
   }
 
-  String validateConfirmPassword(String value) {
+  String validateConfirmPassword(
+    String value,
+    TextEditingController passwordController,
+  ) {
+    print('hehehe');
     if (value.isEmpty) {
+      print('here');
       return _buildEmptyValueMessage('Password');
     }
 
@@ -161,67 +151,78 @@ class RegistrationLogic {
     return null;
   }
 
-  SignUpRequest _buildSignUpRequest() {
-    _separateName(nameController.text);
+  SignUpRequest _buildSignUpRequest(SignUpParam param) {
+    _separateName(param.nameController.text);
 
     return SignUpRequest(
-      email: emailController.text,
-      password: passwordController.text,
+      email: param.emailController.text,
+      password: param.passwordController.text,
       firstname: _firstName,
       lastname: _lastName,
       role: accountType.roleInt,
     );
   }
 
-  SignUpByPhoneRequest _buildSignUpByPhoneRequest() {
-    _separateName(nameController.text);
+  SignUpByPhoneRequest _buildSignUpByPhoneRequest(SignUpParam param) {
+    _separateName(param.nameController.text);
 
     return SignUpByPhoneRequest(
-      phone: phoneNumberController.text,
-      password: passwordController.text,
+      phone: param.phoneNumberController.text,
+      password: param.passwordController.text,
       firstname: _firstName,
       lastname: _lastName,
       role: accountType.roleInt,
     );
   }
 
-  Future<void> _signUp() async {
-    SignInResponse response;
+  Future<void> _signUp(SignUpParam param) async {
+    Response<dynamic> response;
 
-    final SignUpRequest _requestBody = _buildSignUpRequest();
+    final SignUpRequest _requestBody = _buildSignUpRequest(param);
 
     response = await ApiProvider().signUp(_requestBody);
 
-    if (response != null) {
+    if (ApiProvider.isStatusCodeOK(response.statusCode)) {
       _isSignUpSuccessful = true;
 
-      await _secureStorage.setSignInResponse(response);
+      final signInResponse = SignInResponse.fromJson(response.data);
+
+      await _secureStorage.setSignInResponse(signInResponse);
+    } else {
+      final errorResponse = ErrorResponse.fromJson(response.data);
+      _errorMessage = errorResponse?.errorMessage;
     }
   }
 
-  Future<void> _signUpByPhone() async {
-    SignInByPhoneResponse response;
+  Future<void> _signUpByPhone(SignUpParam param) async {
+    Response<dynamic> response;
 
-    final SignUpByPhoneRequest _requestBody = _buildSignUpByPhoneRequest();
+    final SignUpByPhoneRequest _requestBody = _buildSignUpByPhoneRequest(param);
 
     response = await ApiProvider().signUpByPhone(_requestBody);
 
-    if (response != null) {
+    if (ApiProvider.isStatusCodeOK(response.statusCode)) {
       _isSignUpSuccessful = true;
 
-      await _secureStorage.setSignInByPhoneResponse(response);
+      final signInByPhoneResponse =
+          SignInByPhoneResponse.fromJson(response.data);
+
+      await _secureStorage.setSignInByPhoneResponse(signInByPhoneResponse);
+    } else {
+      final errorResponse = ErrorResponse.fromJson(response.data);
+      _errorMessage = errorResponse?.errorMessage;
     }
   }
 
-  Future<void> signUp() async {
+  Future<void> signUp(SignUpParam param) async {
     switch (this.accountType) {
       case AccountType.government:
       case AccountType.company:
-        await _signUp();
+        await _signUp(param);
         return;
       case AccountType.RTRW:
       case AccountType.public:
-        await _signUpByPhone();
+        await _signUpByPhone(param);
         return;
     }
   }
@@ -246,4 +247,20 @@ class RegistrationLogic {
       await ApiProvider().uploadFile(element);
     });
   }
+}
+
+class SignUpParam {
+  final TextEditingController nameController;
+  final TextEditingController phoneNumberController;
+  final TextEditingController emailController;
+  final TextEditingController passwordController;
+  final TextEditingController confirmPasswordController;
+
+  SignUpParam({
+    @required this.nameController,
+    @required this.phoneNumberController,
+    @required this.emailController,
+    @required this.passwordController,
+    @required this.confirmPasswordController,
+  });
 }

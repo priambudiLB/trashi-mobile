@@ -3,12 +3,13 @@ import 'package:flutter/services.dart';
 import 'package:trashi/components/form.dart';
 import 'package:trashi/components/layout_redesign.dart';
 import 'package:trashi/components/progress_indicator.dart';
+import 'package:trashi/components/snack_bar.dart';
 import 'package:trashi/components/spacings.dart';
 import 'package:trashi/constants/account_types.dart';
 import 'package:trashi/constants/colors.dart';
 import 'package:trashi/pages/confirmation_otp_screen/confirmation_otp_screen.dart';
 import 'package:trashi/pages/registration_screen/components/document_upload_button.dart';
-import 'package:trashi/pages/registration_screen/logics/registration.dart';
+import 'package:trashi/pages/registration_screen/provider/registration.dart';
 import 'package:trashi/utils/commons.dart';
 import 'package:provider/provider.dart';
 import 'package:trashi/providers.dart';
@@ -25,7 +26,11 @@ class RegistrationScreen extends StatefulWidget {
 }
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
-  RegistrationLogic _logic;
+  TextEditingController _nameController;
+  TextEditingController _phoneNumberController;
+  TextEditingController _emailController;
+  TextEditingController _passwordController;
+  TextEditingController _confirmPasswordController;
 
   bool areAllDocumentsUploaded;
 
@@ -40,14 +45,18 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   @override
   void initState() {
     super.initState();
-    _logic = RegistrationLogic(
-      accountType: widget.accountType,
-    );
+
+    _nameController = TextEditingController();
+    _phoneNumberController = TextEditingController();
+    _emailController = TextEditingController();
+    _passwordController = TextEditingController();
+    _confirmPasswordController = TextEditingController();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context
           .read<SubmitDocumentOnRegistration>()
           .emptyAllRegistrationDocumentFiles();
+      context.read<RegistrationProvider>().accountType = widget.accountType;
     });
   }
 
@@ -77,20 +86,39 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             if (_formKey.currentState.validate()) {
               showTrashiProgressIndicator(context);
 
-              await _logic.signUp();
+              final signUpParam = SignUpParam(
+                confirmPasswordController: _confirmPasswordController,
+                emailController: _emailController,
+                nameController: _nameController,
+                passwordController: _passwordController,
+                phoneNumberController: _phoneNumberController,
+              );
 
-              if (!_logic.isSignUpSuccessful) {
-                print('sign up failed');
+              await context.read<RegistrationProvider>().signUp(signUpParam);
+
+              if (!context.read<RegistrationProvider>().isSignUpSuccessful) {
+                ScaffoldMessenger.of(context).showSnackBar(buildErrorSnackBar(
+                  message: context.read<RegistrationProvider>().errorMessage,
+                ));
                 return;
               }
 
-              await _logic.uploadRegistrationDocuments(_featureProvider
-                  .getDocumentsByAccountType(widget.accountType));
+              await context
+                  .read<RegistrationProvider>()
+                  .uploadRegistrationDocuments(_featureProvider
+                      .getDocumentsByAccountType(widget.accountType));
 
-              await _logic.generateVerificationCode();
+              await context
+                  .read<RegistrationProvider>()
+                  .generateVerificationCode();
 
-              if (!_logic.isGenerateVerificationCodeSuccessful) {
-                print('generate verification code failed');
+              if (!context
+                  .read<RegistrationProvider>()
+                  .isGenerateVerificationCodeSuccessful) {
+                ScaffoldMessenger.of(context).showSnackBar(buildErrorSnackBar(
+                  message:
+                      'Terjadi kesalahan dalam me-generate verification code. Silakan coba beberapa saat lagi.',
+                ));
                 return;
               }
 
@@ -100,7 +128,11 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 context,
                 MaterialPageRoute(
                   builder: (context) => ConfirmationOTPScreen(
-                    account: _logic.accountIdentifier,
+                    account:
+                        context.read<RegistrationProvider>().accountIdentifier(
+                              _phoneNumberController,
+                              _emailController,
+                            ),
                     verification: widget.accountType.verification,
                   ),
                 ),
@@ -147,15 +179,15 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       return TrashiTextFormField(
         keyboardType: TextInputType.phone,
         label: 'Phone Number',
-        controller: _logic.phoneNumberController,
-        validator: _logic.validatePhoneNumber,
+        controller: _phoneNumberController,
+        validator: context.read<RegistrationProvider>().validatePhoneNumber,
       );
     }
     return TrashiTextFormField(
       keyboardType: TextInputType.text,
       label: 'Email',
-      controller: _logic.emailController,
-      validator: _logic.validateEmail,
+      controller: _emailController,
+      validator: context.read<RegistrationProvider>().validateEmail,
     );
   }
 
@@ -200,8 +232,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         TrashiTextFormField(
                           keyboardType: TextInputType.text,
                           label: 'Name',
-                          controller: _logic.nameController,
-                          validator: _logic.validateName,
+                          controller: _nameController,
+                          validator:
+                              context.read<RegistrationProvider>().validateName,
                         ),
                         Spacings.verticalSpace(12),
                         _buildIdentifierField(),
@@ -210,16 +243,23 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           keyboardType: TextInputType.text,
                           label: 'Password',
                           isPasswordField: true,
-                          controller: _logic.passwordController,
-                          validator: _logic.validatePassword,
+                          controller: _passwordController,
+                          validator: context
+                              .read<RegistrationProvider>()
+                              .validatePassword,
                         ),
                         Spacings.verticalSpace(12),
                         TrashiTextFormField(
                           keyboardType: TextInputType.text,
                           label: 'Confirm Password',
                           isPasswordField: true,
-                          controller: _logic.confirmPasswordController,
-                          validator: _logic.validateConfirmPassword,
+                          controller: _confirmPasswordController,
+                          validator: (value) => context
+                              .read<RegistrationProvider>()
+                              .validateConfirmPassword(
+                                value,
+                                _passwordController,
+                              ),
                         ),
                         Spacings.verticalSpace(12),
                       ],
