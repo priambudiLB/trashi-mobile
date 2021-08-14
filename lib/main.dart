@@ -6,6 +6,7 @@ import 'package:trashi/app.dart';
 import 'package:trashi/pages/edit_profile_screen/provider.dart';
 import 'package:trashi/pages/form_request_pengangkatan/provider.dart';
 import 'package:trashi/pages/profile_screen_redesign/provider.dart';
+import 'package:trashi/pages/registration_screen/provider/registration.dart';
 import 'package:trashi/pages/request_screen/provider.dart';
 import 'package:trashi/pages/splash_screen/provider.dart';
 import 'package:trashi/pages/trash_collection_screen/accepter/provider/provider.dart';
@@ -37,6 +38,7 @@ void main() {
         ChangeNotifierProvider(
             create: (_) => TrashCollectionRequestDetailProvider()),
         ChangeNotifierProvider(create: (_) => CollectionHistoryProvider()),
+        ChangeNotifierProvider(create: (_) => RegistrationProvider()),
       ],
       // child: const MyApp(),
       child: const TrashiApplication(),

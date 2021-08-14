@@ -161,46 +161,32 @@ class ApiProvider {
     return response.data;
   }
 
-  Future<SignInResponse> signUp(SignUpRequest body) async {
-    final response = await _dio
-        .post(
-          '/auth/signup',
-          data: body,
-        )
-        .catchError(
-          _onError,
-        );
+  Future<Response<dynamic>> signUp(SignUpRequest body) async {
+    final response = await postWithDio('/auth/signup', body);
 
-    if (response == null) {
-      return null;
+    if (!isStatusCodeOK(response.statusCode)) {
+      return response;
     }
 
     final cookies = response.headers.map['set-cookie'];
 
     await _saveTokenFromCookies(cookies);
 
-    return SignInResponse.fromJson(response.data);
+    return response;
   }
 
-  Future<SignInByPhoneResponse> signUpByPhone(SignUpByPhoneRequest body) async {
-    final response = await _dio
-        .post(
-          '/auth/signup/byphone',
-          data: body,
-        )
-        .catchError(
-          _onError,
-        );
+  Future<Response<dynamic>> signUpByPhone(SignUpByPhoneRequest body) async {
+    final response = await postWithDio('/auth/signup/byphone', body);
 
-    if (response == null) {
-      return null;
+    if (!isStatusCodeOK(response.statusCode)) {
+      return response;
     }
 
     final cookies = response.headers.map['set-cookie'];
 
     await _saveTokenFromCookies(cookies);
 
-    return SignInByPhoneResponse.fromJson(response.data);
+    return response;
   }
 
   Future<GenerateVerificationCodeResponse> generateVerificationCode(

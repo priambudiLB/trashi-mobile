@@ -2,8 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:trashi/utils/commons.dart';
 
 SnackBar buildErrorSnackBar({
-  String message = 'Terjadi kesalahan. Silakan coba beberapa saat lagi.',
+  String message,
 }) {
+  if (message == null) {
+    message = 'Terjadi kesalahan. Silakan coba beberapa saat lagi.';
+  }
+
   return buildTrashiSnackBar(
     message: message,
     backgroundColor: hexToColor('#B00020'),
