@@ -9,6 +9,7 @@ import 'package:intl/intl.dart';
 import 'package:trashi/constants/account_types.dart';
 import 'package:trashi/constants/document_type.dart';
 import 'package:trashi/http_request/api_provider.dart';
+import 'package:trashi/http_request/models/errors.dart';
 import 'package:trashi/models/trashi_document.dart';
 import 'package:trashi/status_upload.dart';
 import 'package:trashi/verification.dart';
@@ -214,6 +215,22 @@ class OTP with ChangeNotifier, DiagnosticableTreeMixin {
   bool get popUpSuccessOpen => _popUpSuccessOpen;
   Verification get verificationOption => _verificationOption;
 
+  bool _isError = false;
+  String _errorMessage;
+
+  bool get isError => _isError;
+  String get errorMessage => _errorMessage;
+
+  set isError(bool value) {
+    _isError = value;
+    notifyListeners();
+  }
+
+  set errorMessage(String value) {
+    _errorMessage = value;
+    notifyListeners();
+  }
+
   void setOtp1(String newValue) {
     _otp1 = newValue;
     notifyListeners();
@@ -260,7 +277,7 @@ class OTP with ChangeNotifier, DiagnosticableTreeMixin {
     }
   }
 
-  void verify() async {
+  Future<void> verify() async {
     ValidateVerificationCodeRequest _requestBody =
         ValidateVerificationCodeRequest(
       code: otpComplete,
@@ -270,10 +287,17 @@ class OTP with ChangeNotifier, DiagnosticableTreeMixin {
       _requestBody,
     );
 
-    if (response != null) {
-      print('OTP complete');
-      setPopUpSuccessOpen(true);
+    if (!ApiProvider.isStatusCodeOK(response.statusCode)) {
+      isError = true;
+
+      final errorResponse = ErrorResponse.fromJson(response.data);
+      errorMessage = errorResponse?.errorMessage;
+
+      return;
     }
+
+    print('OTP complete');
+    setPopUpSuccessOpen(true);
   }
 }
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:trashi/components/button.dart';
+import 'package:trashi/components/snack_bar.dart';
 import 'package:trashi/constants/colors.dart';
 import 'package:trashi/providers.dart';
 import 'package:trashi/utils/commons.dart';
@@ -41,8 +42,16 @@ class ConfirmationOTPBody extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: Button(
-                onTap: () {
-                  context.read<OTP>().verify();
+                onTap: () async {
+                  await context.read<OTP>().verify();
+
+                  if (context.read<OTP>().isError) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      buildErrorSnackBar(
+                        message: context.read<OTP>().errorMessage,
+                      ),
+                    );
+                  }
                 },
                 title: "Verify",
                 width: MediaQuery.of(context).size.width,
