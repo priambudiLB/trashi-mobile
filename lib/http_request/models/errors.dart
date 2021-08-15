@@ -16,8 +16,8 @@ class ErrorResponse {
   Map<String, dynamic> toJson() => _$ErrorResponseToJson(this);
 
   String get errorMessage {
-    if (errors.length == 0) {
-      return 'Terjadi kesalahan.';
+    if (errors == null || errors.length == 0) {
+      return 'Terjadi kesalahan. Silakan coba beberapa saat lagi.';
     }
 
     String messages = '';
@@ -28,7 +28,7 @@ class ErrorResponse {
 
     messages = messages.substring(0, messages.length - 1);
 
-    return 'Terjadi kesalahan dengan detail berikut: $messages';
+    return messages;
   }
 }
 

@@ -208,17 +208,11 @@ class ApiProvider {
     return GenerateVerificationCodeResponse.fromJson(response.data);
   }
 
-  Future<String> validateVerificationCode(
+  Future<Response<dynamic>> validateVerificationCode(
       ValidateVerificationCodeRequest body) async {
-    final response = await _dio.post('/token/verify', data: body).catchError(
-          _onError,
-        );
+    final response = await postWithDio('/token/verify', body);
 
-    if (response == null) {
-      return null;
-    }
-
-    return response.toString();
+    return response;
   }
 
   Future<CurrentUserResponse> getCurrentUser() async {
