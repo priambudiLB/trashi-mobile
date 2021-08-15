@@ -10,10 +10,12 @@ class _OTPInputState extends State<OTPInput> {
   FocusNode pin2FocusNode;
   FocusNode pin3FocusNode;
   FocusNode pin4FocusNode;
+  FocusNode pin5FocusNode;
   TextEditingController controller1;
   TextEditingController controller2;
   TextEditingController controller3;
   TextEditingController controller4;
+  TextEditingController controller5;
 
   @override
   void initState() {
@@ -22,10 +24,12 @@ class _OTPInputState extends State<OTPInput> {
     controller2 = TextEditingController();
     controller3 = TextEditingController();
     controller4 = TextEditingController();
+    controller5 = TextEditingController();
     pin1FocusNode = FocusNode();
     pin2FocusNode = FocusNode();
     pin3FocusNode = FocusNode();
     pin4FocusNode = FocusNode();
+    pin5FocusNode = FocusNode();
 
     pin1FocusNode.addListener(() {
       if (pin1FocusNode.hasFocus) {
@@ -54,6 +58,13 @@ class _OTPInputState extends State<OTPInput> {
         controller4.clear();
       }
     });
+
+    pin5FocusNode.addListener(() {
+      if (pin5FocusNode.hasFocus) {
+        context.read<OTP>().setOtp5("");
+        controller5.clear();
+      }
+    });
   }
 
   @override
@@ -80,6 +91,9 @@ class _OTPInputState extends State<OTPInput> {
 
   @override
   Widget build(BuildContext context) {
+    bool has5OTPDigits = context.watch<RegistrationProvider>().has5OTPDigits;
+    print(has5OTPDigits);
+
     return Padding(
       padding: EdgeInsets.only(right: 48, left: 48),
       child: Row(
@@ -160,9 +174,13 @@ class _OTPInputState extends State<OTPInput> {
               textAlign: TextAlign.center,
               onChanged: (value) {
                 context.read<OTP>().setOtp4(value);
-                if (value.length == 1) {
-                  pin4FocusNode.unfocus();
-                  // Then you need to check is the code is correct or not
+                if (has5OTPDigits) {
+                  nextField(value, pin5FocusNode);
+                } else {
+                  if (value.length == 1) {
+                    pin4FocusNode.unfocus();
+                    // Then you need to check is the code is correct or not
+                  }
                 }
               },
               decoration: InputDecoration(
@@ -173,6 +191,31 @@ class _OTPInputState extends State<OTPInput> {
               ),
             ),
           ),
+          if (has5OTPDigits)
+            SizedBox(
+              width: 48,
+              height: 48,
+              child: TextFormField(
+                focusNode: pin5FocusNode,
+                controller: controller5,
+                style: TextStyle(fontSize: 24),
+                keyboardType: TextInputType.number,
+                textAlign: TextAlign.center,
+                onChanged: (value) {
+                  context.read<OTP>().setOtp5(value);
+                  if (value.length == 1) {
+                    pin5FocusNode.unfocus();
+                    // Then you need to check is the code is correct or not
+                  }
+                },
+                decoration: InputDecoration(
+                  contentPadding: EdgeInsets.zero,
+                  border: outlineInputBorder(),
+                  focusedBorder: outlineInputBorder(),
+                  enabledBorder: outlineInputBorder(),
+                ),
+              ),
+            ),
         ],
       ),
     );

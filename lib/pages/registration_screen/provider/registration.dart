@@ -36,6 +36,11 @@ class RegistrationProvider with ChangeNotifier, DiagnosticableTreeMixin {
 
   String get errorMessage => _errorMessage;
 
+  bool get has5OTPDigits {
+    return _accountType == AccountType.company ||
+        _accountType == AccountType.government;
+  }
+
   String accountIdentifier(
     TextEditingController phoneNumberController,
     TextEditingController emailController,

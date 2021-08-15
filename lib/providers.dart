@@ -202,6 +202,7 @@ class OTP with ChangeNotifier, DiagnosticableTreeMixin {
   String _otp2 = "";
   String _otp3 = "";
   String _otp4 = "";
+  String _otp5 = "";
   String _account = "";
   bool _popUpSuccessOpen = false;
   Verification _verificationOption = Verification.email;
@@ -210,7 +211,17 @@ class OTP with ChangeNotifier, DiagnosticableTreeMixin {
   String get otp2 => _otp2;
   String get otp3 => _otp3;
   String get otp4 => _otp4;
-  String get otpComplete => _otp1 + _otp2 + _otp3 + _otp4;
+  String get otp5 => _otp5;
+  String get otpComplete {
+    String otpComplete = _otp1 + _otp2 + _otp3 + _otp4;
+
+    if (_otp5.isNotEmpty) {
+      otpComplete += _otp5;
+    }
+
+    return otpComplete;
+  }
+
   String get account => _account;
   bool get popUpSuccessOpen => _popUpSuccessOpen;
   Verification get verificationOption => _verificationOption;
@@ -248,6 +259,11 @@ class OTP with ChangeNotifier, DiagnosticableTreeMixin {
 
   void setOtp4(String newValue) {
     _otp4 = newValue;
+    notifyListeners();
+  }
+
+  void setOtp5(String newValue) {
+    _otp5 = newValue;
     notifyListeners();
   }
 
@@ -296,6 +312,7 @@ class OTP with ChangeNotifier, DiagnosticableTreeMixin {
       return;
     }
 
+    isError = false;
     print('OTP complete');
     setPopUpSuccessOpen(true);
   }

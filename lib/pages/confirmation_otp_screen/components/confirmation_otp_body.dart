@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:trashi/components/button.dart';
 import 'package:trashi/components/snack_bar.dart';
 import 'package:trashi/constants/colors.dart';
+import 'package:trashi/pages/registration_screen/provider/registration.dart';
 import 'package:trashi/providers.dart';
 import 'package:trashi/utils/commons.dart';
 import 'package:provider/provider.dart';
