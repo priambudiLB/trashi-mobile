@@ -90,4 +90,35 @@ extension MonthExtension on Month {
 
     return 0;
   }
+
+  String get abbreviatedLocale {
+    switch (this) {
+      case Month.january:
+        return 'Jan';
+      case Month.february:
+        return 'Feb';
+      case Month.march:
+        return 'Mar';
+      case Month.april:
+        return 'Apr';
+      case Month.may:
+        return 'Mei';
+      case Month.june:
+        return 'Jun';
+      case Month.july:
+        return 'Jul';
+      case Month.august:
+        return 'Agu';
+      case Month.september:
+        return 'Sep';
+      case Month.october:
+        return 'Okt';
+      case Month.november:
+        return 'Nov';
+      case Month.december:
+        return 'Des';
+    }
+
+    return '';
+  }
 }

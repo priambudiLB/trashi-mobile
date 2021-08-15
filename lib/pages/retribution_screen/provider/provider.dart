@@ -3,6 +3,8 @@ import 'package:trashi/constants/time.dart';
 import 'package:trashi/http_request/api_provider.dart';
 import 'package:trashi/http_request/models/kabupaten.dart';
 import 'package:trashi/http_request/models/kecamatan.dart';
+import 'package:trashi/http_request/models/pengangkatan.dart';
+import 'package:trashi/http_request/models/retribusi.dart';
 import 'package:trashi/http_request/models/upst.dart';
 
 class RetributionProvider with ChangeNotifier, DiagnosticableTreeMixin {
@@ -15,6 +17,10 @@ class RetributionProvider with ChangeNotifier, DiagnosticableTreeMixin {
   UPSTHTTPModel _upst;
   String _status;
   List<Month> _months = trashiMonths;
+  Month _month;
+
+  GetRetribusiListResponse _getRetribusiListResponse =
+      GetRetribusiListResponse();
 
   List<Kabupaten> _kabupatens;
   List<Kecamatan> _kecamatans;
@@ -29,6 +35,8 @@ class RetributionProvider with ChangeNotifier, DiagnosticableTreeMixin {
   List<Kabupaten> get kabupatens => _kabupatens;
   List<Kecamatan> get kecamatans => _kecamatans;
   List<UPSTHTTPModel> get upsts => _upsts;
+
+  Month get month => _month;
 
   bool get isFetching => _isFetching;
 
@@ -62,6 +70,11 @@ class RetributionProvider with ChangeNotifier, DiagnosticableTreeMixin {
 
   set status(String value) {
     _status = value;
+    notifyListeners();
+  }
+
+  set month(Month value) {
+    _month = value;
     notifyListeners();
   }
 
@@ -126,6 +139,33 @@ class RetributionProvider with ChangeNotifier, DiagnosticableTreeMixin {
     _upsts = upstResponse.list;
 
     _isFetching = false;
+
+    notifyListeners();
+  }
+
+  Future<void> getRetribusiList() async {
+    final response = await ApiProvider().getPengangkatanListAdmin();
+
+    if (!ApiProvider.isStatusCodeOK(response.statusCode)) {
+      return;
+    }
+
+    final pengangkatanListAdminResponse =
+        PengangkatanListAdminResponse.fromJson(response.data);
+
+    List<Retribusi> retribusiList = [];
+
+    pengangkatanListAdminResponse.done.forEach((element) {
+      retribusiList.add(Retribusi(
+        idTransaksi: element.id.toString(),
+        tarif: 5000,
+        alamat: element.lokasi,
+        status: 'Approved',
+        penanggungJawab: 'RT 001/ RW003',
+      ));
+    });
+
+    _getRetribusiListResponse.retribusi = retribusiList;
 
     notifyListeners();
   }
