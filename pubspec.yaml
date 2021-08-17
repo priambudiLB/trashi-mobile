@@ -43,6 +43,7 @@ dependencies:
   json_annotation: ^3.1.1
   flutter_secure_storage: ^3.3.5
   webview_flutter: ^1.0.7
+  multi_select_flutter: ^3.1.8
 
 dev_dependencies:
   flutter_test:

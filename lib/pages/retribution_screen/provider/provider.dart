@@ -169,4 +169,50 @@ class RetributionProvider with ChangeNotifier, DiagnosticableTreeMixin {
 
     notifyListeners();
   }
+
+  /// for retributions approval
+  Map<String, List<String>> _toBeApprovedValues = Map<String, List<String>>();
+
+  Map<String, List<String>> get toBeApprovedValues => _toBeApprovedValues;
+
+  void addToBeApprovedValue(String key, List<String> value) {
+    _toBeApprovedValues[key] = value;
+
+    notifyListeners();
+  }
+
+  String generateKeyForToBeApprovedValues(Retribusi retribusi, Month month) {
+    final idTransaksi = retribusi.idTransaksi;
+    final alamat = retribusi.alamat;
+
+    return '$idTransaksi-$alamat';
+  }
+
+  bool areMonthsToBeApprovedOK(
+    List<Month> monthsToBeApproved,
+    List<Month> monthsAvailable,
+  ) {
+    final monthsToBeApprovedInNumbers = monthsToBeApproved
+        .map(
+          (element) => element.inNumber,
+        )
+        .toList();
+
+    final monthsAvailableInNumbers = monthsAvailable
+        .map(
+          (element) => element.inNumber,
+        )
+        .toList();
+
+    monthsToBeApprovedInNumbers.sort();
+    monthsAvailableInNumbers.sort();
+
+    for (var i = 0; i < monthsToBeApprovedInNumbers.length; i++) {
+      if (monthsToBeApprovedInNumbers[i] != monthsAvailableInNumbers[i]) {
+        return false;
+      }
+    }
+
+    return true;
+  }
 }
