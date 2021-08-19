@@ -209,6 +209,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     ),
                   ),
                 ),
+                Spacings.verticalSpace(12),
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
