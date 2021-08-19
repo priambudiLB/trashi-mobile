@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:trashi/http_request/api_provider.dart';
 import 'package:trashi/http_request/models/kabupaten.dart';
 import 'package:trashi/http_request/models/kecamatan.dart';
@@ -185,5 +186,29 @@ class TrashCollectionRequestDetailProvider
     _pengangkatan = Pengangkatan.fromJson(response.data);
 
     notifyListeners();
+  }
+
+  Set<Marker> _markers = {};
+  Set<Marker> get markers => _markers;
+
+  set markers(Set<Marker> value) {
+    _markers = value;
+    notifyListeners();
+  }
+
+  Future<void> fetchDataMap() async {
+    LatLng latlang = new LatLng(
+      _pengangkatan.latitude,
+      _pengangkatan.longitude,
+    );
+
+    Future.delayed(Duration(seconds: 1), () {
+      markers = {
+        Marker(
+          markerId: MarkerId(latlang.toString()),
+          position: latlang,
+        )
+      };
+    });
   }
 }
