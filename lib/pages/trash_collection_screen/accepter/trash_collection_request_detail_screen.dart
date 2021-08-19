@@ -206,14 +206,20 @@ class _TrashCollectionRequestDetailScreenState
           ),
         ],
       ),
-      onPressed: () {
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return _buildDialog();
-          },
-        );
-      },
+      onPressed: context
+                  .watch<TrashCollectionRequestDetailProvider>()
+                  .pengangkatan
+                  .statusPengangkatan ==
+              StatusPengangkatan.selesai
+          ? null
+          : () {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return _buildDialog();
+                },
+              );
+            },
     );
   }
 
