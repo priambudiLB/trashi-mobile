@@ -6,6 +6,7 @@ import 'package:trashi/constants/pengangkatan.dart';
 import 'package:trashi/http_request/models/pengangkatan.dart';
 import 'package:trashi/pages/trash_collection_screen/accepter/components/row_button_wrapper.dart';
 import 'package:trashi/pages/trash_collection_screen/accepter/components/simple_button.dart';
+import 'package:trashi/pages/trash_collection_screen/accepter/request_location_screen.dart';
 import 'package:trashi/utils/commons.dart';
 import 'package:provider/provider.dart';
 import 'package:trashi/pages/trash_collection_screen/accepter/provider/provider.dart';
@@ -157,7 +158,12 @@ class _TrashCollectionRequestDetailScreenState
         ],
       ),
       onPressed: () {
-        print("open gmaps");
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => RequestLocationScreen(),
+          ),
+        );
       },
     );
   }
