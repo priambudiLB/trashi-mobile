@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:trashi/components/button.dart';
+import 'package:trashi/components/progress_indicator.dart';
 import 'package:trashi/components/snack_bar.dart';
 import 'package:trashi/constants/colors.dart';
 import 'package:trashi/pages/registration_screen/provider/registration.dart';
@@ -62,8 +63,23 @@ class ConfirmationOTPBody extends StatelessWidget {
               height: 24,
             ),
             new GestureDetector(
-              onTap: () {
-                context.read<OTP>().sendVerificationCode();
+              onTap: () async {
+                showTrashiProgressIndicator(context);
+
+                await context
+                    .read<RegistrationProvider>()
+                    .generateVerificationCode();
+
+                if (!context
+                    .read<RegistrationProvider>()
+                    .isGenerateVerificationCodeSuccessful) {
+                  ScaffoldMessenger.of(context).showSnackBar(buildErrorSnackBar(
+                    message:
+                        'Terjadi kesalahan dalam me-generate verification code. Silakan coba beberapa saat lagi.',
+                  ));
+                }
+
+                closeTrashiProgressIndicator(context);
               },
               child: new Text(
                 "Send the code again",
