@@ -25,6 +25,8 @@ class _LogInScreenState extends State<LogInScreen> {
   TextEditingController _passwordController = TextEditingController();
   bool isSignInSuccessful = false;
 
+  final _formKey = GlobalKey<FormState>();
+
   bool isPhoneNumber(String text) {
     try {
       int.parse(text);
@@ -42,6 +44,8 @@ class _LogInScreenState extends State<LogInScreen> {
 
   Future<void> _signIn() async {
     showTrashiProgressIndicator(context);
+
+    if (_formKey.currentState.validate()) {}
 
     bool isError = false;
     String errorMessage;
@@ -106,37 +110,54 @@ class _LogInScreenState extends State<LogInScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              "Login",
-              style: TextStyle(
-                color: hexToColor("#4C4C4C"),
-                fontWeight: FontWeight.w800,
-                fontSize: 20,
+            Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Login",
+                    style: TextStyle(
+                      color: hexToColor("#4C4C4C"),
+                      fontWeight: FontWeight.w800,
+                      fontSize: 20,
+                    ),
+                  ),
+                  Spacings.verticalSpace(12),
+                  Text(
+                    "Please login to continue",
+                    style: TextStyle(
+                      color: hexToColor("#909090"),
+                      fontWeight: FontWeight.w400,
+                      fontSize: 14,
+                    ),
+                  ),
+                  Spacings.verticalSpace(24),
+                  TrashiTextFormField(
+                    controller: _emailOrPhoneNumberController,
+                    label: "Email or phone number",
+                    keyboardType: TextInputType.text,
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return 'Email atau nomor telepon tidak boleh kosong';
+                      }
+
+                      if (!isPhoneNumber(value) && !isEmail(value)) {
+                        return 'Harus salah satu di antara email atau nomor telepon';
+                      }
+                    },
+                  ),
+                  Spacings.verticalSpace(12),
+                  TrashiTextFormField(
+                    controller: _passwordController,
+                    label: "Password",
+                    keyboardType: TextInputType.text,
+                    isPasswordField: true,
+                  ),
+                  Spacings.verticalSpace(8),
+                ],
               ),
             ),
-            Spacings.verticalSpace(12),
-            Text(
-              "Please login to continue",
-              style: TextStyle(
-                color: hexToColor("#909090"),
-                fontWeight: FontWeight.w400,
-                fontSize: 14,
-              ),
-            ),
-            Spacings.verticalSpace(24),
-            TrashiTextFormField(
-              controller: _emailOrPhoneNumberController,
-              label: "Email or phone number",
-              keyboardType: TextInputType.text,
-            ),
-            Spacings.verticalSpace(12),
-            TrashiTextFormField(
-              controller: _passwordController,
-              label: "Password",
-              keyboardType: TextInputType.text,
-              isPasswordField: true,
-            ),
-            Spacings.verticalSpace(8),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [

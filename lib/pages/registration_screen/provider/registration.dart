@@ -80,22 +80,51 @@ class RegistrationProvider with ChangeNotifier, DiagnosticableTreeMixin {
   }
 
   String validateName(String value) {
+    int minDigits = nameMinimumDigits();
+    int maxDigits = nameMaximumDigits();
+
     if (value.isEmpty) {
       return _buildEmptyValueMessage('Nama');
     }
 
     _separateName(value);
-    if (_firstName.length < 8 || _firstName.length > 20) {
+    if (_firstName.length < minDigits || _firstName.length > maxDigits) {
       _firstName = '';
-      return 'Nama depan harus sepanjang 8 hingga 20 karakter.';
+      return 'Nama depan harus sepanjang $minDigits hingga $maxDigits karakter.';
     }
 
-    if (_lastName.length < 8 || _lastName.length > 20) {
+    if (_lastName.length < minDigits || _lastName.length > maxDigits) {
       _lastName = '';
-      return 'Nama belakang harus sepanjang 8 hingga 20 karakter.';
+      return 'Nama belakang harus sepanjang $minDigits hingga $maxDigits karakter.';
     }
 
     return null;
+  }
+
+  int nameMinimumDigits() {
+    switch (accountType) {
+      case AccountType.government:
+      case AccountType.company:
+        return 2;
+      case AccountType.RTRW:
+      case AccountType.public:
+        return 6;
+    }
+
+    return 2;
+  }
+
+  int nameMaximumDigits() {
+    switch (accountType) {
+      case AccountType.government:
+      case AccountType.company:
+        return 20;
+      case AccountType.RTRW:
+      case AccountType.public:
+        return 12;
+    }
+
+    return 20;
   }
 
   String validatePhoneNumber(String value) {
@@ -138,9 +167,7 @@ class RegistrationProvider with ChangeNotifier, DiagnosticableTreeMixin {
     String value,
     TextEditingController passwordController,
   ) {
-    print('hehehe');
     if (value.isEmpty) {
-      print('here');
       return _buildEmptyValueMessage('Password');
     }
 
