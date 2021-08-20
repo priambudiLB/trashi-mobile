@@ -95,7 +95,7 @@ class _EditProfileState extends State<EditProfile> {
               ),
               Center(
                 child: Text(
-                  "Masyarakat Umum",
+                  context.watch<EditProfileScreenProvider>().role,
                   style: TextStyle(fontSize: 12),
                 ),
               ),

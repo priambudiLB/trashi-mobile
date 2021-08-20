@@ -9,7 +9,9 @@ import 'package:trashi/secure_storage/secure_storage.dart';
 class ProfileScreenProvider with ChangeNotifier, DiagnosticableTreeMixin {
   SecureStorage _secureStorage = SecureStorage();
   String _name = "";
+  String _role = "";
   String get name => _name;
+  String get role => _role;
   RoleType _roleType;
   RoleType get roleType => _roleType;
   FormzStatus _statusFetchData = FormzStatus.pure;
@@ -24,18 +26,24 @@ class ProfileScreenProvider with ChangeNotifier, DiagnosticableTreeMixin {
       switch (currentUser.currentUser.role) {
         case 1:
           setRoleType(RoleType.ADMIN);
+          setRole("Admin");
           break;
         case 2:
           setRoleType(RoleType.PEMERINTAH);
+          setRole("Pemerintah");
           break;
         case 3:
           setRoleType(RoleType.SWASTA);
+          setRole("Swasta");
           break;
         case 4:
           setRoleType(RoleType.PERSONAL);
+          setRole("Masyarakat Umum");
           break;
         case 5:
           setRoleType(RoleType.RTRW);
+          setRole("RT/RW");
+          break;
       }
     } else {
       final response = await ApiProvider().getCurrentUser();
@@ -47,6 +55,11 @@ class ProfileScreenProvider with ChangeNotifier, DiagnosticableTreeMixin {
       }
     }
     setStatusFetchData(FormzStatus.submissionSuccess);
+  }
+
+  void setRole(String newRole) {
+    _role = newRole;
+    notifyListeners();
   }
 
   void setRoleType(RoleType role) {

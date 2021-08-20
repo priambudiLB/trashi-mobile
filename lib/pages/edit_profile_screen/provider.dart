@@ -13,6 +13,7 @@ class EditProfileScreenProvider with ChangeNotifier, DiagnosticableTreeMixin {
   String _name = "";
   String _emailOrPhone = "";
   String _password = "";
+  String _role = "";
   bool _isPasswordVisible = false;
   FormzStatus _statusFetchData = FormzStatus.pure;
 
@@ -20,8 +21,14 @@ class EditProfileScreenProvider with ChangeNotifier, DiagnosticableTreeMixin {
   String get name => _name;
   String get emailOrPhone => _emailOrPhone;
   String get password => _password;
+  String get role => _role;
   bool get isPasswordVisible => _isPasswordVisible;
   FormzStatus get statusFetchData => _statusFetchData;
+
+  void setRole(String newRole) {
+    _role = newRole;
+    notifyListeners();
+  }
 
   void setRoleType(RoleType role) {
     _roleType = role;
@@ -65,7 +72,28 @@ class EditProfileScreenProvider with ChangeNotifier, DiagnosticableTreeMixin {
         setEmailOrPhone(currentUser.currentUser.phone);
       else
         setEmailOrPhone(currentUser.currentUser.username);
-
+      switch (currentUser.currentUser.role) {
+        case 1:
+          setRoleType(RoleType.ADMIN);
+          setRole("Admin");
+          break;
+        case 2:
+          setRoleType(RoleType.PEMERINTAH);
+          setRole("Pemerintah");
+          break;
+        case 3:
+          setRoleType(RoleType.SWASTA);
+          setRole("Swasta");
+          break;
+        case 4:
+          setRoleType(RoleType.PERSONAL);
+          setRole("Masyarakat Umum");
+          break;
+        case 5:
+          setRoleType(RoleType.RTRW);
+          setRole("RT/RW");
+          break;
+      }
       setRoleType(getRoleType(currentUser.currentUser.role));
       setPassword("");
     }
