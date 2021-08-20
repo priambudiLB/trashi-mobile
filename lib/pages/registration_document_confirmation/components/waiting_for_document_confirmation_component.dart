@@ -29,7 +29,7 @@ class WaitingForDocumentConfirmationComponent extends StatelessWidget {
         Button(
           onTap: () => Navigator.of(context)
               .pushNamed(RegistrationDocumentConfirmation.PATH),
-          title: "Check Status Konfirmasi Dokumen",
+          title: "Cek Status Konfirmasi Dokumen",
           width: MediaQuery.of(context).size.width,
           backgroundColor: Colors.white,
           fontColor: hexToColor(MAIN_COLOR),
