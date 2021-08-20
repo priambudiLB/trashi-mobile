@@ -100,6 +100,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 ScaffoldMessenger.of(context).showSnackBar(buildErrorSnackBar(
                   message: context.read<RegistrationProvider>().errorMessage,
                 ));
+                closeTrashiProgressIndicator(context);
                 return;
               }
 
@@ -119,6 +120,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   message:
                       'Terjadi kesalahan dalam me-generate verification code. Silakan coba beberapa saat lagi.',
                 ));
+                closeTrashiProgressIndicator(context);
                 return;
               }
 
