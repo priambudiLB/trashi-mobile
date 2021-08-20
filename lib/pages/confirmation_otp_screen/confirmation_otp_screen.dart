@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:trashi/pages/confirmation_otp_screen/components/confirmation_otp_body.dart';
 import 'package:provider/provider.dart';
 import 'package:trashi/pages/confirmation_otp_screen/components/pop_up_success.dart';
@@ -30,6 +31,15 @@ class _ConfirmationOTPScreenState extends State<ConfirmationOTPScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (context.watch<OTP>().popUpSuccessOpen) {
+      SchedulerBinding.instance.addPostFrameCallback((_) {
+        showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return PopUpSuccess();
+            });
+      });
+    }
     return Container(
       height: double.infinity,
       width: double.infinity,
@@ -46,7 +56,6 @@ class _ConfirmationOTPScreenState extends State<ConfirmationOTPScreen> {
                 elevation: 0,
               ),
               body: ConfirmationOTPBody()),
-          PopUpSuccess()
         ],
       ),
     );
