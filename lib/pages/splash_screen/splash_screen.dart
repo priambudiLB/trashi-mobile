@@ -7,7 +7,6 @@ import 'package:trashi/pages/splash_screen/provider.dart';
 // import 'package:trashi/pages/navbar_screen/default_screen.dart';
 import 'package:trashi/pages/splash_screen/splash_screen_view.dart';
 import 'package:provider/provider.dart';
-import 'package:trashi/providers.dart';
 
 class SplashScreen extends StatefulWidget {
   static const String PATH = "splashScreen";
