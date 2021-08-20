@@ -10,9 +10,9 @@ import 'package:trashi/utils/commons.dart';
 class EditProfileScreenProvider with ChangeNotifier, DiagnosticableTreeMixin {
   SecureStorage _secureStorage = SecureStorage();
   RoleType _roleType;
-  String _name;
-  String _emailOrPhone;
-  String _password;
+  String _name = "";
+  String _emailOrPhone = "";
+  String _password = "";
   bool _isPasswordVisible = false;
   FormzStatus _statusFetchData = FormzStatus.pure;
 
@@ -61,7 +61,11 @@ class EditProfileScreenProvider with ChangeNotifier, DiagnosticableTreeMixin {
       setName(currentUser.currentUser.firstName +
           " " +
           currentUser.currentUser.lastName);
-      setEmailOrPhone(currentUser.currentUser.phone);
+      if (currentUser.currentUser.role == 5)
+        setEmailOrPhone(currentUser.currentUser.phone);
+      else
+        setEmailOrPhone(currentUser.currentUser.username);
+
       setRoleType(getRoleType(currentUser.currentUser.role));
       setPassword("");
     }

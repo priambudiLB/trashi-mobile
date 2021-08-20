@@ -204,7 +204,9 @@ class ProfileHeader extends StatelessWidget {
               left: 24,
               top: 58,
               child: Text(
-                "Hello, ${context.watch<ProfileScreenProvider>().name},",
+                "Hello, ${context.watch<ProfileScreenProvider>().name.length > 12 ? context.watch<ProfileScreenProvider>().name.substring(0, 12) + "..." : context.watch<ProfileScreenProvider>().name}",
+                overflow: TextOverflow.ellipsis,
+                softWrap: false,
                 style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.w800,
@@ -247,8 +249,7 @@ class ProfileHeader extends StatelessWidget {
                             height: 30,
                             width: 30,
                             color: Colors.white,
-                            child:
-                                Image.asset("assets/images/Icon_success.png"))),
+                            child: Image.asset("assets/images/dummy_dp.png"))),
                   ),
                 ],
               )),
