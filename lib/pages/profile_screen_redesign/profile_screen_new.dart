@@ -185,10 +185,11 @@ class ProfileHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height:
-          context.watch<ProfileScreenProvider>().roleType != RoleType.PERSONAL
-              ? 420
-              : 300,
+      height: context.watch<ProfileScreenProvider>().roleType ==
+                  RoleType.PERSONAL ||
+              context.watch<ProfileScreenProvider>().roleType == RoleType.SWASTA
+          ? 300
+          : 420,
       child: Stack(
         children: [
           ClipRRect(
@@ -196,7 +197,7 @@ class ProfileHeader extends StatelessWidget {
                 bottomLeft: Radius.circular(16),
                 bottomRight: Radius.circular(16)),
             child: Image.asset(
-              "assets/images/${context.watch<ProfileScreenProvider>().roleType != RoleType.PERSONAL ? 'large_green_background.png' : 'small_green_background.png'}",
+              "assets/images/${context.watch<ProfileScreenProvider>().roleType == RoleType.PERSONAL || context.watch<ProfileScreenProvider>().roleType == RoleType.SWASTA ? 'small_green_background.png' : 'large_green_background.png'}",
               width: size.width,
             ),
           ),
@@ -260,143 +261,161 @@ class ProfileHeader extends StatelessWidget {
                 width: size.width,
                 child: Column(
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        InkWell(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => RetributionScreen(),
-                              ),
-                            );
-                          },
-                          child: Container(
-                            height: 115,
-                            width: 148,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(8),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withOpacity(0.08),
-                                  blurRadius: 7,
-                                  offset: Offset(
-                                      0, 4), // changes position of shadow
-                                ),
-                              ],
-                            ),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                ClipOval(
-                                  child: Container(
-                                    padding: EdgeInsets.all(6),
-                                    height: 32,
-                                    width: 32,
-                                    color: hexToColor(MAIN_COLOR),
-                                    child: Center(
-                                      child: Image.asset(
-                                        "assets/images/wallet_icon.png",
-                                        width: 15,
-                                        height: 15,
-                                      ),
+                    context.watch<ProfileScreenProvider>().roleType !=
+                            RoleType.SWASTA
+                        ? Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              InkWell(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => RetributionScreen(),
                                     ),
+                                  );
+                                },
+                                child: Container(
+                                  height: 115,
+                                  width: 148,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(8),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black.withOpacity(0.08),
+                                        blurRadius: 7,
+                                        offset: Offset(
+                                            0, 4), // changes position of shadow
+                                      ),
+                                    ],
                                   ),
-                                ),
-                                Container(
-                                  height: 12,
-                                ),
-                                Text(
-                                  "Pembayaran\nRetribusi",
-                                  textAlign: TextAlign.center,
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                        InkWell(
-                          onTap: () {
-                            if (context
-                                    .read<ProfileScreenProvider>()
-                                    .roleType ==
-                                RoleType.ADMIN)
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      AcceptTrashCollectionRequestScreen(),
-                                ),
-                              );
-                            else {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => RequestScreen(),
-                                ),
-                              );
-                            }
-                          },
-                          child: Container(
-                              height: 115,
-                              width: 148,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(8),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.black.withOpacity(0.08),
-                                    blurRadius: 7,
-                                    offset: Offset(
-                                        0, 4), // changes position of shadow
-                                  ),
-                                ],
-                              ),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  ClipOval(
-                                    child: Container(
-                                      padding: EdgeInsets.all(6),
-                                      height: 32,
-                                      width: 32,
-                                      color: hexToColor(MAIN_COLOR),
-                                      child: Center(
-                                        child: Image.asset(
-                                          "assets/images/bag_icon.png",
-                                          width: 15,
-                                          height: 15,
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      ClipOval(
+                                        child: Container(
+                                          padding: EdgeInsets.all(6),
+                                          height: 32,
+                                          width: 32,
+                                          color: hexToColor(MAIN_COLOR),
+                                          child: Center(
+                                            child: Image.asset(
+                                              "assets/images/wallet_icon.png",
+                                              width: 15,
+                                              height: 15,
+                                            ),
+                                          ),
                                         ),
                                       ),
+                                      Container(
+                                        height: 12,
+                                      ),
+                                      Text(
+                                        "Pembayaran\nRetribusi",
+                                        textAlign: TextAlign.center,
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              InkWell(
+                                onTap: () {
+                                  if (context
+                                              .read<ProfileScreenProvider>()
+                                              .roleType ==
+                                          RoleType.RTRW ||
+                                      context
+                                              .read<ProfileScreenProvider>()
+                                              .roleType ==
+                                          RoleType.PEMERINTAH)
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            AcceptTrashCollectionRequestScreen(),
+                                      ),
+                                    );
+                                  else {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => RequestScreen(),
+                                      ),
+                                    );
+                                  }
+                                },
+                                child: Container(
+                                    height: 115,
+                                    width: 148,
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(8),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.black.withOpacity(0.08),
+                                          blurRadius: 7,
+                                          offset: Offset(0,
+                                              4), // changes position of shadow
+                                        ),
+                                      ],
                                     ),
-                                  ),
-                                  Container(
-                                    height: 12,
-                                  ),
-                                  Text(
-                                    "Request\nPengangkatan",
-                                    textAlign: TextAlign.center,
-                                  )
-                                ],
-                              )),
-                        ),
-                      ],
-                    ),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        ClipOval(
+                                          child: Container(
+                                            padding: EdgeInsets.all(6),
+                                            height: 32,
+                                            width: 32,
+                                            color: hexToColor(MAIN_COLOR),
+                                            child: Center(
+                                              child: Image.asset(
+                                                "assets/images/bag_icon.png",
+                                                width: 15,
+                                                height: 15,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        Container(
+                                          height: 12,
+                                        ),
+                                        Text(
+                                          "Request\n${context.read<ProfileScreenProvider>().roleType == RoleType.RTRW || context.read<ProfileScreenProvider>().roleType == RoleType.PEMERINTAH ? "Pengambilan" : "Pengangkatan"}",
+                                          textAlign: TextAlign.center,
+                                        )
+                                      ],
+                                    )),
+                              ),
+                            ],
+                          )
+                        : Container(),
                     Container(
                       height: context.watch<ProfileScreenProvider>().roleType !=
                               RoleType.PERSONAL
                           ? 16
                           : 0,
                     ),
-                    context.watch<ProfileScreenProvider>().roleType !=
-                            RoleType.PERSONAL
-                        ? Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              InkWell(
+                    Row(
+                      mainAxisAlignment:
+                          context.watch<ProfileScreenProvider>().roleType !=
+                                  RoleType.SWASTA
+                              ? MainAxisAlignment.spaceBetween
+                              : MainAxisAlignment.start,
+                      children: [
+                        context.watch<ProfileScreenProvider>().roleType !=
+                                    RoleType.PERSONAL &&
+                                context
+                                        .watch<ProfileScreenProvider>()
+                                        .roleType !=
+                                    RoleType.SWASTA
+                            ? InkWell(
                                 onTap: () {
                                   print('on tap daftar harga');
                                 },
@@ -445,8 +464,11 @@ class ProfileHeader extends StatelessWidget {
                                     ],
                                   ),
                                 ),
-                              ),
-                              InkWell(
+                              )
+                            : Container(),
+                        context.watch<ProfileScreenProvider>().roleType !=
+                                RoleType.PERSONAL
+                            ? InkWell(
                                 onTap: () {
                                   print('on tap buat donasi');
                                 },
@@ -495,10 +517,10 @@ class ProfileHeader extends StatelessWidget {
                                         )
                                       ],
                                     )),
-                              ),
-                            ],
-                          )
-                        : Container(),
+                              )
+                            : Container(),
+                      ],
+                    ),
                   ],
                 ),
               ))
