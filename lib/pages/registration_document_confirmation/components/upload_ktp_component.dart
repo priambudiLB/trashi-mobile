@@ -10,10 +10,15 @@ import 'package:trashi/providers.dart';
 import 'package:trashi/status_upload.dart';
 import 'package:trashi/utils/commons.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:path/path.dart';
+import 'package:path/path.dart' as Path;
 import 'package:formz/formz.dart';
 
-class UploadKtpComponent extends StatelessWidget {
+class UploadKtpComponent extends StatefulWidget {
+  @override
+  _UploadKtpComponentState createState() => _UploadKtpComponentState();
+}
+
+class _UploadKtpComponentState extends State<UploadKtpComponent> {
   final picker = ImagePicker();
 
   @override
@@ -37,18 +42,7 @@ class UploadKtpComponent extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Button(
-            onTap: () async {
-              final pickedFile =
-                  await ImagePicker.pickImage(source: ImageSource.gallery);
-              if (pickedFile != null) {
-                context
-                    .read<SubmitDocumentVerification>()
-                    .setKtpFile(File(pickedFile.path));
-                context
-                    .read<SubmitDocumentVerification>()
-                    .setKtpStatus(StatusUpload.DRAFT);
-              }
-            },
+            onTap: _showPickImageSource,
             title: context.watch<SubmitDocumentVerification>().ktpStatus ==
                     StatusUpload.DRAFT
                 ? "Ubah foto KTP"
@@ -61,7 +55,7 @@ class UploadKtpComponent extends StatelessWidget {
           context.watch<SubmitDocumentVerification>().fileKtp != null &&
                   context.watch<SubmitDocumentVerification>().ktpStatus ==
                       StatusUpload.DRAFT
-              ? Text(basename(
+              ? Text(Path.basename(
                   context.watch<SubmitDocumentVerification>().fileKtp.path))
               : Container(),
           context.watch<SubmitDocumentVerification>().ktpStatus ==
@@ -75,6 +69,56 @@ class UploadKtpComponent extends StatelessWidget {
               : Container()
         ],
       );
+    }
+  }
+
+  void _showPickImageSource() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        title: const Text('Pilih sumber foto'),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => _onTapUploadFromCamera(),
+            child: const Text('Kamera'),
+          ),
+          TextButton(
+            onPressed: () => _onTapUploadFromGallery(),
+            child: const Text('Galeri'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _onTapUploadFromGallery() async {
+    final pickedFile = await ImagePicker.pickImage(
+      source: ImageSource.gallery,
+    );
+
+    if (pickedFile != null) {
+      context
+          .read<SubmitDocumentVerification>()
+          .setKtpFile(File(pickedFile.path));
+      context
+          .read<SubmitDocumentVerification>()
+          .setKtpStatus(StatusUpload.DRAFT);
+      Navigator.of(context).pop();
+    }
+  }
+
+  void _onTapUploadFromCamera() async {
+    final pickedFile = await ImagePicker.pickImage(
+      source: ImageSource.camera,
+    );
+    if (pickedFile != null) {
+      context
+          .read<SubmitDocumentVerification>()
+          .setKtpFile(File(pickedFile.path));
+      context
+          .read<SubmitDocumentVerification>()
+          .setKtpStatus(StatusUpload.DRAFT);
+      Navigator.of(context).pop();
     }
   }
 }

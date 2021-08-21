@@ -10,10 +10,16 @@ import 'package:trashi/providers.dart';
 import 'package:trashi/status_upload.dart';
 import 'package:trashi/utils/commons.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:path/path.dart';
+import 'package:path/path.dart' as Path;
 import 'package:formz/formz.dart';
 
-class UploadKtpAndKkComponent extends StatelessWidget {
+class UploadKtpAndKkComponent extends StatefulWidget {
+  @override
+  _UploadKtpAndKkComponentState createState() =>
+      _UploadKtpAndKkComponentState();
+}
+
+class _UploadKtpAndKkComponentState extends State<UploadKtpAndKkComponent> {
   final picker = ImagePicker();
 
   @override
@@ -36,18 +42,7 @@ class UploadKtpAndKkComponent extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Button(
-            onTap: () async {
-              final pickedFile =
-                  await ImagePicker.pickImage(source: ImageSource.gallery);
-              if (pickedFile != null) {
-                context
-                    .read<SubmitDocumentVerification>()
-                    .setKtpAndKkFile(File(pickedFile.path));
-                context
-                    .read<SubmitDocumentVerification>()
-                    .setKtpAndKkStatus(StatusUpload.DRAFT);
-              }
-            },
+            onTap: _showPickImageSource,
             title: context.watch<SubmitDocumentVerification>().ktpAndKkStatus ==
                     StatusUpload.DRAFT
                 ? "Ubah foto bersama KTP dan KK"
@@ -60,7 +55,7 @@ class UploadKtpAndKkComponent extends StatelessWidget {
           context.watch<SubmitDocumentVerification>().fileKtpAndKK != null &&
                   context.watch<SubmitDocumentVerification>().ktpAndKkStatus ==
                       StatusUpload.DRAFT
-              ? Text(basename(context
+              ? Text(Path.basename(context
                   .watch<SubmitDocumentVerification>()
                   .fileKtpAndKK
                   .path))
@@ -76,6 +71,56 @@ class UploadKtpAndKkComponent extends StatelessWidget {
               : Container()
         ],
       );
+    }
+  }
+
+  void _showPickImageSource() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        title: const Text('Pilih sumber foto'),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => _onTapUploadFromCamera(),
+            child: const Text('Kamera'),
+          ),
+          TextButton(
+            onPressed: () => _onTapUploadFromGallery(),
+            child: const Text('Galeri'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _onTapUploadFromGallery() async {
+    final pickedFile = await ImagePicker.pickImage(
+      source: ImageSource.gallery,
+    );
+
+    if (pickedFile != null) {
+      context
+          .read<SubmitDocumentVerification>()
+          .setKtpAndKkFile(File(pickedFile.path));
+      context
+          .read<SubmitDocumentVerification>()
+          .setKtpAndKkStatus(StatusUpload.DRAFT);
+      Navigator.of(context).pop();
+    }
+  }
+
+  void _onTapUploadFromCamera() async {
+    final pickedFile = await ImagePicker.pickImage(
+      source: ImageSource.camera,
+    );
+    if (pickedFile != null) {
+      context
+          .read<SubmitDocumentVerification>()
+          .setKtpAndKkFile(File(pickedFile.path));
+      context
+          .read<SubmitDocumentVerification>()
+          .setKtpAndKkStatus(StatusUpload.DRAFT);
+      Navigator.of(context).pop();
     }
   }
 }
