@@ -260,6 +260,50 @@ class _FormRequestPengangkatanState extends State<FormRequestPengangkatan> {
     );
   }
 
+  void _showPickImageSource() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        title: const Text('Pilih sumber foto'),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => _onTapUploadFromCamera(),
+            child: const Text('Kamera'),
+          ),
+          TextButton(
+            onPressed: () => _onTapUploadFromGallery(),
+            child: const Text('Galeri'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _onTapUploadFromGallery() async {
+    final pickedFile = await ImagePicker.pickImage(
+      source: ImageSource.gallery,
+    );
+
+    if (pickedFile != null) {
+      List<File> tmp = context.read<FormRequestPengangkatanProvider>().listFile;
+      tmp.add(File(pickedFile.path));
+      context.read<FormRequestPengangkatanProvider>().setListFile(tmp);
+      Navigator.of(context).pop();
+    }
+  }
+
+  void _onTapUploadFromCamera() async {
+    final pickedFile = await ImagePicker.pickImage(
+      source: ImageSource.camera,
+    );
+    if (pickedFile != null) {
+      List<File> tmp = context.read<FormRequestPengangkatanProvider>().listFile;
+      tmp.add(File(pickedFile.path));
+      context.read<FormRequestPengangkatanProvider>().setListFile(tmp);
+      Navigator.of(context).pop();
+    }
+  }
+
   List<Widget> getFileListWidget(BuildContext context) {
     return List.generate(
         context.watch<FormRequestPengangkatanProvider>().listFile.length + 1,
@@ -267,16 +311,7 @@ class _FormRequestPengangkatanState extends State<FormRequestPengangkatan> {
       if (index ==
           context.read<FormRequestPengangkatanProvider>().listFile.length) {
         return InkWell(
-          onTap: () async {
-            final pickedFile =
-                await ImagePicker.pickImage(source: ImageSource.gallery);
-            if (pickedFile != null) {
-              List<File> tmp =
-                  context.read<FormRequestPengangkatanProvider>().listFile;
-              tmp.add(File(pickedFile.path));
-              context.read<FormRequestPengangkatanProvider>().setListFile(tmp);
-            }
-          },
+          onTap: _showPickImageSource,
           child: Container(
             height: 80,
             width: 80,

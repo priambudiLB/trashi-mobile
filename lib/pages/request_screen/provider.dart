@@ -13,7 +13,7 @@ class CollectionHistoryProvider with ChangeNotifier, DiagnosticableTreeMixin {
   }
 
   List<Pengangkatan> _pengangkatanList;
-  bool _hasInvalidPayment;
+  bool _hasInvalidPayment = false;
 
   List<Pengangkatan> get pengangkatanList => _pengangkatanList;
   bool get hasInvalidPayment => _hasInvalidPayment;
