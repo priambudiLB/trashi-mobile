@@ -3,7 +3,6 @@ import 'package:trashi/constants/time.dart';
 import 'package:trashi/http_request/api_provider.dart';
 import 'package:trashi/http_request/models/kabupaten.dart';
 import 'package:trashi/http_request/models/kecamatan.dart';
-import 'package:trashi/http_request/models/pengangkatan.dart';
 import 'package:trashi/http_request/models/retribusi.dart';
 import 'package:trashi/http_request/models/upst.dart';
 
@@ -19,8 +18,7 @@ class RetributionProvider with ChangeNotifier, DiagnosticableTreeMixin {
   List<Month> _months = trashiMonths;
   Month _month;
 
-  GetRetribusiListResponse _getRetribusiListResponse =
-      GetRetribusiListResponse();
+  GetRetribusiListResponse _getRetribusiListResponse;
 
   List<Kabupaten> _kabupatens;
   List<Kecamatan> _kecamatans;
@@ -143,29 +141,24 @@ class RetributionProvider with ChangeNotifier, DiagnosticableTreeMixin {
     notifyListeners();
   }
 
-  Future<void> getRetribusiList() async {
-    final response = await ApiProvider().getPengangkatanListAdmin();
+  Future<void> getRetribusiList({
+    GetRetribusiListFilter filter,
+  }) async {
+    GetRetribusiListFilter getRetribusiListFilter = GetRetribusiListFilter();
+    if (filter != null) {
+      getRetribusiListFilter = filter;
+    }
+
+    final response =
+        await ApiProvider().getRetribusiList(getRetribusiListFilter);
 
     if (!ApiProvider.isStatusCodeOK(response.statusCode)) {
       return;
     }
 
-    final pengangkatanListAdminResponse =
-        PengangkatanListAdminResponse.fromJson(response.data);
-
-    List<Retribusi> retribusiList = [];
-
-    pengangkatanListAdminResponse.done.forEach((element) {
-      retribusiList.add(Retribusi(
-        idTransaksi: element.id.toString(),
-        tarif: 5000,
-        alamat: element.lokasi,
-        status: 'Approved',
-        penanggungJawab: 'RT 001/ RW003',
-      ));
-    });
-
-    _getRetribusiListResponse.retribusi = retribusiList;
+    _getRetribusiListResponse = GetRetribusiListResponse.fromJson(
+      response.data,
+    );
 
     notifyListeners();
   }

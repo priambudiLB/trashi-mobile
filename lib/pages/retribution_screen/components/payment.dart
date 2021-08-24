@@ -7,6 +7,7 @@ import 'package:trashi/pages/retribution_screen/components/table_header.dart';
 import 'package:trashi/pages/retribution_screen/provider/provider.dart';
 import 'package:trashi/utils/commons.dart';
 import 'package:provider/provider.dart';
+import 'package:trashi/http_request/models/retribusi.dart';
 
 class Payment extends StatefulWidget {
   const Payment({

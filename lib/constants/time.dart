@@ -1,15 +1,29 @@
+import 'package:json_annotation/json_annotation.dart';
+
 enum Month {
+  @JsonValue(1)
   january,
+  @JsonValue(2)
   february,
+  @JsonValue(3)
   march,
+  @JsonValue(4)
   april,
+  @JsonValue(5)
   may,
+  @JsonValue(6)
   june,
+  @JsonValue(7)
   july,
+  @JsonValue(8)
   august,
+  @JsonValue(9)
   september,
+  @JsonValue(10)
   october,
+  @JsonValue(11)
   november,
+  @JsonValue(12)
   december
 }
 

@@ -8,6 +8,7 @@ import 'package:trashi/http_request/models/kendaraan_dp.dart';
 import 'package:trashi/http_request/models/pembayaran_pengangkatan.dart';
 import 'package:trashi/http_request/models/pengangkatan.dart';
 import 'package:trashi/http_request/models/range_berat.dart';
+import 'package:trashi/http_request/models/retribusi.dart';
 import 'package:trashi/models/trashi_document.dart';
 import 'package:trashi/secure_storage/secure_storage.dart';
 import 'package:trashi/constants/document_type.dart';
@@ -62,6 +63,8 @@ class ApiProvider {
   }
 
   Future<Response<dynamic>> postWithDio(String path, dynamic data) async {
+    _logRequest(path, 'POST');
+
     Response<dynamic> response;
 
     try {
@@ -78,6 +81,8 @@ class ApiProvider {
   }
 
   Future<Response<dynamic>> getWithDio(String path) async {
+    _logRequest(path, 'GET');
+
     Response<dynamic> response;
 
     try {
@@ -90,6 +95,11 @@ class ApiProvider {
     }
 
     return response;
+  }
+
+  void _logRequest(String path, String httpMethod) {
+    Logger logger = Logger();
+    logger.i('Trying to connect to: $path with method: $httpMethod');
   }
 
   void _logError(Response<dynamic> response) {
@@ -477,6 +487,18 @@ class ApiProvider {
     }
 
     return CreatePengangkatanResponse.fromJson(response.data);
+  }
+
+  Future<Response<dynamic>> getRetribusiList(
+    GetRetribusiListFilter filter,
+  ) async {
+    final filterAsString = filter.getFilterAsString;
+
+    final path = '/retribusi$filterAsString';
+
+    final response = await getWithDio(path);
+
+    return response;
   }
 }
 
