@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:trashi/pages/retribution_screen/components/filter_button.dart';
-import 'package:trashi/pages/retribution_screen/components/status.dart';
 import 'package:trashi/pages/retribution_screen/components/table_body.dart';
 import 'package:trashi/pages/retribution_screen/components/table_header.dart';
 import 'package:trashi/pages/retribution_screen/provider/provider.dart';
 import 'package:trashi/utils/commons.dart';
 import 'package:provider/provider.dart';
-import 'package:trashi/http_request/models/retribusi.dart';
 
 class Payment extends StatefulWidget {
   const Payment({
@@ -112,14 +110,17 @@ class _PaymentState extends State<Payment> {
                               ),
                             ),
                             Column(
-                                children: context
-                                    .watch<RetributionProvider>()
-                                    .getRetribusiListResponse
-                                    .list
-                                    .map((item) => TableBody(
-                                          retribusi: item,
-                                        ))
-                                    .toList()),
+                              children: context
+                                  .watch<RetributionProvider>()
+                                  .getRetribusiListResponse
+                                  .list
+                                  .map(
+                                    (item) => TableBody(
+                                      retribusi: item,
+                                    ),
+                                  )
+                                  .toList(),
+                            ),
                           ],
                         ))),
                 Padding(

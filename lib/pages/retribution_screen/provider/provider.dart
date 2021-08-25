@@ -5,6 +5,7 @@ import 'package:trashi/http_request/models/kabupaten.dart';
 import 'package:trashi/http_request/models/kecamatan.dart';
 import 'package:trashi/http_request/models/retribusi.dart';
 import 'package:trashi/http_request/models/upst.dart';
+import 'package:trashi/constants/retribution_status.dart';
 
 class RetributionProvider with ChangeNotifier, DiagnosticableTreeMixin {
   bool _isFetching = false;
@@ -14,13 +15,21 @@ class RetributionProvider with ChangeNotifier, DiagnosticableTreeMixin {
   Kabupaten _kabupaten;
   Kecamatan _kecamatan;
   UPSTHTTPModel _upst;
-  String _status;
+  RetributionStatus _status;
   List<Month> _months = trashiMonths;
   Month _month;
 
   GetRetribusiListResponse _getRetribusiListResponse;
   GetRetribusiListResponse get getRetribusiListResponse =>
       _getRetribusiListResponse;
+
+  GetRetribusiListFilter _getRetribusiListFilter;
+  GetRetribusiListFilter get getRetribusiListFilter => _getRetribusiListFilter;
+
+  set getRetribusiListFilter(GetRetribusiListFilter value) {
+    _getRetribusiListFilter = value;
+    notifyListeners();
+  }
 
   List<Kabupaten> _kabupatens;
   List<Kecamatan> _kecamatans;
@@ -40,7 +49,7 @@ class RetributionProvider with ChangeNotifier, DiagnosticableTreeMixin {
 
   bool get isFetching => _isFetching;
 
-  String get status => _status;
+  RetributionStatus get status => _status;
 
   List<Month> get months => _months;
 
@@ -68,7 +77,7 @@ class RetributionProvider with ChangeNotifier, DiagnosticableTreeMixin {
     notifyListeners();
   }
 
-  set status(String value) {
+  set status(RetributionStatus value) {
     _status = value;
     notifyListeners();
   }
@@ -76,6 +85,14 @@ class RetributionProvider with ChangeNotifier, DiagnosticableTreeMixin {
   set month(Month value) {
     _month = value;
     notifyListeners();
+  }
+
+  void resetAllFilters() {
+    _kabupaten = null;
+    _kecamatan = null;
+    _upst = null;
+    _month = null;
+    _status = null;
   }
 
   Future<void> getKabupatens() async {

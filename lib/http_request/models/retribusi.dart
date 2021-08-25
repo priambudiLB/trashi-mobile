@@ -83,8 +83,9 @@ class GetRetribusiListFilter {
   final int kabupatenID;
   final int kecamatanID;
   final int upstID;
-  final int limit;
   final int skip;
+
+  final int defaultLimit = 5;
 
   GetRetribusiListFilter({
     this.statusesMonth,
@@ -93,7 +94,6 @@ class GetRetribusiListFilter {
     this.kabupatenID,
     this.kecamatanID,
     this.upstID,
-    this.limit,
     this.skip,
   });
 
@@ -104,9 +104,8 @@ class GetRetribusiListFilter {
     String kabupatenIDFilterString = this.kabupatenID?.toString() ?? '';
     String kecamatanIDFilterString = this.kecamatanID?.toString() ?? '';
     String upstIDFilterString = this.upstID?.toString() ?? '';
-    String limitFilterString = this.limit?.toString() ?? '';
     String skipFilterString = this.skip?.toString() ?? '';
 
-    return '?statuses.monthCode=$statusesMonthFilterString&statuses.year=$statusesYearFilterString&statuses.isApproved=$isApprovedFilterString&kabupaten=$kabupatenIDFilterString&kecamatan=$kecamatanIDFilterString&upst=$upstIDFilterString&limit=$limitFilterString&skip=$skipFilterString';
+    return '?statuses.monthCode=$statusesMonthFilterString&statuses.year=$statusesYearFilterString&statuses.isApproved=$isApprovedFilterString&kabupaten=$kabupatenIDFilterString&kecamatan=$kecamatanIDFilterString&upst=$upstIDFilterString&limit=$defaultLimit&skip=$skipFilterString';
   }
 }
