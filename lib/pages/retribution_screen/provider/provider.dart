@@ -19,6 +19,8 @@ class RetributionProvider with ChangeNotifier, DiagnosticableTreeMixin {
   Month _month;
 
   GetRetribusiListResponse _getRetribusiListResponse;
+  GetRetribusiListResponse get getRetribusiListResponse =>
+      _getRetribusiListResponse;
 
   List<Kabupaten> _kabupatens;
   List<Kecamatan> _kecamatans;

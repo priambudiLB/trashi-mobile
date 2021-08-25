@@ -37,27 +37,6 @@ class _PaymentState extends State<Payment> {
 
   @override
   Widget build(BuildContext context) {
-    List<Map<String, dynamic>> paymentData = [];
-
-    paymentData.add({
-      'idTransaksi': 'RBS 00307',
-      'tarif': '50000',
-      'alamatRumah': 'Jl.Cipinang Elok 1 no 8',
-      'status': 0,
-    });
-    paymentData.add({
-      'idTransaksi': 'RBS 00307',
-      'tarif': '50000',
-      'alamatRumah': 'Jl.Cipinang Elok 1 no 8',
-      'status': 1,
-    });
-    paymentData.add({
-      'idTransaksi': 'RBS 00307',
-      'tarif': '50000',
-      'alamatRumah': 'Jl.Cipinang Elok 1 no 8',
-      'status': 2,
-    });
-
     return context.watch<RetributionProvider>().isFetching || isFirstTimeOpened
         ? Center(
             child: CircularProgressIndicator(),
@@ -133,42 +112,12 @@ class _PaymentState extends State<Payment> {
                               ),
                             ),
                             Column(
-                                children: paymentData
+                                children: context
+                                    .watch<RetributionProvider>()
+                                    .getRetribusiListResponse
+                                    .list
                                     .map((item) => TableBody(
-                                          index: paymentData.indexOf(item),
-                                          items: [
-                                            Text(
-                                              item['idTransaksi'],
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                fontFamily: "Avenir",
-                                                fontWeight: FontWeight.w500,
-                                                color: hexToColor('#4D4D4D'),
-                                                fontSize: 12,
-                                              ),
-                                            ),
-                                            Text(
-                                              item['tarif'],
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                fontFamily: "Avenir",
-                                                fontWeight: FontWeight.w500,
-                                                color: hexToColor('#4D4D4D'),
-                                                fontSize: 12,
-                                              ),
-                                            ),
-                                            Text(
-                                              item['alamatRumah'],
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                fontFamily: "Avenir",
-                                                fontWeight: FontWeight.w500,
-                                                color: hexToColor('#4D4D4D'),
-                                                fontSize: 12,
-                                              ),
-                                            ),
-                                            Status(item['status'])
-                                          ],
+                                          retribusi: item,
                                         ))
                                     .toList()),
                           ],
