@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:trashi/components/layout_redesign.dart';
-import 'package:trashi/components/overlay.dart';
 import 'package:trashi/pages/retribution_screen/components/payment.dart';
-import 'package:trashi/pages/retribution_screen/components/success_overlay.dart';
 import 'package:trashi/utils/commons.dart';
 
 class RetributionScreen extends StatefulWidget {
@@ -37,7 +35,7 @@ class _RetributionScreenState extends State<RetributionScreen> {
             Radius.circular(8),
           ),
         ),
-        focusedBorder:OutlineInputBorder(
+        focusedBorder: OutlineInputBorder(
           borderSide: BorderSide(color: hexToColor("#909090"), width: 2.0),
           borderRadius: BorderRadius.all(
             Radius.circular(8),
@@ -58,6 +56,7 @@ class _RetributionScreenState extends State<RetributionScreen> {
       ],
     );
   }
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -71,8 +70,7 @@ class _RetributionScreenState extends State<RetributionScreen> {
                 fontFamily: "Avenir",
                 fontWeight: FontWeight.w600,
                 color: Colors.black,
-                fontSize: 20
-            ),
+                fontSize: 20),
           ),
           body: ListView(
             children: [

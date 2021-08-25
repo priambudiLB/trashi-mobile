@@ -26,6 +26,21 @@ class _DropdownSelectionState<T> extends State<DropdownSelection<T>> {
     });
   }
 
+  bool isValueOK(T value) {
+    if (widget.items != null && widget.items.isNotEmpty && value != null) {
+      int itemCounter = 0;
+      widget.items.forEach((element) {
+        if (element == value) {
+          itemCounter++;
+        }
+      });
+
+      return itemCounter == 1;
+    }
+
+    return true;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -41,7 +56,7 @@ class _DropdownSelectionState<T> extends State<DropdownSelection<T>> {
       child: DropdownButtonHideUnderline(
         child: DropdownButton<T>(
           isExpanded: true,
-          value: _value,
+          value: isValueOK(_value) ? _value : null,
           icon: const Icon(Icons.keyboard_arrow_down),
           iconSize: 24,
           style: TextStyle(

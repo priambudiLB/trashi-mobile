@@ -1,12 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:trashi/components/dropdown_selection.dart';
 import 'package:trashi/components/layout_redesign.dart';
+import 'package:trashi/components/progress_indicator.dart';
 import 'package:trashi/components/spacings.dart';
 import 'package:trashi/constants/colors.dart';
+import 'package:trashi/http_request/models/kabupaten.dart';
+import 'package:trashi/http_request/models/kecamatan.dart';
+import 'package:trashi/http_request/models/upst.dart';
 import 'package:trashi/pages/registration_screen/components/account_type_checkbox.dart';
-import 'package:trashi/pages/trash_collection_screen/accepter/components/drop_down_filter.dart';
+import 'package:trashi/pages/retribution_screen/provider/provider.dart';
 import 'package:trashi/pages/trash_collection_screen/accepter/components/row_button_wrapper.dart';
 import 'package:trashi/utils/checkbox_configs.dart';
 import 'package:trashi/utils/commons.dart';
+import 'package:provider/provider.dart';
+import 'package:trashi/http_request/models/retribusi.dart';
+import 'package:trashi/constants/retribution_status.dart';
 
 class FilterAdminScreen extends StatefulWidget {
   static const String PATH = "retributionFilterAdmin";
@@ -17,45 +25,66 @@ class FilterAdminScreen extends StatefulWidget {
 
 class _FilterAdminScreen extends State<FilterAdminScreen> {
   Widget _buildProvinceDropdown() {
-    return DropdownFilter(
-      initValue: "DKI Jakarta",
-      list: [
-        "DKI Jakarta",
-        "Jawa Barat",
-      ],
+    return DropdownSelection<String>(
+      items: [context.watch<RetributionProvider>().provinsi],
+      getLabel: (String value) {
+        return value;
+      },
+      onChanged: (String value) {
+        context.read<RetributionProvider>().provinsi = value;
+      },
     );
   }
 
   Widget _buildKabupatenDropdown() {
-    return DropdownFilter(
-      initValue: "Jakarta Pusat",
-      list: [
-        "Jakarta Pusat",
-        "Jakarta Selatan",
-        "Jakarta Timur",
-        "Jakarta Utara",
-        "Jakarta Barat",
-      ],
+    return DropdownSelection<Kabupaten>(
+      items: context.watch<RetributionProvider>().kabupatens,
+      getLabel: (Kabupaten value) {
+        return value.name ?? 'Nama tidak tersedia';
+      },
+      onChanged: (Kabupaten value) async {
+        context.read<RetributionProvider>().kabupaten = value;
+        showTrashiProgressIndicator(context);
+        await context
+            .read<RetributionProvider>()
+            .getKecamatans(kabupatenID: value.id);
+        await context
+            .read<RetributionProvider>()
+            .getUPSTs(kabupatenID: value.id);
+        closeTrashiProgressIndicator(context);
+      },
     );
   }
 
   Widget _buildKecamatanDropdown() {
-    return DropdownFilter(
-      initValue: "Mampang Prapatan",
-      list: [
-        "Mampang Prapatan",
-        "Tebet",
-      ],
+    return DropdownSelection<Kecamatan>(
+      items: context.watch<RetributionProvider>().kecamatans,
+      getLabel: (Kecamatan value) {
+        return value.name ?? 'Nama tidak tersedia';
+      },
+      onChanged: (Kecamatan value) async {
+        context.read<RetributionProvider>().kecamatan = value;
+        showTrashiProgressIndicator(context);
+        await context
+            .read<RetributionProvider>()
+            .getUPSTs(kecamatanID: value.id);
+        closeTrashiProgressIndicator(context);
+      },
     );
   }
 
   Widget _buildUPSTDropdown() {
-    return DropdownFilter(
-      initValue: "UPST 1",
-      list: [
-        "UPST 1",
-        "UPST 2",
-      ],
+    return DropdownSelection<UPSTHTTPModel>(
+      items: context.watch<RetributionProvider>().upsts,
+      getLabel: (UPSTHTTPModel value) {
+        final name = value.name;
+        final kelurahanName = value.kelurahan.name;
+
+        return '$name, Kelurahan $kelurahanName';
+      },
+      onChanged: (UPSTHTTPModel value) {
+        context.read<RetributionProvider>().upst = value;
+      },
     );
   }
 
@@ -93,8 +122,25 @@ class _FilterAdminScreen extends State<FilterAdminScreen> {
           ),
         ],
       ),
-      onPressed: () {
-        print("apply filter");
+      onPressed: () async {
+        context.read<RetributionProvider>().getRetribusiListFilter =
+            GetRetribusiListFilter(
+          kabupatenID: context.read<RetributionProvider>().kabupaten?.id,
+          kecamatanID: context.read<RetributionProvider>().kecamatan?.id,
+          upstID: context.read<RetributionProvider>().upst?.id,
+          isApproved: context.read<RetributionProvider>().status?.asIsApproved,
+        );
+
+        showTrashiProgressIndicator(context);
+
+        await context.read<RetributionProvider>().getRetribusiList(
+              filter:
+                  context.read<RetributionProvider>().getRetribusiListFilter,
+            );
+
+        closeTrashiProgressIndicator(context);
+
+        Navigator.of(context).pop();
       },
     );
   }
@@ -102,32 +148,32 @@ class _FilterAdminScreen extends State<FilterAdminScreen> {
   String currentlyChecked = "";
 
   final choices = [
-    CheckboxConfig(text: "Sudah bayar"),
-    CheckboxConfig(text: "Belum bayar"),
-    CheckboxConfig(text: "Semua Pembayaran")
+    CheckboxConfig(text: RetributionStatus.sudahBayar.text),
+    CheckboxConfig(text: RetributionStatus.belumBayar.text),
+    CheckboxConfig(text: RetributionStatus.semuaPembayaran.text),
   ];
 
   _choose(CheckboxConfig config) {
     setState(() {
-      if (currentlyChecked.length == 0) {
-        _changeValue(config);
-        currentlyChecked = config.text;
-      } else if (currentlyChecked == config.text) {
-        _changeValue(config);
-        currentlyChecked = "";
-      }
+      _changeValue(config);
     });
   }
 
   _changeValue(CheckboxConfig config) {
-    print(config.text);
-    bool newValue = !config.value;
-    config.value = newValue;
-    choices.forEach((element) {
-      if (element.text != config.text && element.value != newValue) {
-        element.value = !newValue;
-      }
-    });
+    bool currentValue = config.value;
+
+    choices.forEach(
+      (element) {
+        if (element.text != config.text) {
+          element.value = false;
+        }
+      },
+    );
+
+    config.value = !currentValue;
+    context.read<RetributionProvider>().status = getRetributionStatusByText(
+      config.text,
+    );
   }
 
   List<AccountTypeCheckbox> getAccountTypeCheckboxes() {
@@ -148,6 +194,19 @@ class _FilterAdminScreen extends State<FilterAdminScreen> {
       );
     }
     return checkboxes;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      context.read<RetributionProvider>().resetAllFilters();
+      showTrashiProgressIndicator(context);
+      await context.read<RetributionProvider>().getKabupatens();
+      await context.read<RetributionProvider>().getKecamatans();
+      await context.read<RetributionProvider>().getUPSTs();
+      closeTrashiProgressIndicator(context);
+    });
   }
 
   @override
