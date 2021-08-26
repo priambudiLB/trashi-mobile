@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:formz/formz.dart';
 import 'package:trashi/components/button.dart';
 import 'package:trashi/components/layout_redesign.dart';
-import 'package:trashi/pages/registration_document_confirmation/components/upload_kk_component.dart';
-import 'package:trashi/pages/registration_document_confirmation/components/upload_ktp_and_kk_component.dart';
-import 'package:trashi/pages/registration_document_confirmation/components/upload_ktp_component.dart';
-import 'package:trashi/status_upload.dart';
+import 'package:trashi/pages/profile_screen_redesign/registration_document_confirmation/components/upload_kk_component.dart';
+import 'package:trashi/pages/profile_screen_redesign/registration_document_confirmation/components/upload_ktp_and_kk_component.dart';
+import 'package:trashi/pages/profile_screen_redesign/registration_document_confirmation/components/upload_ktp_component.dart';
+import 'package:trashi/pages/profile_screen_redesign/registration_document_confirmation/provider.dart';
+import 'package:trashi/pages/profile_screen_redesign/registration_document_confirmation/status_upload.dart';
 import 'package:trashi/utils/commons.dart';
-import 'package:trashi/providers.dart';
 import 'package:provider/provider.dart';
 
 class RegistrationDocumentConfirmation extends StatefulWidget {

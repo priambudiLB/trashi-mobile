@@ -5,20 +5,20 @@ import 'package:provider/provider.dart';
 import 'package:skeleton_text/skeleton_text.dart';
 import 'package:trashi/components/button.dart';
 import 'package:trashi/constants/colors.dart';
-import 'package:trashi/pages/registration_document_confirmation/components/document_on_verification_button.dart';
-import 'package:trashi/providers.dart';
-import 'package:trashi/status_upload.dart';
+import 'package:trashi/pages/profile_screen_redesign/registration_document_confirmation/components/document_on_verification_button.dart';
+import 'package:trashi/pages/profile_screen_redesign/registration_document_confirmation/provider.dart';
+import 'package:trashi/pages/profile_screen_redesign/registration_document_confirmation/status_upload.dart';
 import 'package:trashi/utils/commons.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as Path;
 import 'package:formz/formz.dart';
 
-class UploadKtpComponent extends StatefulWidget {
+class UploadKkComponent extends StatefulWidget {
   @override
-  _UploadKtpComponentState createState() => _UploadKtpComponentState();
+  _UploadKkComponentState createState() => _UploadKkComponentState();
 }
 
-class _UploadKtpComponentState extends State<UploadKtpComponent> {
+class _UploadKkComponentState extends State<UploadKkComponent> {
   final picker = ImagePicker();
 
   @override
@@ -33,8 +33,7 @@ class _UploadKtpComponentState extends State<UploadKtpComponent> {
               title: "Loading",
               width: double.infinity,
               backgroundColor: Color.fromRGBO(114, 120, 151, 0.1)));
-    }
-    if (context.watch<SubmitDocumentVerification>().generalStatus ==
+    } else if (context.watch<SubmitDocumentVerification>().generalStatus ==
         StatusUpload.SUBMITTED) {
       return DocumentOnVerificationButton();
     } else {
@@ -43,22 +42,22 @@ class _UploadKtpComponentState extends State<UploadKtpComponent> {
         children: [
           Button(
             onTap: _showPickImageSource,
-            title: context.watch<SubmitDocumentVerification>().ktpStatus ==
+            title: context.watch<SubmitDocumentVerification>().kkStatus ==
                     StatusUpload.DRAFT
-                ? "Ubah foto KTP"
-                : "Upload foto KTP",
+                ? "Ubah foto KK"
+                : "Upload foto KK",
             backgroundColor: Colors.white,
             fontColor: hexToColor(MAIN_COLOR),
             borderColor: hexToColor(MAIN_COLOR),
             width: double.infinity,
           ),
-          context.watch<SubmitDocumentVerification>().fileKtp != null &&
-                  context.watch<SubmitDocumentVerification>().ktpStatus ==
+          context.watch<SubmitDocumentVerification>().fileKk != null &&
+                  context.watch<SubmitDocumentVerification>().kkStatus ==
                       StatusUpload.DRAFT
               ? Text(Path.basename(
-                  context.watch<SubmitDocumentVerification>().fileKtp.path))
+                  context.watch<SubmitDocumentVerification>().fileKk.path))
               : Container(),
-          context.watch<SubmitDocumentVerification>().ktpStatus ==
+          context.watch<SubmitDocumentVerification>().kkStatus ==
                   StatusUpload.FAILED
               ? Text(
                   "Foto Anda ditolak. Silakan upload kembali.",
@@ -99,10 +98,10 @@ class _UploadKtpComponentState extends State<UploadKtpComponent> {
     if (pickedFile != null) {
       context
           .read<SubmitDocumentVerification>()
-          .setKtpFile(File(pickedFile.path));
+          .setKkFile(File(pickedFile.path));
       context
           .read<SubmitDocumentVerification>()
-          .setKtpStatus(StatusUpload.DRAFT);
+          .setKkStatus(StatusUpload.DRAFT);
       Navigator.of(context).pop();
     }
   }
@@ -114,10 +113,10 @@ class _UploadKtpComponentState extends State<UploadKtpComponent> {
     if (pickedFile != null) {
       context
           .read<SubmitDocumentVerification>()
-          .setKtpFile(File(pickedFile.path));
+          .setKkFile(File(pickedFile.path));
       context
           .read<SubmitDocumentVerification>()
-          .setKtpStatus(StatusUpload.DRAFT);
+          .setKkStatus(StatusUpload.DRAFT);
       Navigator.of(context).pop();
     }
   }

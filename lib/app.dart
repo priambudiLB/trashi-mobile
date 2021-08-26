@@ -6,10 +6,9 @@ import 'package:trashi/pages/edit_profile_screen/edit_profile_screen.dart';
 import 'package:trashi/pages/form_request_pengangkatan/form_request_pengangkatan.dart';
 import 'package:trashi/pages/onboarding_redesign_screen/on_boarding_screen_view.dart';
 import 'package:trashi/pages/payment/payment_web_view_screen.dart';
-import 'package:trashi/pages/profile_screen/profile_screen.dart';
 import 'package:trashi/pages/profile_screen_redesign/profile_screen_new.dart';
-import 'package:trashi/pages/registration_document_confirmation/profile_example.dart';
-import 'package:trashi/pages/registration_document_confirmation/registration_document_confirmation.dart';
+import 'package:trashi/pages/profile_screen_redesign/profile_screen_not_verified.dart';
+import 'package:trashi/pages/profile_screen_redesign/registration_document_confirmation/registration_document_confirmation.dart';
 import 'package:trashi/pages/request_screen/request_screen.dart';
 import 'package:trashi/pages/retribution_screen/retribution_screen.dart';
 import 'package:trashi/pages/splash_screen/splash_screen.dart';
@@ -26,17 +25,15 @@ class TrashiApplication extends StatelessWidget {
       title: APP_NAME,
       initialRoute: SplashScreen.PATH,
       routes: <String, WidgetBuilder>{
-        // TODO: Add more page and define its path here
         SplashScreen.PATH: (_) => SplashScreen(),
-        ProfileScreen.PATH: (_) => ProfileScreen(),
-        ProfileScreenRedesign.PATH: (_) => ProfileScreenRedesign(),
+        ProfileScreenVerified.PATH: (_) => ProfileScreenVerified(),
         OnboardingScreen.PATH: (_) => OnboardingScreen(),
         RetributionScreen.PATH: (_) => RetributionScreen(),
         ConfirmationOTPScreen.PATH: (_) => ConfirmationOTPScreen(
               account: "0896361219",
               verification: Verification.phone,
             ),
-        ProfileExample.PATH: (_) => ProfileExample(),
+        ProfileScreenNotVerified.PATH: (_) => ProfileScreenNotVerified(),
         RegistrationDocumentConfirmation.PATH: (_) =>
             RegistrationDocumentConfirmation(),
         FormRequestPengangkatan.PATH: (_) => FormRequestPengangkatan(),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:trashi/components/button.dart';
 import 'package:trashi/constants/colors.dart';
-import 'package:trashi/pages/registration_document_confirmation/registration_document_confirmation.dart';
+import 'package:trashi/pages/profile_screen_redesign/registration_document_confirmation/registration_document_confirmation.dart';
 import 'package:trashi/utils/commons.dart';
 
 class WaitingForDocumentConfirmationComponent extends StatelessWidget {

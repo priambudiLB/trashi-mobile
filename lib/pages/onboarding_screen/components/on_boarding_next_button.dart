@@ -14,7 +14,6 @@ class OnBoardingNextButton extends StatelessWidget {
           MaterialPageRoute(
               builder: (context) => BottomNavScreen(
                     navIndex: 0,
-                    isVerified: true,
                   )),
         );
       },

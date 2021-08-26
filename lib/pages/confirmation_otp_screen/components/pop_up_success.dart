@@ -53,15 +53,14 @@ class PopUpSuccess extends StatelessWidget {
                   child: Material(
                     child: Button(
                       onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => BottomNavScreen(
-                              navIndex: 2,
-                              isVerified: false,
+                        Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => BottomNavScreen(
+                                navIndex: 2,
+                              ),
                             ),
-                          ),
-                        );
+                            (route) => false);
                       },
                       title: "Done",
                     ),

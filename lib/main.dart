@@ -6,6 +6,7 @@ import 'package:trashi/app.dart';
 import 'package:trashi/pages/edit_profile_screen/provider.dart';
 import 'package:trashi/pages/form_request_pengangkatan/provider.dart';
 import 'package:trashi/pages/profile_screen_redesign/provider.dart';
+import 'package:trashi/pages/profile_screen_redesign/registration_document_confirmation/provider.dart';
 import 'package:trashi/pages/registration_screen/provider/registration.dart';
 import 'package:trashi/pages/request_screen/provider.dart';
 import 'package:trashi/pages/retribution_screen/provider/provider.dart';

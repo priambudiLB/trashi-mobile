@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:trashi/components/progress_indicator.dart';
 import 'package:trashi/constants/colors.dart';
 import 'package:trashi/http_request/api_provider.dart';
-import 'package:trashi/http_request/models/auth.dart';
 import 'package:trashi/pages/edit_profile_screen/edit_profile_screen.dart';
 import 'package:trashi/pages/onboarding_redesign_screen/on_boarding_screen_view.dart';
 import 'package:trashi/pages/profile_screen_redesign/provider.dart';
@@ -12,17 +11,16 @@ import 'package:trashi/pages/retribution_screen/retribution_screen.dart';
 import 'package:trashi/pages/trash_collection_screen/accepter/accept_trash_collection_request_screen.dart';
 import 'package:trashi/secure_storage/secure_storage.dart';
 import 'package:trashi/utils/commons.dart';
-
 import 'package:provider/provider.dart';
 
-class ProfileScreenRedesign extends StatefulWidget {
+class ProfileScreenVerified extends StatefulWidget {
   static const String PATH = "profile_redesign";
 
   @override
-  _ProfileScreenRedesignState createState() => _ProfileScreenRedesignState();
+  _ProfileScreenVerifiedState createState() => _ProfileScreenVerifiedState();
 }
 
-class _ProfileScreenRedesignState extends State<ProfileScreenRedesign> {
+class _ProfileScreenVerifiedState extends State<ProfileScreenVerified> {
   bool isSignOutSuccessful = false;
   SecureStorage _secureStorage = SecureStorage();
 
@@ -36,27 +34,6 @@ class _ProfileScreenRedesignState extends State<ProfileScreenRedesign> {
     }
 
     closeTrashiProgressIndicator(context);
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<ProfileScreenProvider>().fetchData();
-    });
-    printMethod();
-  }
-
-  void printMethod() async {
-    // can be deleted later. for testing purposes
-    SignInByPhoneResponse signInByPhoneResponse =
-        await _secureStorage.getSignInByPhoneResponse();
-
-    SignInResponse signInResponse = await _secureStorage.getSignInResponse();
-
-    if (signInByPhoneResponse != null) print(signInByPhoneResponse.phone);
-
-    if (signInResponse != null) print(signInResponse.email);
   }
 
   @override

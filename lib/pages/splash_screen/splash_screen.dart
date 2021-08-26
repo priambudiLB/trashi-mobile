@@ -36,7 +36,6 @@ class _SplashScreenState extends State<SplashScreen> {
           MaterialPageRoute(
             builder: (context) => BottomNavScreen(
               navIndex: 2,
-              isVerified: true,
             ),
           ),
         );

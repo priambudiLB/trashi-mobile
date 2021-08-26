@@ -10,8 +10,10 @@ class ProfileScreenProvider with ChangeNotifier, DiagnosticableTreeMixin {
   SecureStorage _secureStorage = SecureStorage();
   String _name = "";
   String _role = "";
+  int _isAcc = 0;
   String get name => _name;
   String get role => _role;
+  int get isAcc => _isAcc;
   RoleType _roleType;
   RoleType get roleType => _roleType;
   FormzStatus _statusFetchData = FormzStatus.pure;
@@ -23,6 +25,7 @@ class ProfileScreenProvider with ChangeNotifier, DiagnosticableTreeMixin {
         await _secureStorage.getCurrentUserResponse();
     if (currentUser != null) {
       setName(currentUser.currentUser.firstName);
+      setIsAcc(currentUser.currentUser.isAcc);
       switch (currentUser.currentUser.role) {
         case 1:
           setRoleType(RoleType.ADMIN);
@@ -55,6 +58,11 @@ class ProfileScreenProvider with ChangeNotifier, DiagnosticableTreeMixin {
       }
     }
     setStatusFetchData(FormzStatus.submissionSuccess);
+  }
+
+  void setIsAcc(int value) {
+    _isAcc = value;
+    notifyListeners();
   }
 
   void setRole(String newRole) {

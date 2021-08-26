@@ -192,7 +192,6 @@ class _LogInScreenState extends State<LogInScreen> {
                     MaterialPageRoute(
                       builder: (context) => BottomNavScreen(
                         navIndex: 2,
-                        isVerified: true,
                       ),
                     ),
                   );

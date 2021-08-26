@@ -1,19 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:trashi/constants/colors.dart';
 import 'package:trashi/pages/home_screen/home_screen.dart';
-import 'package:trashi/pages/profile_screen/profile_screen.dart';
-import 'package:trashi/pages/profile_screen_redesign/profile_screen_new.dart';
-import 'package:trashi/pages/registration_document_confirmation/profile_example.dart';
+import 'package:trashi/pages/profile_screen_redesign/profile_screen_checker.dart';
 import 'package:trashi/pages/upst_screen/upst_screen.dart';
 import 'package:trashi/utils/commons.dart';
 
 class BottomNavScreen extends StatefulWidget {
   final int navIndex;
-  final bool isVerified;
 
-  const BottomNavScreen(
-      {Key key, @required this.navIndex, @required this.isVerified})
-      : super(key: key);
+  const BottomNavScreen({Key key, @required this.navIndex}) : super(key: key);
   @override
   _BottomNavScreenState createState() => _BottomNavScreenState();
 }
@@ -42,7 +37,7 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
         "image-inactive": "assets/images/profile-inactive.png",
         "image-active": "assets/images/profile-active.png",
         "size": 18.0,
-        "screen": widget.isVerified ? ProfileScreenRedesign() : ProfileExample()
+        "screen": ProfileScreenChecker()
       },
     ];
     return Scaffold(
@@ -73,7 +68,6 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
                             pageBuilder: (context, animation1, animation2) =>
                                 BottomNavScreen(
                               navIndex: index,
-                              isVerified: widget.isVerified,
                             ),
                             transitionDuration: Duration(seconds: 0),
                           ),
