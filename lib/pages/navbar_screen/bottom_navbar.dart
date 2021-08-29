@@ -62,16 +62,17 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
                     new Expanded(
                         child: GestureDetector(
                       onTap: () {
-                        Navigator.pushReplacement(
-                          context,
-                          PageRouteBuilder(
-                            pageBuilder: (context, animation1, animation2) =>
-                                BottomNavScreen(
-                              navIndex: index,
+                        if (index == 2)
+                          Navigator.pushReplacement(
+                            context,
+                            PageRouteBuilder(
+                              pageBuilder: (context, animation1, animation2) =>
+                                  BottomNavScreen(
+                                navIndex: index,
+                              ),
+                              transitionDuration: Duration(seconds: 0),
                             ),
-                            transitionDuration: Duration(seconds: 0),
-                          ),
-                        );
+                          );
                       },
                       child: Container(
                         color: Colors.white,

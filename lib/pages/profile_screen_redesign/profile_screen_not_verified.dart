@@ -29,14 +29,17 @@ class ProfileScreenNotVerified extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 35),
         child: RefreshIndicator(
-            onRefresh: () async {
-              context.read<ProfileScreenProvider>().fetchData();
-            },
-            child: Center(
-              child: SingleChildScrollView(
-                  physics: AlwaysScrollableScrollPhysics(),
-                  child: WaitingForDocumentConfirmationComponent()),
-            )),
+          onRefresh: () async {
+            context.read<ProfileScreenProvider>().fetchData();
+          },
+          child: SingleChildScrollView(
+              physics: AlwaysScrollableScrollPhysics(),
+              child: Container(
+                  alignment: Alignment.center,
+                  height: MediaQuery.of(context).size.height -
+                      6 * MediaQuery.of(context).padding.top,
+                  child: WaitingForDocumentConfirmationComponent())),
+        ),
       ),
     );
   }

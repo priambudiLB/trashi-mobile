@@ -9,6 +9,7 @@ class WaitingForDocumentConfirmationComponent extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
       children: [
         Icon(
           Icons.access_time,
