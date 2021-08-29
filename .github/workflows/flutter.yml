@@ -2,8 +2,6 @@ name: Build APK
 
 on:
   push:
-    branches:
-      - test
     tags:
       - 'v*.*.*'
 
@@ -38,7 +36,7 @@ jobs:
     # - run: flutter test
     
     # Build.
-    - run: flutter pub run build_runner build apk --split-per-abi --delete-conflicting-outputs
+    - run: flutter pub run build_runner build --delete-conflicting-outputs
 
     # Upload generated apk to the releases.
     # - name: Push APK to Releases
