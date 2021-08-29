@@ -11,15 +11,26 @@ class ProfileScreenProvider with ChangeNotifier, DiagnosticableTreeMixin {
   String _name = "";
   String _role = "";
   int _isAcc = 0;
+  bool _isSignOutSuccessful = false;
   String get name => _name;
   String get role => _role;
   int get isAcc => _isAcc;
+  bool get isSignOutSuccessful => _isSignOutSuccessful;
   RoleType _roleType;
   RoleType get roleType => _roleType;
   FormzStatus _statusFetchData = FormzStatus.pure;
   FormzStatus get statusFetchData => _statusFetchData;
 
+  Future<void> signOut() async {
+    final response = await ApiProvider().signOut();
+    if (response != null) {
+      setIsSignOutSuccessful(true);
+      await _secureStorage.deleteAll();
+    }
+  }
+
   void fetchData() async {
+    setIsSignOutSuccessful(false);
     setStatusFetchData(FormzStatus.submissionInProgress);
     CurrentUserResponse currentUser = await ApiProvider().getCurrentUser();
     if (currentUser != null) {
@@ -63,6 +74,11 @@ class ProfileScreenProvider with ChangeNotifier, DiagnosticableTreeMixin {
 
   void setIsAcc(int value) {
     _isAcc = value;
+    notifyListeners();
+  }
+
+  void setIsSignOutSuccessful(bool value) {
+    _isSignOutSuccessful = value;
     notifyListeners();
   }
 

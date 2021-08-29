@@ -24,6 +24,7 @@ class TrashiApplication extends StatelessWidget {
       theme: defaultTheme,
       title: APP_NAME,
       initialRoute: SplashScreen.PATH,
+      debugShowCheckedModeBanner: false,
       routes: <String, WidgetBuilder>{
         SplashScreen.PATH: (_) => SplashScreen(),
         ProfileScreenVerified.PATH: (_) => ProfileScreenVerified(),

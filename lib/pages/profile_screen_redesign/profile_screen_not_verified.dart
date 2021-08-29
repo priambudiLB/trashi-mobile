@@ -33,11 +33,11 @@ class ProfileScreenNotVerified extends StatelessWidget {
             context.read<ProfileScreenProvider>().fetchData();
           },
           child: SingleChildScrollView(
-              physics: AlwaysScrollableScrollPhysics(),
+              physics: const AlwaysScrollableScrollPhysics(),
               child: Container(
                   alignment: Alignment.center,
                   height: MediaQuery.of(context).size.height -
-                      6 * MediaQuery.of(context).padding.top,
+                      5.5 * MediaQuery.of(context).padding.top,
                   child: WaitingForDocumentConfirmationComponent())),
         ),
       ),

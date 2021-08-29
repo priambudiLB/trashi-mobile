@@ -40,69 +40,75 @@ class _ProfileScreenVerifiedState extends State<ProfileScreenVerified> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      body: ListView(
-        children: [
-          ProfileHeader(size: size),
-          context.watch<ProfileScreenProvider>().roleType == RoleType.PERSONAL
-              ? ItemTileProfile(
-                  icon: Icons.text_snippet_outlined,
-                  ontap: () {},
-                  title: "Daftar Harga Pengangkatan",
-                )
-              : Container(),
-          Container(
-            height: context.watch<ProfileScreenProvider>().roleType ==
-                    RoleType.PERSONAL
-                ? 1
-                : 0,
-            margin: EdgeInsets.symmetric(horizontal: 24),
-            color: hexToColor("#DFDFDF"),
-          ),
-          ItemTileProfile(
-            icon: Icons.lock_outline,
-            ontap: () {},
-            title: "Privacy",
-          ),
-          Container(
-            height: 1,
-            margin: EdgeInsets.symmetric(horizontal: 24),
-            color: hexToColor("#DFDFDF"),
-          ),
-          ItemTileProfile(
-              icon: Icons.settings_outlined,
-              ontap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => EditProfile(),
-                  ),
-                ).then((value) =>
-                    context.read<ProfileScreenProvider>().fetchData());
-              },
-              title: "Setting"),
-          Container(
-            height: 1,
-            margin: EdgeInsets.symmetric(horizontal: 24),
-            color: hexToColor("#DFDFDF"),
-          ),
-          ItemTileProfile(
-              icon: Icons.logout,
-              ontap: () async {
-                await _signOut();
-
-                if (isSignOutSuccessful) {
-                  print('log out');
-                  await _secureStorage.deleteAll();
-                  Navigator.pushReplacement(
+      body: RefreshIndicator(
+        onRefresh: () async {
+          context.read<ProfileScreenProvider>().fetchData();
+        },
+        child: ListView(
+          physics: AlwaysScrollableScrollPhysics(),
+          children: [
+            ProfileHeader(size: size),
+            context.watch<ProfileScreenProvider>().roleType == RoleType.PERSONAL
+                ? ItemTileProfile(
+                    icon: Icons.text_snippet_outlined,
+                    ontap: () {},
+                    title: "Daftar Harga Pengangkatan",
+                  )
+                : Container(),
+            Container(
+              height: context.watch<ProfileScreenProvider>().roleType ==
+                      RoleType.PERSONAL
+                  ? 1
+                  : 0,
+              margin: EdgeInsets.symmetric(horizontal: 24),
+              color: hexToColor("#DFDFDF"),
+            ),
+            ItemTileProfile(
+              icon: Icons.lock_outline,
+              ontap: () {},
+              title: "Privacy",
+            ),
+            Container(
+              height: 1,
+              margin: EdgeInsets.symmetric(horizontal: 24),
+              color: hexToColor("#DFDFDF"),
+            ),
+            ItemTileProfile(
+                icon: Icons.settings_outlined,
+                ontap: () {
+                  Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => OnboardingScreen(),
+                      builder: (context) => EditProfile(),
                     ),
-                  );
-                }
-              },
-              title: "Logout"),
-        ],
+                  ).then((value) =>
+                      context.read<ProfileScreenProvider>().fetchData());
+                },
+                title: "Setting"),
+            Container(
+              height: 1,
+              margin: EdgeInsets.symmetric(horizontal: 24),
+              color: hexToColor("#DFDFDF"),
+            ),
+            ItemTileProfile(
+                icon: Icons.logout,
+                ontap: () async {
+                  await _signOut();
+
+                  if (isSignOutSuccessful) {
+                    print('log out');
+                    await _secureStorage.deleteAll();
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => OnboardingScreen(),
+                      ),
+                    );
+                  }
+                },
+                title: "Logout"),
+          ],
+        ),
       ),
     );
   }

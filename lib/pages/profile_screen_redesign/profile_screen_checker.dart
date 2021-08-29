@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:formz/formz.dart';
 import 'package:trashi/pages/profile_screen_redesign/profile_screen_not_verified.dart';
 import 'package:trashi/pages/profile_screen_redesign/profile_screen_new.dart';
@@ -26,7 +25,7 @@ class _ProfileScreenCheckerState extends State<ProfileScreenChecker> {
   Widget build(BuildContext context) {
     if (context.watch<ProfileScreenProvider>().statusFetchData ==
         FormzStatus.submissionSuccess) {
-      if (context.watch<ProfileScreenProvider>().isAcc <= 0)
+      if (context.watch<ProfileScreenProvider>().isAcc <= 2)
         return ProfileScreenNotVerified();
       else
         return ProfileScreenVerified();

@@ -75,9 +75,9 @@ class _LogInScreenState extends State<LogInScreen> {
       }
     } else if (isEmail(_emailOrPhoneNumberController.text)) {
       SignInRequest body = SignInRequest(
-        email: _emailOrPhoneNumberController.text,
-        password: _passwordController.text,
-      );
+          email: _emailOrPhoneNumberController.text,
+          password: _passwordController.text,
+          requestSource: "mobile-app");
 
       final response = await ApiProvider().signIn(body);
 
