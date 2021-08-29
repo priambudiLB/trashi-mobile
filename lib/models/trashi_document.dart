@@ -8,3 +8,13 @@ class TrashiDocument {
 
   TrashiDocument({this.file, this.type});
 }
+
+class TrashiVerificationDocument {
+  final File file;
+  final String label;
+
+  TrashiVerificationDocument({
+    this.file,
+    this.label,
+  });
+}

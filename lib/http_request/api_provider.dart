@@ -326,6 +326,28 @@ class ApiProvider {
     }
   }
 
+  Future<void> uploadVerificationDocument(
+    TrashiVerificationDocument file,
+  ) async {
+    FormData uploadFileData = FormData.fromMap({
+      'upload': await MultipartFile.fromFile(file.file.path),
+    });
+
+    final response = await _dio.post(
+      '/files/upload',
+      data: uploadFileData,
+      options: Options(
+        headers: {
+          'label': file.label,
+        },
+      ),
+    );
+
+    if (response == null) {
+      return;
+    }
+  }
+
   Future<Response<dynamic>> getKabupatens() async {
     final response = await _dio
         .get(

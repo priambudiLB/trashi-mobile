@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:trashi/constants/colors.dart';
 import 'package:trashi/utils/commons.dart';
 
 SnackBar buildErrorSnackBar({
@@ -11,6 +12,20 @@ SnackBar buildErrorSnackBar({
   return buildTrashiSnackBar(
     message: message,
     backgroundColor: hexToColor('#B00020'),
+    textColor: Colors.white,
+  );
+}
+
+SnackBar buildSuccessSnackBar({
+  String message,
+}) {
+  if (message == null) {
+    message = 'Sukses';
+  }
+
+  return buildTrashiSnackBar(
+    message: message,
+    backgroundColor: hexToColor(MAIN_COLOR),
     textColor: Colors.white,
   );
 }

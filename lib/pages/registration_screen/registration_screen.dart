@@ -73,16 +73,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         height: 48,
         child: MaterialButton(
           onPressed: () async {
-            final _featureProvider =
-                context.read<SubmitDocumentOnRegistration>();
-
-            if (_featureProvider.areAllDocumentsUploaded(widget.accountType)) {
-              setAreAllDocumentsUploadedState(true);
-            } else {
-              setAreAllDocumentsUploadedState(false);
-              return;
-            }
-
             if (_formKey.currentState.validate()) {
               showTrashiProgressIndicator(context);
 
@@ -103,11 +93,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 closeTrashiProgressIndicator(context);
                 return;
               }
-
-              await context
-                  .read<RegistrationProvider>()
-                  .uploadRegistrationDocuments(_featureProvider
-                      .getDocumentsByAccountType(widget.accountType));
 
               await context
                   .read<RegistrationProvider>()
@@ -269,42 +254,13 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     ),
                   ),
                 ),
-                Divider(
-                  thickness: 1,
-                  color: hexToColor(COLOR_INACTIVE_GREY),
-                ),
                 Padding(
                   padding: EdgeInsets.only(bottom: 24),
-                ),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    "Kelengkapan Dokumen",
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w800,
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(bottom: 16),
                 ),
                 Container(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      _buildAccountDocumentButtons(),
-                      if (areAllDocumentsUploaded != null &&
-                          !areAllDocumentsUploaded) ...[
-                        Text(
-                          'Semua dokumen harus diupload',
-                          textAlign: TextAlign.start,
-                          style: TextStyle(color: Colors.red),
-                        ),
-                      ],
-                      Padding(
-                        padding: EdgeInsets.only(bottom: 24),
-                      ),
                       _buildRegisterButton(),
                       Padding(
                         padding: EdgeInsets.only(bottom: 28),
