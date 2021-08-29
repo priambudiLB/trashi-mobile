@@ -28,7 +28,7 @@ class NetworkUtils {
       NetworkModel responseModel;
 
       responseModel = await http
-          .post("$API_BASE_URL$path",
+          .post(Uri.parse("$API_BASE_URL$path"),
               body: json.encode(bodyParams), headers: requestHeaderJson)
           .then((response) async {
         log.i("POST request called!\n"
@@ -82,7 +82,7 @@ class NetworkUtils {
       NetworkModel responseModel;
       responseModel = await http
           .get(
-        "$API_BASE_URL$path",
+        Uri.parse("$API_BASE_URL$path"),
         headers: requestHeaderJson,
       )
           .then((response) async {
@@ -121,7 +121,7 @@ class NetworkUtils {
       NetworkModel responseModel;
 
       responseModel = await http
-          .patch("$API_BASE_URL$path",
+          .patch(Uri.parse("$API_BASE_URL$path"),
               body: json.decode(bodyParams), headers: requestHeaderJson)
           .then((response) async {
         if (response.statusCode >= 400) {
