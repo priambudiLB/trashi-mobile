@@ -37,9 +37,9 @@ jobs:
     # Run widget tests for our flutter project.
     # - run: flutter test
     
-    # Build apk.
-    - run: flutter build apk --split-per-abi
-    
+    # Build.
+    - run: flutter pub run build_runner build --delete-conflicting-outputs
+
     # Upload generated apk to the releases.
     # - name: Push APK to Releases
     #   if: ${{ startsWith(github.ref, 'refs/tags/') }}
