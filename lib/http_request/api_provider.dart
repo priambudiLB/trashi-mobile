@@ -97,6 +97,24 @@ class ApiProvider {
     return response;
   }
 
+  Future<Response<dynamic>> putWithDio(String path, dynamic data) async {
+    _logRequest(path, 'PUT');
+
+    Response<dynamic> response;
+
+    try {
+      response = await _dio.put(
+        path,
+        data: data,
+      );
+    } on DioError catch (e) {
+      response = e.response;
+      _logError(response);
+    }
+
+    return response;
+  }
+
   void _logRequest(String path, String httpMethod) {
     Logger logger = Logger();
     logger.i('Trying to connect to: $path with method: $httpMethod');
@@ -497,6 +515,16 @@ class ApiProvider {
     final path = '/retribusi$filterAsString';
 
     final response = await getWithDio(path);
+
+    return response;
+  }
+
+  Future<Response<dynamic>> approveRetribusi(
+    ApproveRetribusiRequest body,
+  ) async {
+    final path = '/retribusi/approve';
+
+    final response = await putWithDio(path, body);
 
     return response;
   }

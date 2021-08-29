@@ -109,3 +109,23 @@ class GetRetribusiListFilter {
     return '?statuses.monthCode=$statusesMonthFilterString&statuses.year=$statusesYearFilterString&statuses.isApproved=$isApprovedFilterString&kabupaten=$kabupatenIDFilterString&kecamatan=$kecamatanIDFilterString&upst=$upstIDFilterString&limit=$defaultLimit&skip=$skipFilterString';
   }
 }
+
+@JsonSerializable()
+class ApproveRetribusiRequest {
+  @JsonKey(name: '_id')
+  final int idRetribusi;
+  @JsonKey(name: 'monthCode')
+  final Month month;
+  final int year;
+
+  ApproveRetribusiRequest({
+    this.idRetribusi,
+    this.month,
+    this.year,
+  });
+
+  factory ApproveRetribusiRequest.fromJson(Map<String, dynamic> json) =>
+      _$ApproveRetribusiRequestFromJson(json);
+
+  Map<String, dynamic> toJson() => _$ApproveRetribusiRequestToJson(this);
+}

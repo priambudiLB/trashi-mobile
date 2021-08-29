@@ -183,36 +183,60 @@ class RetributionProvider with ChangeNotifier, DiagnosticableTreeMixin {
   }
 
   /// for retributions approval
-  Map<String, List<String>> _toBeApprovedValues = Map<String, List<String>>();
+  Map<String, List<StatusRetribusi>> _toBeApprovedValues =
+      Map<String, List<StatusRetribusi>>();
 
-  Map<String, List<String>> get toBeApprovedValues => _toBeApprovedValues;
+  Map<String, List<StatusRetribusi>> get toBeApprovedValues =>
+      _toBeApprovedValues;
 
-  void addToBeApprovedValue(String key, List<String> value) {
-    _toBeApprovedValues[key] = value;
+  void addToBeApprovedValue(String key, List<StatusRetribusi> value) {
+    if (value.isEmpty || value.length < 1) {
+      if (_toBeApprovedValues.containsKey(key)) {
+        _toBeApprovedValues.remove(key);
+      }
+    } else {
+      _toBeApprovedValues[key] = value;
+    }
 
     notifyListeners();
   }
 
-  String generateKeyForToBeApprovedValues(Retribusi retribusi, Month month) {
+  void emptyToBeApprovedValues() {
+    _toBeApprovedValues = Map<String, List<StatusRetribusi>>();
+    notifyListeners();
+  }
+
+  String generateKeyForToBeApprovedValues(Retribusi retribusi) {
     final idTransaksi = retribusi.idTransaksi;
     final alamat = retribusi.alamat;
 
     return '$idTransaksi-$alamat';
   }
 
-  bool areMonthsToBeApprovedOK(
-    List<Month> monthsToBeApproved,
-    List<Month> monthsAvailable,
+  ApproveRetribusiRequest _createApproveRetribusiRequest(
+    Retribusi retribusi,
+    StatusRetribusi status,
   ) {
-    final monthsToBeApprovedInNumbers = monthsToBeApproved
+    return ApproveRetribusiRequest(
+      idRetribusi: retribusi.id,
+      month: status.month,
+      year: status.year,
+    );
+  }
+
+  bool areMonthsToBeApprovedOK(
+    List<StatusRetribusi> statusToBeApproved,
+    List<StatusRetribusi> statusAvailable,
+  ) {
+    final monthsToBeApprovedInNumbers = statusToBeApproved
         .map(
-          (element) => element.inNumber,
+          (element) => element.month.inNumber,
         )
         .toList();
 
-    final monthsAvailableInNumbers = monthsAvailable
+    final monthsAvailableInNumbers = statusAvailable
         .map(
-          (element) => element.inNumber,
+          (element) => element.month.inNumber,
         )
         .toList();
 
@@ -226,5 +250,27 @@ class RetributionProvider with ChangeNotifier, DiagnosticableTreeMixin {
     }
 
     return true;
+  }
+
+  Future<void> approveRetribusi(
+    ApproveRetribusiRequest body,
+  ) async {
+    final response = await ApiProvider().approveRetribusi(body);
+
+    if (!ApiProvider.isStatusCodeOK(response.statusCode)) {
+      return;
+    }
+  }
+
+  Future<void> approveRetribusiList() async {
+    if (_toBeApprovedValues.keys.length < 1) {
+      return;
+    }
+
+    List<ApproveRetribusiRequest> _toBeApprovedList = [];
+
+    _toBeApprovedList.forEach((element) {
+      approveRetribusi(element);
+    });
   }
 }

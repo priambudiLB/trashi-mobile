@@ -41,10 +41,16 @@ class _TableBody extends State<TableBody> {
     final isApproved = isApprovedCount == widget.retribusi.statuses.length;
 
     if (isApproved) {
-      return Status(0);
+      return Status(
+        status: 0,
+        retribusi: widget.retribusi,
+      );
     }
 
-    return Status(2);
+    return Status(
+      status: 2,
+      retribusi: widget.retribusi,
+    );
   }
 
   @override
