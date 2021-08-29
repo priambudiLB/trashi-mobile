@@ -24,7 +24,7 @@ class _PaymentState extends State<Payment> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       context.read<RetributionProvider>().isFetching = true;
-      await context.read<RetributionProvider>().getRetribusiList();
+      await context.read<RetributionProvider>().getRetribusiListPemerintah();
       context.read<RetributionProvider>().isFetching = false;
 
       setState(() {
@@ -116,7 +116,7 @@ class _PaymentState extends State<Payment> {
                                   .list
                                   .map(
                                     (item) => TableBody(
-                                      retribusi: item,
+                                      getRetribusiListItemResponse: item,
                                     ),
                                   )
                                   .toList(),

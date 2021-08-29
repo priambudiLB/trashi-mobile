@@ -40,3 +40,7 @@ RetributionStatus getRetributionStatusByText(String value) {
 
   return null;
 }
+
+const retributionStatusNotApproved = 0;
+const retributionStatusApproved = 1;
+const retributionStatusOverdue = 2;

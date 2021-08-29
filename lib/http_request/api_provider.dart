@@ -550,6 +550,30 @@ class ApiProvider {
 
     return response;
   }
+
+  Future<Response<dynamic>> getRetribusiListPemerintah() async {
+    final path = '/retribusi/pemerintah';
+
+    final response = await getWithDio(path);
+
+    return response;
+  }
+
+  Future<Response<dynamic>> getRetribusiListRTRW() async {
+    final path = '/retribusi/rtrw';
+
+    final response = await getWithDio(path);
+
+    return response;
+  }
+
+  Future<Response<dynamic>> getRetribusiListMasyarakat() async {
+    final path = '/retribusi/masyarakat';
+
+    final response = await getWithDio(path);
+
+    return response;
+  }
 }
 
 /**
