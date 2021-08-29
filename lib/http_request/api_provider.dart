@@ -19,7 +19,7 @@ class ApiProvider {
   SecureStorage _secureStorage = SecureStorage();
 
   final BaseOptions options = new BaseOptions(
-    baseUrl: 'http://10.0.2.2:5000/api',
+    baseUrl: 'http://trashi.my.id:5000/api',
     connectTimeout: 15000,
     receiveTimeout: 13000,
   );
