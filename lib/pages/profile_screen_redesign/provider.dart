@@ -21,9 +21,9 @@ class ProfileScreenProvider with ChangeNotifier, DiagnosticableTreeMixin {
 
   void fetchData() async {
     setStatusFetchData(FormzStatus.submissionInProgress);
-    CurrentUserResponse currentUser =
-        await _secureStorage.getCurrentUserResponse();
+    CurrentUserResponse currentUser = await ApiProvider().getCurrentUser();
     if (currentUser != null) {
+      _secureStorage.setCurrentUserResponse(currentUser);
       setName(currentUser.currentUser.firstName);
       setIsAcc(currentUser.currentUser.isAcc);
       switch (currentUser.currentUser.role) {
@@ -48,15 +48,16 @@ class ProfileScreenProvider with ChangeNotifier, DiagnosticableTreeMixin {
           setRole("RT/RW");
           break;
       }
-    } else {
-      final response = await ApiProvider().getCurrentUser();
-      if (response.currentUser != null) {
-        await _secureStorage.setCurrentUserResponse(response);
-        fetchData();
-      } else {
-        //ngapain yak enaknya
-      }
     }
+    //else {
+    //   final response = await ApiProvider().getCurrentUser();
+    //   if (response.currentUser != null) {
+    //     await _secureStorage.setCurrentUserResponse(response);
+    //     fetchData();
+    //   } else {
+    //     //ngapain yak enaknya
+    //   }
+    // }
     setStatusFetchData(FormzStatus.submissionSuccess);
   }
 
