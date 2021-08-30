@@ -6,8 +6,16 @@ import 'package:trashi/http_request/models/kecamatan.dart';
 import 'package:trashi/http_request/models/retribusi.dart';
 import 'package:trashi/http_request/models/upst.dart';
 import 'package:trashi/constants/retribution_status.dart';
+import 'package:trashi/pages/profile_screen_redesign/role_type.dart';
 
 class RetributionProvider with ChangeNotifier, DiagnosticableTreeMixin {
+  RoleType _roleType;
+  RoleType get roleType => _roleType;
+  set roleType(RoleType value) {
+    _roleType = value;
+    notifyListeners();
+  }
+
   bool _isFetching = false;
 
   DateTime _dateTime;
@@ -53,6 +61,20 @@ class RetributionProvider with ChangeNotifier, DiagnosticableTreeMixin {
 
   List<Month> get months => _months;
 
+  String _monthFilter;
+  String get monthFilter => _monthFilter;
+  set monthFilter(String value) {
+    _monthFilter = value;
+    notifyListeners();
+  }
+
+  String _yearFilter;
+  String get yearFilter => _yearFilter;
+  set yearFilter(String value) {
+    _yearFilter = value;
+    notifyListeners();
+  }
+
   set kabupaten(Kabupaten value) {
     _kabupaten = value;
     notifyListeners();
@@ -93,6 +115,8 @@ class RetributionProvider with ChangeNotifier, DiagnosticableTreeMixin {
     _upst = null;
     _month = null;
     _status = null;
+    _monthFilter = null;
+    _yearFilter = null;
   }
 
   Future<void> getKabupatens() async {
@@ -228,6 +252,20 @@ class RetributionProvider with ChangeNotifier, DiagnosticableTreeMixin {
     notifyListeners();
   }
 
+  Future<void> getRetribusiListByRole({
+    GetRetribusiListFilterV2 filter,
+  }) async {
+    switch (_roleType) {
+      case RoleType.ADMIN:
+      case RoleType.PEMERINTAH:
+        return await getRetribusiListPemerintah(filter: filter);
+      case RoleType.RTRW:
+        return await getRetribusiListRTRW(filter: filter);
+    }
+
+    return;
+  }
+
   /// for retributions approval
 
   String _approvalResultMessage = '';
@@ -337,7 +375,7 @@ class RetributionProvider with ChangeNotifier, DiagnosticableTreeMixin {
     }
 
     _toBeApprovedValues = Map<String, List<RetribusiAllItemResponse>>();
-    getRetribusiListPemerintah();
+    getRetribusiListByRole();
   }
 
   // filter V2
@@ -348,5 +386,17 @@ class RetributionProvider with ChangeNotifier, DiagnosticableTreeMixin {
   set getRetribusiListFilterV2(GetRetribusiListFilterV2 value) {
     _getRetribusiListFilterV2 = value;
     notifyListeners();
+  }
+
+  bool shouldShowPenanggungJawabColumn() {
+    switch (_roleType) {
+      case RoleType.ADMIN:
+      case RoleType.PEMERINTAH:
+        return true;
+      case RoleType.RTRW:
+        return false;
+    }
+
+    return false;
   }
 }

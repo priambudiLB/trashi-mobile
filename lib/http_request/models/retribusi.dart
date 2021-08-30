@@ -176,7 +176,7 @@ class RumahResponse {
   final int upstID;
   final DateTime createdAt;
   final DateTime updatedAt;
-  final String tarifRetribusi;
+  final int tarifRetribusi;
 
   RumahResponse({
     this.id,
@@ -291,7 +291,7 @@ class GetRetribusiListResponseV2 {
 }
 
 class GetRetribusiListFilterV2 {
-  int yearMonth;
+  String yearMonth;
   int kabupatenID;
   int kecamatanID;
   int upstID;
@@ -317,5 +317,41 @@ class GetRetribusiListFilterV2 {
     String statusFilterString = this.status?.toString() ?? '';
 
     return '?yearMonth=$yearMonthFilterString&rumah.kabupaten=$kabupatenIDFilterString&rumah.kecamatan=$kecamatanIDFilterString&rumah.upst=$upstIDFilterString&status=$statusFilterString&limit=$defaultLimit&skip=$skipFilterString';
+  }
+
+  String getFilterString() {
+    String filter = '?limit=10';
+
+    if (this.yearMonth != null) {
+      String yearMonthFilterString = this.yearMonth?.toString() ?? '';
+      filter += '&yearMonth=$yearMonthFilterString';
+    }
+
+    if (this.kabupatenID != null) {
+      String kabupatenIDFilterString = this.kabupatenID?.toString() ?? '';
+      filter += '&rumah.kabupaten=$kabupatenIDFilterString';
+    }
+
+    if (this.kecamatanID != null) {
+      String kecamatanIDFilterString = this.kecamatanID?.toString() ?? '';
+      filter += '&rumah.kecamatan=$kecamatanIDFilterString';
+    }
+
+    if (this.upstID != null) {
+      String upstIDFilterString = this.upstID?.toString() ?? '';
+      filter += '&rumah.upst=$upstIDFilterString';
+    }
+
+    if (this.status != null) {
+      String statusFilterString = this.status?.toString() ?? '';
+      filter += '&status=$statusFilterString';
+    }
+
+    if (this.skip != null) {
+      String skipFilterString = this.skip?.toString() ?? '';
+      filter += '&skip=$skipFilterString';
+    }
+
+    return filter;
   }
 }
