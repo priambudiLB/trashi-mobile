@@ -198,3 +198,12 @@ getMonthTextFromString(String month) {
 
   return '';
 }
+
+String getCurrentMonthYear() {
+  DateTime now = new DateTime.now();
+
+  final month = getMonthText(now.month);
+  final year = now.year;
+
+  return '$month, $year';
+}
