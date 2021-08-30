@@ -58,43 +58,44 @@ class _TableBody extends State<TableBody> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        decoration: BoxDecoration(
-          border: Border(
-              top: BorderSide(
-            width: 1,
-            color: hexToColor('#F2F2F2'),
-          )),
-          // color: widget.index % 2 == 0 ? hexToColor('#DFDFDF') : hexToColor('#FFFFFF'),
+      decoration: BoxDecoration(
+        border: Border(
+            top: BorderSide(
+          width: 1,
+          color: hexToColor('#F2F2F2'),
+        )),
+        // color: widget.index % 2 == 0 ? hexToColor('#DFDFDF') : hexToColor('#FFFFFF'),
+      ),
+      width: double.infinity,
+      child: Padding(
+        padding: EdgeInsets.symmetric(
+          vertical: 12,
         ),
-        width: double.infinity,
-        child: Padding(
-          padding: EdgeInsets.symmetric(
-            vertical: 12,
-          ),
-          child: Row(
-            // children: widget.items,
-            children: [
-              TableBodyContent(
-                content: _buildTextContent(
-                    widget.getRetribusiListItemResponse.now.rumah.fullName),
-                flex: 6,
-              ),
-              TableBodyContent(
-                content: _buildTextContent(widget
-                    .getRetribusiListItemResponse.now.rumah.tarifRetribusi),
-                flex: 6,
-              ),
-              TableBodyContent(
-                content: _buildTextContent(
-                    widget.getRetribusiListItemResponse.now.rumah.alamat),
-                flex: 10,
-              ),
-              TableBodyContent(
-                content: _buildStatus(),
-                flex: 6,
-              ),
-            ],
-          ),
-        ));
+        child: Row(
+          // children: widget.items,
+          children: [
+            TableBodyContent(
+              content: _buildTextContent(
+                  widget.getRetribusiListItemResponse.now.rumah.fullName),
+              flex: 6,
+            ),
+            TableBodyContent(
+              content: _buildTextContent(
+                  widget.getRetribusiListItemResponse.now.rumah.tarifRetribusi),
+              flex: 6,
+            ),
+            TableBodyContent(
+              content: _buildTextContent(
+                  widget.getRetribusiListItemResponse.now.rumah.alamat),
+              flex: 10,
+            ),
+            TableBodyContent(
+              content: _buildStatus(),
+              flex: 6,
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
