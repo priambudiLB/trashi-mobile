@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:trashi/constants/retribution_status.dart';
 import 'package:trashi/http_request/models/retribusi.dart';
-import 'package:trashi/pages/retribution_screen/components/status.dart';
+import 'package:trashi/pages/retribution_masyarakat_screen/components/status.dart';
 import 'package:trashi/pages/retribution_screen/components/table_body_text.dart';
 import 'package:trashi/utils/commons.dart';
 
 class TableBody extends StatefulWidget {
-  final GetRetribusiListItemResponse getRetribusiListItemResponse;
+  final RetribusiNowResponse getRetribusiListItemResponse;
 
   const TableBody({
     Key key,
@@ -31,26 +30,8 @@ class _TableBody extends State<TableBody> {
   }
 
   Status _buildStatus() {
-    int isApprovedCount = 0;
-
-    widget.getRetribusiListItemResponse.all.forEach((element) {
-      if (element.status == retributionStatusApproved) {
-        isApprovedCount++;
-      }
-    });
-
-    final isApproved =
-        isApprovedCount == widget.getRetribusiListItemResponse.all.length;
-
-    if (isApproved) {
-      return Status(
-        status: 0,
-        getRetribusiListItemResponse: widget.getRetribusiListItemResponse,
-      );
-    }
-
     return Status(
-      status: 2,
+      status: widget.getRetribusiListItemResponse.status,
       getRetribusiListItemResponse: widget.getRetribusiListItemResponse,
     );
   }
@@ -76,18 +57,18 @@ class _TableBody extends State<TableBody> {
           children: [
             TableBodyContent(
               content: _buildTextContent(
-                  widget.getRetribusiListItemResponse.now.rumah.fullName),
+                  widget.getRetribusiListItemResponse.rumah.fullName),
               flex: 6,
             ),
             TableBodyContent(
               content: _buildTextContent(widget
-                  .getRetribusiListItemResponse.now.rumah.tarifRetribusi
+                  .getRetribusiListItemResponse.rumah.tarifRetribusi
                   .toString()),
               flex: 6,
             ),
             TableBodyContent(
               content: _buildTextContent(
-                  widget.getRetribusiListItemResponse.now.rumah.alamat),
+                  widget.getRetribusiListItemResponse.rumah.alamat),
               flex: 10,
             ),
             TableBodyContent(
