@@ -101,9 +101,9 @@ class RetributionMasyarakat extends StatelessWidget {
           : ListView(
               children: [
                 Container(
-                  child: _buildSearchField('Search'),
-                  margin: EdgeInsets.only(top: 16),
-                ),
+                    // child: _buildSearchField('Search'),
+                    // margin: EdgeInsets.only(top: 16),
+                    ),
                 Payment(),
               ],
             ),

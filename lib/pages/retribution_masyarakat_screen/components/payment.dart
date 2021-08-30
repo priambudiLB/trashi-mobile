@@ -4,6 +4,7 @@ import 'package:trashi/components/progress_indicator.dart';
 import 'package:trashi/components/snack_bar.dart';
 import 'package:trashi/components/spacings.dart';
 import 'package:trashi/constants/colors.dart';
+import 'package:trashi/constants/time.dart';
 import 'package:trashi/pages/retribution_masyarakat_screen/components/table_body.dart';
 import 'package:trashi/pages/retribution_masyarakat_screen/components/table_header.dart';
 import 'package:trashi/pages/retribution_masyarakat_screen/provider.dart';
@@ -66,7 +67,7 @@ class _PaymentState extends State<Payment> {
                         ),
                         Container(height: 4),
                         Text(
-                          'Januari, 2020',
+                          getCurrentMonthYear(),
                           style: TextStyle(
                             fontFamily: "Avenir",
                             fontWeight: FontWeight.w400,

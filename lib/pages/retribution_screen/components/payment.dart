@@ -4,6 +4,7 @@ import 'package:trashi/components/progress_indicator.dart';
 import 'package:trashi/components/snack_bar.dart';
 import 'package:trashi/components/spacings.dart';
 import 'package:trashi/constants/colors.dart';
+import 'package:trashi/constants/time.dart';
 import 'package:trashi/pages/profile_screen_redesign/provider.dart';
 import 'package:trashi/pages/retribution_screen/components/filter_button.dart';
 import 'package:trashi/pages/retribution_screen/components/table_body.dart';
@@ -64,14 +65,14 @@ class _PaymentState extends State<Payment> {
     return context.watch<RetributionProvider>().toBeApprovedValues.keys.length >
             0
         ? Container(
+            padding: EdgeInsets.fromLTRB(0, 5, 0, 0),
             decoration: BoxDecoration(
-              boxShadow: [
-                BoxShadow(
-                  color: hexToColor("#E0E0E0").withOpacity(0.25),
-                  blurRadius: 7,
-                  offset: Offset(0, -10), // changes position of shadow
+              border: Border(
+                top: BorderSide(
+                  color: hexToColor('#FAFAFA'),
+                  width: 4,
                 ),
-              ],
+              ),
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -141,7 +142,7 @@ class _PaymentState extends State<Payment> {
                         ),
                         Container(height: 4),
                         Text(
-                          'Januari, 2020',
+                          getCurrentMonthYear(),
                           style: TextStyle(
                             fontFamily: "Avenir",
                             fontWeight: FontWeight.w400,
@@ -314,8 +315,8 @@ class _PaymentState extends State<Payment> {
                 //     ],
                 //   ),
                 // ),
-                Spacings.verticalSpace(20),
                 _buildApprovalSection(),
+                Spacings.verticalSpace(20),
               ],
             ),
           );
