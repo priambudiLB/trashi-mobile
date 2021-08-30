@@ -3,9 +3,9 @@ name: Build APK
 on:
   push:
     branches:
-      - "test"
-    tags:
-      - 'v*.*.*'
+      - "main"
+    # tags:
+    #   - 'v*.*.*'
 
 jobs:
   build:
