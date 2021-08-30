@@ -126,6 +126,25 @@ class Status extends StatelessWidget {
               },
             ));
         break;
+      case 3:
+        return Container(
+            // width: 1000,
+            height: 16,
+            decoration: BoxDecoration(
+                color: hexToColor('#FFEFE8'),
+                borderRadius: BorderRadius.all(Radius.circular(8))),
+            child: Center(
+              child: Text(
+                "Waiting",
+                style: TextStyle(
+                  fontFamily: "Avenir",
+                  fontWeight: FontWeight.w400,
+                  color: hexToColor('#ED7D31'),
+                  fontSize: 10,
+                ),
+              ),
+            ));
+        break;
     }
   }
 }

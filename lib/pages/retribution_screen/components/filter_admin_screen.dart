@@ -7,6 +7,8 @@ import 'package:trashi/constants/colors.dart';
 import 'package:trashi/http_request/models/kabupaten.dart';
 import 'package:trashi/http_request/models/kecamatan.dart';
 import 'package:trashi/http_request/models/upst.dart';
+import 'package:trashi/pages/profile_screen_redesign/provider.dart';
+import 'package:trashi/pages/profile_screen_redesign/role_type.dart';
 import 'package:trashi/pages/registration_screen/components/account_type_checkbox.dart';
 import 'package:trashi/pages/retribution_screen/provider/provider.dart';
 import 'package:trashi/pages/trash_collection_screen/accepter/components/row_button_wrapper.dart';
@@ -15,6 +17,7 @@ import 'package:trashi/utils/commons.dart';
 import 'package:provider/provider.dart';
 import 'package:trashi/http_request/models/retribusi.dart';
 import 'package:trashi/constants/retribution_status.dart';
+import 'package:trashi/constants/time.dart';
 
 class FilterAdminScreen extends StatefulWidget {
   static const String PATH = "retributionFilterAdmin";
@@ -24,6 +27,56 @@ class FilterAdminScreen extends StatefulWidget {
 }
 
 class _FilterAdminScreen extends State<FilterAdminScreen> {
+  Widget _buildYearDropdown() {
+    return DropdownSelection<String>(
+      items: [
+        '2019',
+        '2020',
+        '2021',
+        '2022',
+        '2023',
+        '2024',
+        '2025',
+        '2026',
+        '2027',
+        '2028',
+        '2029',
+        '2030'
+      ],
+      getLabel: (String value) {
+        return value;
+      },
+      onChanged: (String value) {
+        context.read<RetributionProvider>().yearFilter = value;
+      },
+    );
+  }
+
+  Widget _buildMonthDropdown() {
+    return DropdownSelection<String>(
+      items: [
+        '01',
+        '02',
+        '03',
+        '04',
+        '05',
+        '06',
+        '07',
+        '08',
+        '09',
+        '10',
+        '11',
+        '12'
+      ],
+      getLabel: (String value) {
+        return getMonthTextFromString(value);
+      },
+      onChanged: (String value) {
+        context.read<RetributionProvider>().monthFilter = value;
+      },
+    );
+  }
+
   Widget _buildProvinceDropdown() {
     return DropdownSelection<String>(
       items: [context.watch<RetributionProvider>().provinsi],
@@ -123,17 +176,25 @@ class _FilterAdminScreen extends State<FilterAdminScreen> {
         ],
       ),
       onPressed: () async {
+        String yearMonthFilter;
+        if (context.read<RetributionProvider>().yearFilter != null ||
+            context.read<RetributionProvider>().monthFilter != null) {
+          yearMonthFilter = context.read<RetributionProvider>().yearFilter +
+              context.read<RetributionProvider>().monthFilter;
+        }
+
         context.read<RetributionProvider>().getRetribusiListFilterV2 =
             GetRetribusiListFilterV2(
           kabupatenID: context.read<RetributionProvider>().kabupaten?.id,
           kecamatanID: context.read<RetributionProvider>().kecamatan?.id,
           upstID: context.read<RetributionProvider>().upst?.id,
           status: context.read<RetributionProvider>().status?.asInt,
+          yearMonth: yearMonthFilter,
         );
 
         showTrashiProgressIndicator(context);
 
-        await context.read<RetributionProvider>().getRetribusiListPemerintah(
+        await context.read<RetributionProvider>().getRetribusiListByRole(
               filter:
                   context.read<RetributionProvider>().getRetribusiListFilterV2,
             );
@@ -196,6 +257,85 @@ class _FilterAdminScreen extends State<FilterAdminScreen> {
     return checkboxes;
   }
 
+  Widget _buildFilterRTRW() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Row(
+          children: [
+            Expanded(
+              child: Text('Bulan'),
+            ),
+            Spacings.horizontalSpace(10),
+            Expanded(
+              child: Text('Tahun'),
+            ),
+          ],
+        ),
+        Row(
+          children: [
+            Expanded(
+              child: _buildMonthDropdown(),
+            ),
+            Spacings.horizontalSpace(10),
+            Expanded(
+              child: _buildYearDropdown(),
+            ),
+          ],
+        ),
+        Spacings.verticalSpace(24),
+        _buildFilterLabelText("Status"),
+        Column(
+          children: getAccountTypeCheckboxes(),
+        ),
+        Spacings.verticalSpace(24),
+        _buildApplyFilterButton(),
+        Spacings.verticalSpace(24),
+      ],
+    );
+  }
+
+  Widget _buildFilterAdmin() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        _buildFilterLabelText("Provinsi"),
+        _buildProvinceDropdown(),
+        Spacings.verticalSpace(16),
+        _buildFilterLabelText("Kabupaten"),
+        _buildKabupatenDropdown(),
+        Spacings.verticalSpace(16),
+        _buildFilterLabelText("Kecamatan"),
+        _buildKecamatanDropdown(),
+        Spacings.verticalSpace(16),
+        _buildFilterLabelText("UPST"),
+        _buildUPSTDropdown(),
+        Spacings.verticalSpace(24),
+        _buildFilterLabelText("Status"),
+        Column(
+          children: getAccountTypeCheckboxes(),
+        ),
+        Spacings.verticalSpace(24),
+        _buildApplyFilterButton(),
+        Spacings.verticalSpace(24),
+      ],
+    );
+  }
+
+  Widget _buildFilterContent() {
+    RoleType roleType = context.read<ProfileScreenProvider>().roleType;
+
+    switch (roleType) {
+      case RoleType.ADMIN:
+      case RoleType.PEMERINTAH:
+        return _buildFilterAdmin();
+      case RoleType.RTRW:
+        return _buildFilterRTRW();
+    }
+
+    return SizedBox.shrink();
+  }
+
   @override
   void initState() {
     super.initState();
@@ -220,28 +360,8 @@ class _FilterAdminScreen extends State<FilterAdminScreen> {
           fontWeight: FontWeight.w800,
         ),
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          _buildFilterLabelText("Provinsi"),
-          _buildProvinceDropdown(),
-          Spacings.verticalSpace(16),
-          _buildFilterLabelText("Kabupaten"),
-          _buildKabupatenDropdown(),
-          Spacings.verticalSpace(16),
-          _buildFilterLabelText("Kecamatan"),
-          _buildKecamatanDropdown(),
-          Spacings.verticalSpace(16),
-          _buildFilterLabelText("UPST"),
-          _buildUPSTDropdown(),
-          Spacings.verticalSpace(24),
-          _buildFilterLabelText("Status"),
-          Column(
-            children: getAccountTypeCheckboxes(),
-          ),
-          Spacings.verticalSpace(24),
-          _buildApplyFilterButton(),
-        ],
+      body: ListView(
+        children: [_buildFilterContent()],
       ),
     );
   }
