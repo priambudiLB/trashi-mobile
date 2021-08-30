@@ -552,7 +552,7 @@ class ApiProvider {
 
   Future<Response<dynamic>> getRetribusiListPemerintah(
       GetRetribusiListFilterV2 filter) async {
-    final filterAsString = filter.getFilterAsString;
+    final filterAsString = filter.getFilterString();
 
     final path = '/retribusi/pemerintah$filterAsString';
 
@@ -563,7 +563,7 @@ class ApiProvider {
 
   Future<Response<dynamic>> getRetribusiListRTRW(
       GetRetribusiListFilterV2 filter) async {
-    final filterAsString = filter.getFilterAsString;
+    final filterAsString = filter.getFilterString();
 
     final path = '/retribusi/rtrw$filterAsString';
 

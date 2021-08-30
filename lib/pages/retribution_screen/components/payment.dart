@@ -4,6 +4,7 @@ import 'package:trashi/components/progress_indicator.dart';
 import 'package:trashi/components/snack_bar.dart';
 import 'package:trashi/components/spacings.dart';
 import 'package:trashi/constants/colors.dart';
+import 'package:trashi/pages/profile_screen_redesign/provider.dart';
 import 'package:trashi/pages/retribution_screen/components/filter_button.dart';
 import 'package:trashi/pages/retribution_screen/components/table_body.dart';
 import 'package:trashi/pages/retribution_screen/components/table_header.dart';
@@ -29,10 +30,12 @@ class _PaymentState extends State<Payment> {
     super.initState();
 
     context.read<RetributionProvider>().emptyToBeApprovedValues();
+    context.read<RetributionProvider>().roleType =
+        context.read<ProfileScreenProvider>().roleType;
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       context.read<RetributionProvider>().isFetching = true;
-      await context.read<RetributionProvider>().getRetribusiListPemerintah();
+      await context.read<RetributionProvider>().getRetribusiListByRole();
       context.read<RetributionProvider>().isFetching = false;
 
       setState(() {
@@ -168,7 +171,7 @@ class _PaymentState extends State<Payment> {
                           child: Row(
                             children: [
                               TableHeader(
-                                text: 'ID\nTransaksi',
+                                text: 'Nama',
                                 flex: 4,
                               ),
                               TableHeader(
@@ -179,6 +182,13 @@ class _PaymentState extends State<Payment> {
                                 text: 'Alamat Rumah',
                                 flex: 6,
                               ),
+                              if (context
+                                  .read<RetributionProvider>()
+                                  .shouldShowPenanggungJawabColumn())
+                                TableHeader(
+                                  text: 'Penanggung Jawab',
+                                  flex: 4,
+                                ),
                               TableHeader(
                                 text: 'Status',
                                 flex: 4,
