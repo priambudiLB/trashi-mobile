@@ -109,3 +109,213 @@ class GetRetribusiListFilter {
     return '?statuses.monthCode=$statusesMonthFilterString&statuses.year=$statusesYearFilterString&statuses.isApproved=$isApprovedFilterString&kabupaten=$kabupatenIDFilterString&kecamatan=$kecamatanIDFilterString&upst=$upstIDFilterString&limit=$defaultLimit&skip=$skipFilterString';
   }
 }
+
+@JsonSerializable()
+class ApproveRetribusiRequest {
+  @JsonKey(name: '_id')
+  final int idRetribusi;
+  @JsonKey(name: 'monthCode')
+  final Month month;
+  final int year;
+
+  ApproveRetribusiRequest({
+    this.idRetribusi,
+    this.month,
+    this.year,
+  });
+
+  factory ApproveRetribusiRequest.fromJson(Map<String, dynamic> json) =>
+      _$ApproveRetribusiRequestFromJson(json);
+
+  Map<String, dynamic> toJson() => _$ApproveRetribusiRequestToJson(this);
+}
+
+@JsonSerializable()
+class RetribusiNowResponse {
+  @JsonKey(name: '_id')
+  final int id;
+  final int yearMonth;
+  final int status;
+  final DateTime createdAt;
+  final DateTime updatedAt;
+  final RumahResponse rumah;
+
+  RetribusiNowResponse({
+    this.id,
+    this.yearMonth,
+    this.status,
+    this.createdAt,
+    this.updatedAt,
+    this.rumah,
+  });
+
+  factory RetribusiNowResponse.fromJson(Map<String, dynamic> json) =>
+      _$RetribusiNowResponseFromJson(json);
+
+  Map<String, dynamic> toJson() => _$RetribusiNowResponseToJson(this);
+}
+
+@JsonSerializable()
+class RumahResponse {
+  @JsonKey(name: '_id')
+  final int id;
+  final List<String> penanggungJawabIds;
+  final String userId;
+  final String firstname;
+  final String lastname;
+  final String alamat;
+  final double lat;
+  final double long;
+  @JsonKey(name: 'kabupaten')
+  final int kabupatenID;
+  @JsonKey(name: 'kecamatan')
+  final int kecamatanID;
+  @JsonKey(name: 'kelurahan')
+  final int kelurahanID;
+  @JsonKey(name: 'upst')
+  final int upstID;
+  final DateTime createdAt;
+  final DateTime updatedAt;
+  final String tarifRetribusi;
+
+  RumahResponse({
+    this.id,
+    this.penanggungJawabIds,
+    this.userId,
+    this.firstname,
+    this.lastname,
+    this.alamat,
+    this.lat,
+    this.long,
+    this.kabupatenID,
+    this.kecamatanID,
+    this.kelurahanID,
+    this.upstID,
+    this.createdAt,
+    this.updatedAt,
+    this.tarifRetribusi,
+  });
+
+  factory RumahResponse.fromJson(Map<String, dynamic> json) =>
+      _$RumahResponseFromJson(json);
+
+  Map<String, dynamic> toJson() => _$RumahResponseToJson(this);
+
+  String get fullName {
+    return this.firstname + ' ' + this.lastname;
+  }
+}
+
+@JsonSerializable()
+class RetribusiAllItemResponse {
+  @JsonKey(name: '_id')
+  final int id;
+  @JsonKey(name: 'rumah')
+  final int rumahID;
+  final int yearMonth;
+  final int status;
+  final DateTime createdAt;
+  final DateTime updatedAt;
+
+  RetribusiAllItemResponse({
+    this.id,
+    this.rumahID,
+    this.status,
+    this.createdAt,
+    this.updatedAt,
+    this.yearMonth,
+  });
+
+  factory RetribusiAllItemResponse.fromJson(Map<String, dynamic> json) =>
+      _$RetribusiAllItemResponseFromJson(json);
+
+  Map<String, dynamic> toJson() => _$RetribusiAllItemResponseToJson(this);
+
+  int get year {
+    String yearMonthStr = this.yearMonth.toString();
+
+    final year = yearMonthStr.substring(0, 4);
+    final month = yearMonthStr.substring(4);
+
+    return int.parse(year);
+  }
+
+  int get month {
+    String yearMonthStr = this.yearMonth.toString();
+
+    final year = yearMonthStr.substring(0, 4);
+    final month = yearMonthStr.substring(4);
+
+    return int.parse(month);
+  }
+
+  String get monthText {
+    return getMonthText(this.month);
+  }
+}
+
+@JsonSerializable()
+class GetRetribusiListItemResponse {
+  final RetribusiNowResponse now;
+  final List<RetribusiAllItemResponse> all;
+
+  GetRetribusiListItemResponse({
+    this.now,
+    this.all,
+  });
+
+  factory GetRetribusiListItemResponse.fromJson(Map<String, dynamic> json) =>
+      _$GetRetribusiListItemResponseFromJson(json);
+
+  Map<String, dynamic> toJson() => _$GetRetribusiListItemResponseToJson(this);
+}
+
+@JsonSerializable()
+class GetRetribusiListResponseV2 {
+  List<GetRetribusiListItemResponse> list;
+
+  GetRetribusiListResponseV2({
+    this.list,
+  });
+
+  factory GetRetribusiListResponseV2.fromJson(List<dynamic> json) =>
+      GetRetribusiListResponseV2(
+        list: json
+            .map(
+              (e) => GetRetribusiListItemResponse.fromJson(e),
+            )
+            .toList(),
+      );
+
+  Map<String, dynamic> toJson() => _$GetRetribusiListResponseV2ToJson(this);
+}
+
+class GetRetribusiListFilterV2 {
+  int yearMonth;
+  int kabupatenID;
+  int kecamatanID;
+  int upstID;
+  int status;
+  int skip;
+  int defaultLimit = 5;
+
+  GetRetribusiListFilterV2({
+    this.yearMonth,
+    this.kabupatenID,
+    this.kecamatanID,
+    this.upstID,
+    this.status,
+    this.skip,
+  });
+
+  String get getFilterAsString {
+    String yearMonthFilterString = this.yearMonth?.toString() ?? '';
+    String kabupatenIDFilterString = this.kabupatenID?.toString() ?? '';
+    String kecamatanIDFilterString = this.kecamatanID?.toString() ?? '';
+    String upstIDFilterString = this.upstID?.toString() ?? '';
+    String skipFilterString = this.skip?.toString() ?? '';
+    String statusFilterString = this.status?.toString() ?? '';
+
+    return '?yearMonth=$yearMonthFilterString&rumah.kabupaten=$kabupatenIDFilterString&rumah.kecamatan=$kecamatanIDFilterString&rumah.upst=$upstIDFilterString&status=$statusFilterString&limit=$defaultLimit&skip=$skipFilterString';
+  }
+}

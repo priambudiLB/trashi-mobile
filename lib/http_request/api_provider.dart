@@ -97,6 +97,23 @@ class ApiProvider {
     return response;
   }
 
+  Future<Response<dynamic>> putWithDio(String path) async {
+    _logRequest(path, 'PUT');
+
+    Response<dynamic> response;
+
+    try {
+      response = await _dio.put(
+        path,
+      );
+    } on DioError catch (e) {
+      response = e.response;
+      _logError(response);
+    }
+
+    return response;
+  }
+
   void _logRequest(String path, String httpMethod) {
     Logger logger = Logger();
     logger.i('Trying to connect to: $path with method: $httpMethod');
@@ -308,6 +325,28 @@ class ApiProvider {
     }
   }
 
+  Future<void> uploadVerificationDocument(
+    TrashiVerificationDocument file,
+  ) async {
+    FormData uploadFileData = FormData.fromMap({
+      'upload': await MultipartFile.fromFile(file.file.path),
+    });
+
+    final response = await _dio.post(
+      '/files/upload',
+      data: uploadFileData,
+      options: Options(
+        headers: {
+          'label': file.label,
+        },
+      ),
+    );
+
+    if (response == null) {
+      return;
+    }
+  }
+
   Future<Response<dynamic>> getKabupatens() async {
     final response = await _dio
         .get(
@@ -495,6 +534,46 @@ class ApiProvider {
     final filterAsString = filter.getFilterAsString;
 
     final path = '/retribusi$filterAsString';
+
+    final response = await getWithDio(path);
+
+    return response;
+  }
+
+  Future<Response<dynamic>> approveRetribusi(
+    int retribusiID,
+  ) async {
+    final path = '/retribusi/$retribusiID/approve';
+
+    final response = await putWithDio(path);
+
+    return response;
+  }
+
+  Future<Response<dynamic>> getRetribusiListPemerintah(
+      GetRetribusiListFilterV2 filter) async {
+    final filterAsString = filter.getFilterAsString;
+
+    final path = '/retribusi/pemerintah$filterAsString';
+
+    final response = await getWithDio(path);
+
+    return response;
+  }
+
+  Future<Response<dynamic>> getRetribusiListRTRW(
+      GetRetribusiListFilterV2 filter) async {
+    final filterAsString = filter.getFilterAsString;
+
+    final path = '/retribusi/rtrw$filterAsString';
+
+    final response = await getWithDio(path);
+
+    return response;
+  }
+
+  Future<Response<dynamic>> getRetribusiListMasyarakat() async {
+    final path = '/retribusi/masyarakat';
 
     final response = await getWithDio(path);
 

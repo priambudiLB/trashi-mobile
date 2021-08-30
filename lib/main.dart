@@ -42,6 +42,7 @@ void main() {
         ChangeNotifierProvider(create: (_) => CollectionHistoryProvider()),
         ChangeNotifierProvider(create: (_) => RegistrationProvider()),
         ChangeNotifierProvider(create: (_) => RetributionProvider()),
+        ChangeNotifierProvider(create: (_) => SubmitDocumentProvider()),
       ],
       // child: const MyApp(),
       child: const TrashiApplication(),

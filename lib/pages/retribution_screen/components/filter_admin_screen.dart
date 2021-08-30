@@ -123,19 +123,19 @@ class _FilterAdminScreen extends State<FilterAdminScreen> {
         ],
       ),
       onPressed: () async {
-        context.read<RetributionProvider>().getRetribusiListFilter =
-            GetRetribusiListFilter(
+        context.read<RetributionProvider>().getRetribusiListFilterV2 =
+            GetRetribusiListFilterV2(
           kabupatenID: context.read<RetributionProvider>().kabupaten?.id,
           kecamatanID: context.read<RetributionProvider>().kecamatan?.id,
           upstID: context.read<RetributionProvider>().upst?.id,
-          isApproved: context.read<RetributionProvider>().status?.asIsApproved,
+          status: context.read<RetributionProvider>().status?.asInt,
         );
 
         showTrashiProgressIndicator(context);
 
-        await context.read<RetributionProvider>().getRetribusiList(
+        await context.read<RetributionProvider>().getRetribusiListPemerintah(
               filter:
-                  context.read<RetributionProvider>().getRetribusiListFilter,
+                  context.read<RetributionProvider>().getRetribusiListFilterV2,
             );
 
         closeTrashiProgressIndicator(context);

@@ -47,8 +47,9 @@ class SignInResponse {
 class SignInByPhoneRequest {
   String phone;
   String password;
+  String requestSource;
 
-  SignInByPhoneRequest({this.phone, this.password});
+  SignInByPhoneRequest({this.phone, this.password, this.requestSource});
 
   factory SignInByPhoneRequest.fromJson(Map<String, dynamic> json) =>
       _$SignInByPhoneRequestFromJson(json);

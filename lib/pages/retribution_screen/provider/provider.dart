@@ -19,8 +19,8 @@ class RetributionProvider with ChangeNotifier, DiagnosticableTreeMixin {
   List<Month> _months = trashiMonths;
   Month _month;
 
-  GetRetribusiListResponse _getRetribusiListResponse;
-  GetRetribusiListResponse get getRetribusiListResponse =>
+  GetRetribusiListResponseV2 _getRetribusiListResponse;
+  GetRetribusiListResponseV2 get getRetribusiListResponse =>
       _getRetribusiListResponse;
 
   GetRetribusiListFilter _getRetribusiListFilter;
@@ -175,7 +175,53 @@ class RetributionProvider with ChangeNotifier, DiagnosticableTreeMixin {
       return;
     }
 
-    _getRetribusiListResponse = GetRetribusiListResponse.fromJson(
+    _getRetribusiListResponse = GetRetribusiListResponseV2.fromJson(
+      response.data,
+    );
+
+    notifyListeners();
+  }
+
+  Future<void> getRetribusiListPemerintah({
+    GetRetribusiListFilterV2 filter,
+  }) async {
+    GetRetribusiListFilterV2 getRetribusiListFilterV2 =
+        GetRetribusiListFilterV2();
+    if (filter != null) {
+      getRetribusiListFilterV2 = filter;
+    }
+
+    final response = await ApiProvider()
+        .getRetribusiListPemerintah(getRetribusiListFilterV2);
+
+    if (!ApiProvider.isStatusCodeOK(response.statusCode)) {
+      return;
+    }
+
+    _getRetribusiListResponse = GetRetribusiListResponseV2.fromJson(
+      response.data,
+    );
+
+    notifyListeners();
+  }
+
+  Future<void> getRetribusiListRTRW({
+    GetRetribusiListFilterV2 filter,
+  }) async {
+    GetRetribusiListFilterV2 getRetribusiListFilterV2 =
+        GetRetribusiListFilterV2();
+    if (filter != null) {
+      getRetribusiListFilterV2 = filter;
+    }
+
+    final response =
+        await ApiProvider().getRetribusiListRTRW(getRetribusiListFilterV2);
+
+    if (!ApiProvider.isStatusCodeOK(response.statusCode)) {
+      return;
+    }
+
+    _getRetribusiListResponse = GetRetribusiListResponseV2.fromJson(
       response.data,
     );
 
@@ -183,36 +229,57 @@ class RetributionProvider with ChangeNotifier, DiagnosticableTreeMixin {
   }
 
   /// for retributions approval
-  Map<String, List<String>> _toBeApprovedValues = Map<String, List<String>>();
 
-  Map<String, List<String>> get toBeApprovedValues => _toBeApprovedValues;
+  String _approvalResultMessage = '';
+  String get approvalResultMessage => _approvalResultMessage;
 
-  void addToBeApprovedValue(String key, List<String> value) {
-    _toBeApprovedValues[key] = value;
+  bool _isErrorOnApproval = false;
+  bool get isErrorOnApproval => _isErrorOnApproval;
+
+  Map<String, List<RetribusiAllItemResponse>> _toBeApprovedValues =
+      Map<String, List<RetribusiAllItemResponse>>();
+
+  Map<String, List<RetribusiAllItemResponse>> get toBeApprovedValues =>
+      _toBeApprovedValues;
+
+  void addToBeApprovedValue(String key, List<RetribusiAllItemResponse> value) {
+    if (value.isEmpty || value.length < 1) {
+      if (_toBeApprovedValues.containsKey(key)) {
+        _toBeApprovedValues.remove(key);
+      }
+    } else {
+      _toBeApprovedValues[key] = value;
+    }
 
     notifyListeners();
   }
 
-  String generateKeyForToBeApprovedValues(Retribusi retribusi, Month month) {
-    final idTransaksi = retribusi.idTransaksi;
-    final alamat = retribusi.alamat;
+  void emptyToBeApprovedValues() {
+    _toBeApprovedValues = Map<String, List<RetribusiAllItemResponse>>();
+    notifyListeners();
+  }
 
-    return '$idTransaksi-$alamat';
+  String generateKeyForToBeApprovedValues(
+    RetribusiNowResponse retribusiNowResponse,
+  ) {
+    return retribusiNowResponse.id.toString() +
+        retribusiNowResponse.rumah.id.toString() +
+        retribusiNowResponse.rumah.userId;
   }
 
   bool areMonthsToBeApprovedOK(
-    List<Month> monthsToBeApproved,
-    List<Month> monthsAvailable,
+    List<RetribusiAllItemResponse> retribusiToBeApproved,
+    List<RetribusiAllItemResponse> retribusiAvailable,
   ) {
-    final monthsToBeApprovedInNumbers = monthsToBeApproved
+    final monthsToBeApprovedInNumbers = retribusiToBeApproved
         .map(
-          (element) => element.inNumber,
+          (element) => element.yearMonth,
         )
         .toList();
 
-    final monthsAvailableInNumbers = monthsAvailable
+    final monthsAvailableInNumbers = retribusiAvailable
         .map(
-          (element) => element.inNumber,
+          (element) => element.yearMonth,
         )
         .toList();
 
@@ -226,5 +293,60 @@ class RetributionProvider with ChangeNotifier, DiagnosticableTreeMixin {
     }
 
     return true;
+  }
+
+  Future<bool> approveRetribusiAndShowResult(
+    RetribusiAllItemResponse item,
+  ) async {
+    final response = await ApiProvider().approveRetribusi(item.id);
+
+    if (!ApiProvider.isStatusCodeOK(response.statusCode)) {
+      return false;
+    }
+
+    return true;
+  }
+
+  Future<void> approveRetribusiList() async {
+    if (_toBeApprovedValues.keys.length < 1) {
+      return;
+    }
+
+    int successCount = 0;
+    int failedCount = 0;
+
+    List<RetribusiAllItemResponse> _toBeApprovedList = [];
+
+    _toBeApprovedValues.values.forEach((element) {
+      _toBeApprovedList.addAll(element);
+    });
+
+    _toBeApprovedList.forEach((element) async {
+      bool resultSuccess = await approveRetribusiAndShowResult(element);
+      if (resultSuccess) {
+        successCount++;
+      } else {
+        failedCount++;
+      }
+    });
+
+    if (failedCount > 0) {
+      _approvalResultMessage =
+          'Terdapat kesalahan dalam me-approve sejumlah $failedCount data retribusi';
+      _isErrorOnApproval = true;
+    }
+
+    _toBeApprovedValues = Map<String, List<RetribusiAllItemResponse>>();
+    getRetribusiListPemerintah();
+  }
+
+  // filter V2
+  GetRetribusiListFilterV2 _getRetribusiListFilterV2;
+  GetRetribusiListFilterV2 get getRetribusiListFilterV2 =>
+      _getRetribusiListFilterV2;
+
+  set getRetribusiListFilterV2(GetRetribusiListFilterV2 value) {
+    _getRetribusiListFilterV2 = value;
+    notifyListeners();
   }
 }

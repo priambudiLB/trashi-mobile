@@ -1,35 +1,65 @@
 import 'package:flutter/material.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:trashi/components/snack_bar.dart';
+import 'package:trashi/constants/retribution_status.dart';
+import 'package:trashi/http_request/models/retribusi.dart';
+import 'package:trashi/pages/retribution_screen/provider/provider.dart';
 import 'package:trashi/utils/commons.dart';
+import 'package:provider/provider.dart';
 
 class Status extends StatelessWidget {
-  Status(this.status);
+  final GetRetribusiListItemResponse getRetribusiListItemResponse;
+  final int status;
+
+  Status({
+    @required this.status,
+    @required this.getRetribusiListItemResponse,
+  });
 
   void _showMultiSelect(BuildContext context) async {
     await showModalBottomSheet(
       isScrollControlled: true, // required for min/max child size
       context: context,
       builder: (ctx) {
-        return MultiSelectBottomSheet(
-          items: ['a', 'c', 'b'].map((e) => MultiSelectItem(e, e)).toList(),
-          initialValue: ['a'],
+        return MultiSelectBottomSheet<RetribusiAllItemResponse>(
+          items: getRetribusiListItemResponse.all
+              .map(
+                (element) => MultiSelectItem(element, element.monthText),
+              )
+              .toList(),
+          initialValue: context.watch<RetributionProvider>().toBeApprovedValues[
+                  context
+                      .read<RetributionProvider>()
+                      .generateKeyForToBeApprovedValues(
+                        getRetribusiListItemResponse.now,
+                      )] ??
+              [],
           onConfirm: (values) {
-            print('on confirm');
-            print(values);
+            RetributionProvider provider = context.read<RetributionProvider>();
+            if (!provider.areMonthsToBeApprovedOK(
+              values,
+              getRetribusiListItemResponse.all,
+            )) {
+              ScaffoldMessenger.of(context).showSnackBar(buildErrorSnackBar(
+                  message:
+                      'Approval harus dilakukan untuk tagihan bulan yang muncul terlebih dahulu.'));
+              return;
+            }
+
+            provider.addToBeApprovedValue(
+              provider.generateKeyForToBeApprovedValues(
+                getRetribusiListItemResponse.now,
+              ),
+              values,
+            );
           },
           title: Text('Pilih Bulan'),
           initialChildSize: 0.4,
-          onSelectionChanged: (values) {
-            ScaffoldMessenger.of(context).showSnackBar(buildErrorSnackBar());
-            print(values);
-          },
         );
       },
     );
   }
 
-  final int status;
   @override
   Widget build(BuildContext context) {
     switch (status) {

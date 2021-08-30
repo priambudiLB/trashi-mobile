@@ -56,6 +56,7 @@ class _LogInScreenState extends State<LogInScreen> {
       SignInByPhoneRequest body = SignInByPhoneRequest(
         password: _passwordController.text,
         phone: _emailOrPhoneNumberController.text,
+        requestSource: "mobile-app",
       );
 
       final response = await ApiProvider().signInByPhone(body);
