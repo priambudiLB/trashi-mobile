@@ -7,6 +7,7 @@ import 'package:trashi/pages/onboarding_redesign_screen/on_boarding_screen_view.
 import 'package:trashi/pages/profile_screen_redesign/provider.dart';
 import 'package:trashi/pages/profile_screen_redesign/role_type.dart';
 import 'package:trashi/pages/request_screen/request_screen.dart';
+import 'package:trashi/pages/retribution_masyarakat_screen/retribution_masyarakat.dart';
 import 'package:trashi/pages/retribution_screen/retribution_screen.dart';
 import 'package:trashi/pages/trash_collection_screen/accepter/accept_trash_collection_request_screen.dart';
 import 'package:trashi/secure_storage/secure_storage.dart';
@@ -251,12 +252,20 @@ class ProfileHeader extends StatelessWidget {
                             children: [
                               InkWell(
                                 onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => RetributionScreen(),
-                                    ),
-                                  );
+                                  if (context
+                                          .read<ProfileScreenProvider>()
+                                          .roleType ==
+                                      RoleType.PERSONAL)
+                                    Navigator.pushNamed(
+                                        context, RetributionMasyarakat.PATH);
+                                  else
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            RetributionScreen(),
+                                      ),
+                                    );
                                 },
                                 child: Container(
                                   height: 115,

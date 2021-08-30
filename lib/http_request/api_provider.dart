@@ -579,6 +579,14 @@ class ApiProvider {
 
     return response;
   }
+
+  Future<PembayaranRetribusiResponse> createPembayaranRetribusiInvoice(
+      CreatePembayaranRetribusiInvoiceRequest body) async {
+    final response =
+        await postWithDio('/retribusi/pembayaran/invoice/create', body);
+    if (response == null) return null;
+    return PembayaranRetribusiResponse.fromJson(response.data);
+  }
 }
 
 /**
