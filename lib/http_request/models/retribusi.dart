@@ -373,7 +373,7 @@ class GetRetribusiListFilterV2 {
   }
 
   String getFilterString() {
-    String filter = '?limit=10';
+    String filter = '?';
 
     if (this.yearMonth != null) {
       String yearMonthFilterString = this.yearMonth?.toString() ?? '';

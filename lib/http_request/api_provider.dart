@@ -572,8 +572,10 @@ class ApiProvider {
     return response;
   }
 
-  Future<Response<dynamic>> getRetribusiListMasyarakat() async {
-    final path = '/retribusi/masyarakat';
+  Future<Response<dynamic>> getRetribusiListMasyarakat(
+      GetRetribusiListFilterV2 filter) async {
+    final filterAsString = filter.getFilterString();
+    final path = '/retribusi/masyarakat$filterAsString';
 
     final response = await getWithDio(path);
 
