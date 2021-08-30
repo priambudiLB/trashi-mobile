@@ -26,8 +26,6 @@ class Status extends StatelessWidget {
               .map(
                 (element) => MultiSelectItem(element, element.monthText),
               )
-              .where((element) =>
-                  element.value.status != retributionStatusApproved)
               .toList(),
           initialValue: context.watch<RetributionProvider>().toBeApprovedValues[
                   context

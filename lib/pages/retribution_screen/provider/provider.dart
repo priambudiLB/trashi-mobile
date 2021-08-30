@@ -229,6 +229,13 @@ class RetributionProvider with ChangeNotifier, DiagnosticableTreeMixin {
   }
 
   /// for retributions approval
+
+  String _approvalResultMessage = '';
+  String get approvalResultMessage => _approvalResultMessage;
+
+  bool _isErrorOnApproval = false;
+  bool get isErrorOnApproval => _isErrorOnApproval;
+
   Map<String, List<RetribusiAllItemResponse>> _toBeApprovedValues =
       Map<String, List<RetribusiAllItemResponse>>();
 
@@ -255,19 +262,9 @@ class RetributionProvider with ChangeNotifier, DiagnosticableTreeMixin {
   String generateKeyForToBeApprovedValues(
     RetribusiNowResponse retribusiNowResponse,
   ) {
-    return retribusiNowResponse.rumah.id.toString() +
+    return retribusiNowResponse.id.toString() +
+        retribusiNowResponse.rumah.id.toString() +
         retribusiNowResponse.rumah.userId;
-  }
-
-  ApproveRetribusiRequest _createApproveRetribusiRequest(
-    Retribusi retribusi,
-    StatusRetribusi status,
-  ) {
-    return ApproveRetribusiRequest(
-      idRetribusi: retribusi.id,
-      month: status.month,
-      year: status.year,
-    );
   }
 
   bool areMonthsToBeApprovedOK(
@@ -298,14 +295,16 @@ class RetributionProvider with ChangeNotifier, DiagnosticableTreeMixin {
     return true;
   }
 
-  Future<void> approveRetribusi(
-    ApproveRetribusiRequest body,
+  Future<bool> approveRetribusiAndShowResult(
+    RetribusiAllItemResponse item,
   ) async {
-    final response = await ApiProvider().approveRetribusi(body);
+    final response = await ApiProvider().approveRetribusi(item.id);
 
     if (!ApiProvider.isStatusCodeOK(response.statusCode)) {
-      return;
+      return false;
     }
+
+    return true;
   }
 
   Future<void> approveRetribusiList() async {
@@ -313,11 +312,32 @@ class RetributionProvider with ChangeNotifier, DiagnosticableTreeMixin {
       return;
     }
 
-    List<ApproveRetribusiRequest> _toBeApprovedList = [];
+    int successCount = 0;
+    int failedCount = 0;
 
-    _toBeApprovedList.forEach((element) {
-      approveRetribusi(element);
+    List<RetribusiAllItemResponse> _toBeApprovedList = [];
+
+    _toBeApprovedValues.values.forEach((element) {
+      _toBeApprovedList.addAll(element);
     });
+
+    _toBeApprovedList.forEach((element) async {
+      bool resultSuccess = await approveRetribusiAndShowResult(element);
+      if (resultSuccess) {
+        successCount++;
+      } else {
+        failedCount++;
+      }
+    });
+
+    if (failedCount > 0) {
+      _approvalResultMessage =
+          'Terdapat kesalahan dalam me-approve sejumlah $failedCount data retribusi';
+      _isErrorOnApproval = true;
+    }
+
+    _toBeApprovedValues = Map<String, List<RetribusiAllItemResponse>>();
+    getRetribusiListPemerintah();
   }
 
   // filter V2

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:trashi/components/progress_indicator.dart';
+import 'package:trashi/components/snack_bar.dart';
 import 'package:trashi/components/spacings.dart';
 import 'package:trashi/constants/colors.dart';
 import 'package:trashi/pages/retribution_screen/components/filter_button.dart';
@@ -39,7 +41,7 @@ class _PaymentState extends State<Payment> {
     });
   }
 
-  Widget buildSelectedText() {
+  Widget _buildSelectedText() {
     int selectedRumahCount =
         context.watch<RetributionProvider>().toBeApprovedValues.keys.length;
 
@@ -53,6 +55,59 @@ class _PaymentState extends State<Payment> {
         Text('$selectedRumahCount Rumah selected')
       ],
     );
+  }
+
+  Widget _buildApprovalSection() {
+    return context.watch<RetributionProvider>().toBeApprovedValues.keys.length >
+            0
+        ? Container(
+            decoration: BoxDecoration(
+              boxShadow: [
+                BoxShadow(
+                  color: hexToColor("#E0E0E0").withOpacity(0.25),
+                  blurRadius: 7,
+                  offset: Offset(0, -10), // changes position of shadow
+                ),
+              ],
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                _buildSelectedText(),
+                SimpleTextButton(
+                  label: 'Approve',
+                  onPressed: () async {
+                    showTrashiProgressIndicator(context);
+
+                    await context
+                        .read<RetributionProvider>()
+                        .approveRetribusiList();
+
+                    closeTrashiProgressIndicator(context);
+
+                    if (context
+                        .watch<RetributionProvider>()
+                        .isErrorOnApproval) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        buildErrorSnackBar(
+                            message: context
+                                .watch<RetributionProvider>()
+                                .approvalResultMessage),
+                      );
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        buildSuccessSnackBar(
+                            message: 'Sukses me-approve data retribusi'),
+                      );
+                    }
+                  },
+                  textColor: Colors.white,
+                  backgroundColor: hexToColor(MAIN_COLOR),
+                ),
+              ],
+            ),
+          )
+        : SizedBox.shrink();
   }
 
   @override
@@ -249,39 +304,7 @@ class _PaymentState extends State<Payment> {
                     ],
                   ),
                 ),
-                context
-                            .watch<RetributionProvider>()
-                            .toBeApprovedValues
-                            .keys
-                            .length >
-                        0
-                    ? Container(
-                        decoration: BoxDecoration(
-                          boxShadow: [
-                            BoxShadow(
-                              color: hexToColor("#E0E0E0").withOpacity(0.25),
-                              blurRadius: 7,
-                              offset:
-                                  Offset(0, -10), // changes position of shadow
-                            ),
-                          ],
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            buildSelectedText(),
-                            SimpleTextButton(
-                              label: 'Approve',
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                              textColor: Colors.white,
-                              backgroundColor: hexToColor(MAIN_COLOR),
-                            ),
-                          ],
-                        ),
-                      )
-                    : SizedBox.shrink(),
+                _buildApprovalSection(),
               ],
             ),
           );

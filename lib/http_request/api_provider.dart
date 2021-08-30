@@ -97,7 +97,7 @@ class ApiProvider {
     return response;
   }
 
-  Future<Response<dynamic>> putWithDio(String path, dynamic data) async {
+  Future<Response<dynamic>> putWithDio(String path) async {
     _logRequest(path, 'PUT');
 
     Response<dynamic> response;
@@ -105,7 +105,6 @@ class ApiProvider {
     try {
       response = await _dio.put(
         path,
-        data: data,
       );
     } on DioError catch (e) {
       response = e.response;
@@ -542,11 +541,11 @@ class ApiProvider {
   }
 
   Future<Response<dynamic>> approveRetribusi(
-    ApproveRetribusiRequest body,
+    int retribusiID,
   ) async {
-    final path = '/retribusi/approve';
+    final path = '/retribusi/$retribusiID/approve';
 
-    final response = await putWithDio(path, body);
+    final response = await putWithDio(path);
 
     return response;
   }
