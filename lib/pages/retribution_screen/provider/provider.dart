@@ -183,9 +183,16 @@ class RetributionProvider with ChangeNotifier, DiagnosticableTreeMixin {
   }
 
   Future<void> getRetribusiListPemerintah({
-    GetRetribusiListFilter filter,
+    GetRetribusiListFilterV2 filter,
   }) async {
-    final response = await ApiProvider().getRetribusiListPemerintah();
+    GetRetribusiListFilterV2 getRetribusiListFilterV2 =
+        GetRetribusiListFilterV2();
+    if (filter != null) {
+      getRetribusiListFilterV2 = filter;
+    }
+
+    final response = await ApiProvider()
+        .getRetribusiListPemerintah(getRetribusiListFilterV2);
 
     if (!ApiProvider.isStatusCodeOK(response.statusCode)) {
       return;
@@ -199,9 +206,16 @@ class RetributionProvider with ChangeNotifier, DiagnosticableTreeMixin {
   }
 
   Future<void> getRetribusiListRTRW({
-    GetRetribusiListFilter filter,
+    GetRetribusiListFilterV2 filter,
   }) async {
-    final response = await ApiProvider().getRetribusiListRTRW();
+    GetRetribusiListFilterV2 getRetribusiListFilterV2 =
+        GetRetribusiListFilterV2();
+    if (filter != null) {
+      getRetribusiListFilterV2 = filter;
+    }
+
+    final response =
+        await ApiProvider().getRetribusiListRTRW(getRetribusiListFilterV2);
 
     if (!ApiProvider.isStatusCodeOK(response.statusCode)) {
       return;
@@ -304,5 +318,15 @@ class RetributionProvider with ChangeNotifier, DiagnosticableTreeMixin {
     _toBeApprovedList.forEach((element) {
       approveRetribusi(element);
     });
+  }
+
+  // filter V2
+  GetRetribusiListFilterV2 _getRetribusiListFilterV2;
+  GetRetribusiListFilterV2 get getRetribusiListFilterV2 =>
+      _getRetribusiListFilterV2;
+
+  set getRetribusiListFilterV2(GetRetribusiListFilterV2 value) {
+    _getRetribusiListFilterV2 = value;
+    notifyListeners();
   }
 }

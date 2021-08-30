@@ -289,3 +289,33 @@ class GetRetribusiListResponseV2 {
 
   Map<String, dynamic> toJson() => _$GetRetribusiListResponseV2ToJson(this);
 }
+
+class GetRetribusiListFilterV2 {
+  int yearMonth;
+  int kabupatenID;
+  int kecamatanID;
+  int upstID;
+  int status;
+  int skip;
+  int defaultLimit = 5;
+
+  GetRetribusiListFilterV2({
+    this.yearMonth,
+    this.kabupatenID,
+    this.kecamatanID,
+    this.upstID,
+    this.status,
+    this.skip,
+  });
+
+  String get getFilterAsString {
+    String yearMonthFilterString = this.yearMonth?.toString() ?? '';
+    String kabupatenIDFilterString = this.kabupatenID?.toString() ?? '';
+    String kecamatanIDFilterString = this.kecamatanID?.toString() ?? '';
+    String upstIDFilterString = this.upstID?.toString() ?? '';
+    String skipFilterString = this.skip?.toString() ?? '';
+    String statusFilterString = this.status?.toString() ?? '';
+
+    return '?yearMonth=$yearMonthFilterString&rumah.kabupaten=$kabupatenIDFilterString&rumah.kecamatan=$kecamatanIDFilterString&rumah.upst=$upstIDFilterString&status=$statusFilterString&limit=$defaultLimit&skip=$skipFilterString';
+  }
+}

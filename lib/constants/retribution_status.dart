@@ -26,6 +26,19 @@ extension RetributionStatusExtension on RetributionStatus {
 
     return false;
   }
+
+  int get asInt {
+    switch (this) {
+      case RetributionStatus.sudahBayar:
+        return 1;
+      case RetributionStatus.belumBayar:
+        return 0;
+      case RetributionStatus.semuaPembayaran:
+        return null;
+    }
+
+    return 0;
+  }
 }
 
 RetributionStatus getRetributionStatusByText(String value) {

@@ -22,6 +22,9 @@ class _PaymentState extends State<Payment> {
   @override
   void initState() {
     super.initState();
+
+    context.read<RetributionProvider>().emptyToBeApprovedValues();
+
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       context.read<RetributionProvider>().isFetching = true;
       await context.read<RetributionProvider>().getRetribusiListPemerintah();
