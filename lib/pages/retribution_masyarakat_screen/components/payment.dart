@@ -129,108 +129,108 @@ class _PaymentState extends State<Payment> {
                     ),
                   ),
                 ),
-                Padding(
-                  padding: EdgeInsets.only(top: 4, bottom: 8),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Flexible(
-                        flex: 2,
-                        fit: FlexFit.tight,
-                        child: GestureDetector(
-                          onTap: () {},
-                          child: Container(
-                              width: 1000,
-                              height: 32,
-                              decoration: BoxDecoration(
-                                  // color: hexToColor('#304860'),
-                                  border: Border.all(
-                                      width: 1, color: hexToColor('#CBCBCB')),
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(8))),
-                              child: Center(
-                                child: Text(
-                                  "Prev",
-                                  style: TextStyle(
-                                    fontFamily: "Avenir",
-                                    fontWeight: FontWeight.w400,
-                                    color: hexToColor('#C4C4C4'),
-                                    fontSize: 12,
-                                  ),
-                                ),
-                              )),
-                        ),
-                      ),
-                      Container(
-                        width: 16,
-                      ),
-                      Flexible(
-                        flex: 2,
-                        fit: FlexFit.tight,
-                        child: GestureDetector(
-                          onTap: () {},
-                          child: Container(
-                              width: 1000,
-                              height: 32,
-                              decoration: BoxDecoration(
-                                  // color: hexToColor('#304860'),
-                                  border: Border.all(
-                                      width: 1, color: hexToColor('#CBCBCB')),
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(8))),
-                              child: Center(
-                                  child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Text(
-                                    "Page 1",
-                                    style: TextStyle(
-                                      fontFamily: "Avenir",
-                                      fontWeight: FontWeight.w400,
-                                      color: hexToColor('#464646'),
-                                      fontSize: 12,
-                                    ),
-                                  ),
-                                  SvgPicture.asset(
-                                      'assets/images/ic-chevron.svg'),
-                                ],
-                              ))),
-                        ),
-                      ),
-                      Container(
-                        width: 16,
-                      ),
-                      Flexible(
-                        flex: 2,
-                        fit: FlexFit.tight,
-                        child: GestureDetector(
-                          onTap: () {},
-                          child: Container(
-                              width: 1000,
-                              height: 32,
-                              decoration: BoxDecoration(
-                                  // color: hexToColor('#304860'),
-                                  border: Border.all(
-                                      width: 1, color: hexToColor('#CBCBCB')),
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(8))),
-                              child: Center(
-                                child: Text(
-                                  "Next",
-                                  style: TextStyle(
-                                    fontFamily: "Avenir",
-                                    fontWeight: FontWeight.w400,
-                                    color: hexToColor('#464646'),
-                                    fontSize: 12,
-                                  ),
-                                ),
-                              )),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                // Padding(
+                //   padding: EdgeInsets.only(top: 4, bottom: 8),
+                //   child: Row(
+                //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //     children: [
+                //       Flexible(
+                //         flex: 2,
+                //         fit: FlexFit.tight,
+                //         child: GestureDetector(
+                //           onTap: () {},
+                //           child: Container(
+                //               width: 1000,
+                //               height: 32,
+                //               decoration: BoxDecoration(
+                //                   // color: hexToColor('#304860'),
+                //                   border: Border.all(
+                //                       width: 1, color: hexToColor('#CBCBCB')),
+                //                   borderRadius:
+                //                       BorderRadius.all(Radius.circular(8))),
+                //               child: Center(
+                //                 child: Text(
+                //                   "Prev",
+                //                   style: TextStyle(
+                //                     fontFamily: "Avenir",
+                //                     fontWeight: FontWeight.w400,
+                //                     color: hexToColor('#C4C4C4'),
+                //                     fontSize: 12,
+                //                   ),
+                //                 ),
+                //               )),
+                //         ),
+                //       ),
+                //       Container(
+                //         width: 16,
+                //       ),
+                //       Flexible(
+                //         flex: 2,
+                //         fit: FlexFit.tight,
+                //         child: GestureDetector(
+                //           onTap: () {},
+                //           child: Container(
+                //               width: 1000,
+                //               height: 32,
+                //               decoration: BoxDecoration(
+                //                   // color: hexToColor('#304860'),
+                //                   border: Border.all(
+                //                       width: 1, color: hexToColor('#CBCBCB')),
+                //                   borderRadius:
+                //                       BorderRadius.all(Radius.circular(8))),
+                //               child: Center(
+                //                   child: Row(
+                //                 mainAxisAlignment:
+                //                     MainAxisAlignment.spaceEvenly,
+                //                 children: [
+                //                   Text(
+                //                     "Page 1",
+                //                     style: TextStyle(
+                //                       fontFamily: "Avenir",
+                //                       fontWeight: FontWeight.w400,
+                //                       color: hexToColor('#464646'),
+                //                       fontSize: 12,
+                //                     ),
+                //                   ),
+                //                   SvgPicture.asset(
+                //                       'assets/images/ic-chevron.svg'),
+                //                 ],
+                //               ))),
+                //         ),
+                //       ),
+                //       Container(
+                //         width: 16,
+                //       ),
+                //       Flexible(
+                //         flex: 2,
+                //         fit: FlexFit.tight,
+                //         child: GestureDetector(
+                //           onTap: () {},
+                //           child: Container(
+                //               width: 1000,
+                //               height: 32,
+                //               decoration: BoxDecoration(
+                //                   // color: hexToColor('#304860'),
+                //                   border: Border.all(
+                //                       width: 1, color: hexToColor('#CBCBCB')),
+                //                   borderRadius:
+                //                       BorderRadius.all(Radius.circular(8))),
+                //               child: Center(
+                //                 child: Text(
+                //                   "Next",
+                //                   style: TextStyle(
+                //                     fontFamily: "Avenir",
+                //                     fontWeight: FontWeight.w400,
+                //                     color: hexToColor('#464646'),
+                //                     fontSize: 12,
+                //                   ),
+                //                 ),
+                //               )),
+                //         ),
+                //       ),
+                //     ],
+                //   ),
+                // ),
               ],
             ),
           );
