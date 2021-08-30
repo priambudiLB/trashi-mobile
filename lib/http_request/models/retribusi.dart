@@ -35,6 +35,44 @@ class Retribusi {
 }
 
 @JsonSerializable()
+class PembayaranRetribusiResponse {
+  @JsonKey(name: '_id')
+  final int id;
+  final String externalID;
+  @JsonKey(name: 'invoice_id')
+  final String invoiceID;
+  @JsonKey(name: 'invoice_url')
+  final String invoiceURL;
+  @JsonKey(name: 'expiry_date')
+  final DateTime expiryDate;
+  @JsonKey(name: 'idRetribusi')
+  final int idRetribusi;
+  final String status;
+  final int internalStatus;
+  @JsonKey(name: 'userId')
+  final String userID;
+  final int amount;
+
+  PembayaranRetribusiResponse({
+    this.id,
+    this.externalID,
+    this.invoiceID,
+    this.invoiceURL,
+    this.expiryDate,
+    this.idRetribusi,
+    this.status,
+    this.internalStatus,
+    this.userID,
+    this.amount,
+  });
+
+  factory PembayaranRetribusiResponse.fromJson(Map<String, dynamic> json) =>
+      _$PembayaranRetribusiResponseFromJson(json);
+
+  Map<String, dynamic> toJson() => _$PembayaranRetribusiResponseToJson(this);
+}
+
+@JsonSerializable()
 class StatusRetribusi {
   @JsonKey(name: '_id')
   final String id;
@@ -54,6 +92,21 @@ class StatusRetribusi {
       _$StatusRetribusiFromJson(json);
 
   Map<String, dynamic> toJson() => _$StatusRetribusiToJson(this);
+}
+
+@JsonSerializable()
+class CreatePembayaranRetribusiInvoiceRequest {
+  final int idRetribusi;
+  final int amount;
+
+  CreatePembayaranRetribusiInvoiceRequest({this.idRetribusi, this.amount});
+
+  factory CreatePembayaranRetribusiInvoiceRequest.fromJson(
+          Map<String, dynamic> json) =>
+      _$CreatePembayaranRetribusiInvoiceRequestFromJson(json);
+
+  Map<String, dynamic> toJson() =>
+      _$CreatePembayaranRetribusiInvoiceRequestToJson(this);
 }
 
 @JsonSerializable()
@@ -176,7 +229,7 @@ class RumahResponse {
   final int upstID;
   final DateTime createdAt;
   final DateTime updatedAt;
-  final String tarifRetribusi;
+  final int tarifRetribusi;
 
   RumahResponse({
     this.id,

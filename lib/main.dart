@@ -9,6 +9,7 @@ import 'package:trashi/pages/profile_screen_redesign/provider.dart';
 import 'package:trashi/pages/profile_screen_redesign/registration_document_confirmation/provider.dart';
 import 'package:trashi/pages/registration_screen/provider/registration.dart';
 import 'package:trashi/pages/request_screen/provider.dart';
+import 'package:trashi/pages/retribution_masyarakat_screen/provider.dart';
 import 'package:trashi/pages/retribution_screen/provider/provider.dart';
 import 'package:trashi/pages/splash_screen/provider.dart';
 import 'package:trashi/pages/trash_collection_screen/accepter/provider/provider.dart';
@@ -43,6 +44,7 @@ void main() {
         ChangeNotifierProvider(create: (_) => RegistrationProvider()),
         ChangeNotifierProvider(create: (_) => RetributionProvider()),
         ChangeNotifierProvider(create: (_) => SubmitDocumentProvider()),
+        ChangeNotifierProvider(create: (_) => RetributionMasyarakatProvider())
       ],
       // child: const MyApp(),
       child: const TrashiApplication(),
