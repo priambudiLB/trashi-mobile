@@ -152,7 +152,7 @@ class _TableBody extends State<TableBody> {
               ),
             TableBodyContent(
               content: _buildStatus(),
-              flex: 4,
+              flex: 5,
             ),
           ],
         ),

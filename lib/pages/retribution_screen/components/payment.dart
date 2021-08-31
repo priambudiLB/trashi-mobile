@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:trashi/components/button.dart';
 import 'package:trashi/components/form.dart';
 import 'package:trashi/components/progress_indicator.dart';
@@ -360,7 +359,7 @@ class _PaymentState extends State<Payment> {
                                 ),
                               TableHeader(
                                 text: 'Status',
-                                flex: 4,
+                                flex: 5,
                               ),
                             ],
                           ),
