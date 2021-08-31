@@ -37,7 +37,7 @@ class PopUpSuccess extends StatelessWidget {
                 Material(
                   color: Colors.white,
                   child: Text(
-                    "Dokumen anda berhasil kami terima.\nMohon bersabar untuk menunggu proses\nvalidasi dari admin.",
+                    "Registrasi berhasil.\nMohon bersabar untuk menunggu proses\nvalidasi dari admin.",
                     style: TextStyle(
                         fontWeight: FontWeight.w400,
                         fontSize: 12,

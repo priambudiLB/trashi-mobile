@@ -1,12 +1,15 @@
 import 'package:flutter/foundation.dart';
 import 'package:trashi/constants/time.dart';
 import 'package:trashi/http_request/api_provider.dart';
+import 'package:trashi/http_request/models/auth.dart';
+import 'package:trashi/http_request/models/errors.dart';
 import 'package:trashi/http_request/models/kabupaten.dart';
 import 'package:trashi/http_request/models/kecamatan.dart';
 import 'package:trashi/http_request/models/retribusi.dart';
 import 'package:trashi/http_request/models/upst.dart';
 import 'package:trashi/constants/retribution_status.dart';
 import 'package:trashi/pages/profile_screen_redesign/role_type.dart';
+import 'package:trashi/secure_storage/secure_storage.dart';
 
 class RetributionProvider with ChangeNotifier, DiagnosticableTreeMixin {
   RoleType _roleType;
@@ -292,6 +295,16 @@ class RetributionProvider with ChangeNotifier, DiagnosticableTreeMixin {
     notifyListeners();
   }
 
+  int getTarifToBeApproved() {
+    int total = 0;
+
+    _toBeApprovedValues.keys.forEach((element) {
+      total += _getTarifFromKey(element) * _toBeApprovedValues[element].length;
+    });
+
+    return total;
+  }
+
   void emptyToBeApprovedValues() {
     _toBeApprovedValues = Map<String, List<RetribusiAllItemResponse>>();
     notifyListeners();
@@ -302,7 +315,17 @@ class RetributionProvider with ChangeNotifier, DiagnosticableTreeMixin {
   ) {
     return retribusiNowResponse.id.toString() +
         retribusiNowResponse.rumah.id.toString() +
-        retribusiNowResponse.rumah.userId;
+        retribusiNowResponse.rumah.userId +
+        ";;tarifRetribusi;;" +
+        retribusiNowResponse.rumah.tarifRetribusi.toString();
+  }
+
+  int _getTarifFromKey(String key) {
+    final arr = key.split(";;tarifRetribusi;;");
+
+    final tarif = arr.last;
+
+    return int.parse(tarif);
   }
 
   bool areMonthsToBeApprovedOK(
@@ -398,5 +421,37 @@ class RetributionProvider with ChangeNotifier, DiagnosticableTreeMixin {
     }
 
     return false;
+  }
+
+  String _errorApproveMessage = '';
+  String get errorApproveMessage => _errorApproveMessage;
+
+  Future<bool> signInWithoutUpdateSessionByPhone(String password) async {
+    final signInByPhoneResponse =
+        await SecureStorage().getSignInByPhoneResponse();
+
+    if (signInByPhoneResponse == null) {
+      _errorApproveMessage = 'Terjadi kesalahan. Silakan coba lagi';
+      notifyListeners();
+      return false;
+    }
+
+    final request = SignInByPhoneRequest(
+      phone: signInByPhoneResponse.phone,
+      password: password,
+      requestSource: 'mobile-app',
+    );
+
+    final response =
+        await ApiProvider().signInWithoutUpdateSessionByPhone(request);
+
+    if (!ApiProvider.isStatusCodeOK(response.statusCode)) {
+      final errorResponse = ErrorResponse.fromJson(response.data);
+      _errorApproveMessage = errorResponse?.errorMessage;
+      notifyListeners();
+      return false;
+    }
+
+    return true;
   }
 }

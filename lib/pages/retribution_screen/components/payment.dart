@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:trashi/components/button.dart';
+import 'package:trashi/components/form.dart';
 import 'package:trashi/components/progress_indicator.dart';
 import 'package:trashi/components/snack_bar.dart';
 import 'package:trashi/components/spacings.dart';
@@ -25,6 +27,7 @@ class Payment extends StatefulWidget {
 
 class _PaymentState extends State<Payment> {
   bool isFirstTimeOpened = true;
+  TextEditingController _passwordController = TextEditingController();
 
   @override
   void initState() {
@@ -81,29 +84,12 @@ class _PaymentState extends State<Payment> {
                 SimpleTextButton(
                   label: 'Approve',
                   onPressed: () async {
-                    showTrashiProgressIndicator(context);
-
-                    await context
-                        .read<RetributionProvider>()
-                        .approveRetribusiList();
-
-                    closeTrashiProgressIndicator(context);
-
-                    if (context
-                        .watch<RetributionProvider>()
-                        .isErrorOnApproval) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        buildErrorSnackBar(
-                            message: context
-                                .watch<RetributionProvider>()
-                                .approvalResultMessage),
-                      );
-                    } else {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        buildSuccessSnackBar(
-                            message: 'Sukses me-approve data retribusi'),
-                      );
-                    }
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return _buildPopUpPassword();
+                      },
+                    );
                   },
                   textColor: Colors.white,
                   backgroundColor: hexToColor(MAIN_COLOR),
@@ -112,6 +98,188 @@ class _PaymentState extends State<Payment> {
             ),
           )
         : SizedBox.shrink();
+  }
+
+  Future<void> _approveRetribusi() async {
+    showTrashiProgressIndicator(context);
+
+    await context.read<RetributionProvider>().approveRetribusiList();
+
+    closeTrashiProgressIndicator(context);
+
+    if (context.read<RetributionProvider>().isErrorOnApproval) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        buildErrorSnackBar(
+            message:
+                context.watch<RetributionProvider>().approvalResultMessage),
+      );
+    } else {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return _buildPopUpSuccessConfirmation();
+        },
+      );
+    }
+  }
+
+  Widget _buildPopUpPassword() {
+    final totalTarif =
+        context.read<RetributionProvider>().getTarifToBeApproved();
+
+    return Container(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 32),
+        child: Center(
+          child: Container(
+            width: double.infinity,
+            height: 320,
+            decoration: BoxDecoration(
+                color: Colors.white, borderRadius: BorderRadius.circular(16)),
+            child: Column(
+              children: [
+                Container(
+                  height: 40,
+                ),
+                Material(
+                  color: Colors.white,
+                  child: Text(
+                    "Masukkan Password",
+                    style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 18,
+                        color: hexToColor("#4D4D4D")),
+                  ),
+                ),
+                Spacings.verticalSpace(20),
+                Material(
+                  color: Colors.white,
+                  child: Text(
+                    'Silakan masukkan password untuk menyetujui pembayaran dengan jumlah Rp$totalTarif',
+                    style: TextStyle(
+                        fontWeight: FontWeight.w400,
+                        fontSize: 12,
+                        color: hexToColor("#909090")),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                Spacings.verticalSpace(20),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 32),
+                  child: Material(
+                    child: TrashiTextFormField(
+                      controller: _passwordController,
+                      label: "Password",
+                      keyboardType: TextInputType.text,
+                      isPasswordField: true,
+                    ),
+                  ),
+                ),
+                Spacings.verticalSpace(20),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 32),
+                  child: Material(
+                    child: Button(
+                      onTap: () async {
+                        bool success = await context
+                            .read<RetributionProvider>()
+                            .signInWithoutUpdateSessionByPhone(
+                              _passwordController.text,
+                            );
+
+                        _passwordController.text = '';
+
+                        if (!success &&
+                            context
+                                    .read<RetributionProvider>()
+                                    .errorApproveMessage !=
+                                '') {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            buildErrorSnackBar(
+                              message: context
+                                  .read<RetributionProvider>()
+                                  .errorApproveMessage,
+                            ),
+                          );
+
+                          Navigator.of(context).pop();
+                        } else {
+                          Navigator.of(context).pop();
+                          _approveRetribusi();
+                        }
+                      },
+                      title: "Approve",
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildPopUpSuccessConfirmation() {
+    return Container(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 32),
+        child: Center(
+          child: Container(
+            width: double.infinity,
+            height: 320,
+            decoration: BoxDecoration(
+                color: Colors.white, borderRadius: BorderRadius.circular(16)),
+            child: Column(
+              children: [
+                Container(
+                  height: 40,
+                ),
+                Image.asset("assets/images/Icon_success.png"),
+                Container(
+                  height: 20,
+                ),
+                Material(
+                  color: Colors.white,
+                  child: Text(
+                    "Success",
+                    style: TextStyle(
+                        fontWeight: FontWeight.w900,
+                        fontSize: 24,
+                        color: hexToColor("#4D4D4D")),
+                  ),
+                ),
+                Material(
+                  color: Colors.white,
+                  child: Text(
+                    "Anda berhasil menyetujui pembayaran. Nota pembayaran otomatis dikirim ke akun masyarakat.",
+                    style: TextStyle(
+                        fontWeight: FontWeight.w400,
+                        fontSize: 12,
+                        color: hexToColor("#909090")),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                Container(
+                  height: 24,
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 32),
+                  child: Material(
+                    child: Button(
+                      onTap: () {
+                        Navigator.of(context).pop();
+                      },
+                      title: "Done",
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
   }
 
   @override

@@ -156,6 +156,14 @@ class ApiProvider {
     return response;
   }
 
+  Future<Response<dynamic>> signInWithoutUpdateSessionByPhone(
+      SignInByPhoneRequest body) async {
+    final response =
+        await postWithDio('/auth/signinwithoutupdatesession/byphone', body);
+
+    return response;
+  }
+
   Future<Response<dynamic>> signIn(SignInRequest body) async {
     final response = await postWithDio('/auth/signin', body);
 

@@ -83,7 +83,7 @@ class RetributionMasyarakat extends StatelessWidget {
       });
     }
     return Layout(
-      height: 88,
+      height: 40,
       title: Text(
         "Pembayaran Retribusi",
         // textAlign: TextAlign.end,
