@@ -62,7 +62,7 @@ class _RetributionScreenState extends State<RetributionScreen> {
     return Stack(
       children: [
         Layout(
-          height: 88,
+          height: 40,
           title: Text(
             "Pembayaran Retribusi",
             // textAlign: TextAlign.end,
