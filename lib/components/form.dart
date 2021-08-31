@@ -54,10 +54,7 @@ class _TrashiTextFormFieldState extends State<TrashiTextFormField> {
       validator: widget.validator,
     );
 
-    return Container(
-      height: 48,
-      child: textFormField,
-    );
+    return textFormField;
   }
 
   IconButton _buildPasswordIconButton() {
