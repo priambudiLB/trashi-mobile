@@ -2,19 +2,20 @@ import 'package:flutter/foundation.dart';
 import 'package:formz/formz.dart';
 import 'package:trashi/constants/retribution_status.dart';
 import 'package:trashi/http_request/api_provider.dart';
+import 'package:trashi/http_request/models/pembayaran.dart';
 import 'package:trashi/http_request/models/retribusi.dart';
 
 class RetributionMasyarakatProvider
     with ChangeNotifier, DiagnosticableTreeMixin {
   bool _isFetching = false;
   FormzStatus _statusFetchData = FormzStatus.pure;
-  PembayaranRetribusiResponse _pembayaranRetribusiResponse;
+  PembayaranResponse _pembayaranRetribusiResponse;
   List<RetribusiNowResponse> _data = [];
   bool get isFetching => _isFetching;
   FormzStatus get statusFetchData => _statusFetchData;
   List<RetribusiNowResponse> get data => _data;
   RumahResponse rumahResponse = new RumahResponse();
-  PembayaranRetribusiResponse get pembayaranRetribusiResponse =>
+  PembayaranResponse get pembayaranRetribusiResponse =>
       _pembayaranRetribusiResponse;
 
   RetributionStatus _status;
@@ -80,17 +81,17 @@ class RetributionMasyarakatProvider
 
   void createPembayaranRetribusi(int amount, int id) async {
     setCreateStatus(FormzStatus.submissionInProgress);
-    final body = CreatePembayaranRetribusiInvoiceRequest(
-        amount: amount, idRetribusi: id);
-    final response = await ApiProvider().createPembayaranRetribusiInvoice(body);
-    print(response.invoiceURL);
+    final body = PembayaranInvoiceRequest(
+        amount: amount, sourceId: id, sourceType: "RETRIBUSI");
+    final response = await ApiProvider().createPembayaranInvoice(body);
+
     if (response != null) {
       setPembayaranResposnse(response);
     }
     setCreateStatus(FormzStatus.submissionSuccess);
   }
 
-  void setPembayaranResposnse(PembayaranRetribusiResponse value) {
+  void setPembayaranResposnse(PembayaranResponse value) {
     _pembayaranRetribusiResponse = value;
     notifyListeners();
   }

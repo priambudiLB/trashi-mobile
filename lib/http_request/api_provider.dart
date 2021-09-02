@@ -5,6 +5,7 @@ import 'package:logger/logger.dart';
 import 'package:trashi/http_request/models/auth.dart';
 import 'package:trashi/http_request/models/barang.dart';
 import 'package:trashi/http_request/models/kendaraan_dp.dart';
+import 'package:trashi/http_request/models/pembayaran.dart';
 import 'package:trashi/http_request/models/pembayaran_pengangkatan.dart';
 import 'package:trashi/http_request/models/pengangkatan.dart';
 import 'package:trashi/http_request/models/range_berat.dart';
@@ -596,6 +597,13 @@ class ApiProvider {
         await postWithDio('/retribusi/pembayaran/invoice/create', body);
     if (response == null) return null;
     return PembayaranRetribusiResponse.fromJson(response.data);
+  }
+
+  Future<PembayaranResponse> createPembayaranInvoice(
+      PembayaranInvoiceRequest body) async {
+    final response = await postWithDio('/pembayaran/invoice/create', body);
+    if (response == null) return null;
+    return PembayaranResponse.fromJson(response.data);
   }
 }
 

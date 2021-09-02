@@ -7,6 +7,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:trashi/http_request/api_provider.dart';
 import 'package:trashi/http_request/models/barang.dart';
 import 'package:trashi/http_request/models/kendaraan_dp.dart';
+import 'package:trashi/http_request/models/pembayaran.dart';
 import 'package:trashi/http_request/models/pembayaran_pengangkatan.dart';
 import 'package:trashi/http_request/models/pengangkatan.dart';
 import 'package:trashi/http_request/models/range_berat.dart';
@@ -33,7 +34,7 @@ class FormRequestPengangkatanProvider
   String _descriptionLocation = "";
   Pengangkatan _pengangkatan;
   bool _isNow;
-  PembayaranPengangkatan _pembayaranPengangkatan;
+  PembayaranResponse _pembayaranPengangkatan;
 
   Barang get selectedBarang => _selectedBarang;
   RangeBerat get selectedBeratBarang => _selectedBeratBarang;
@@ -54,7 +55,7 @@ class FormRequestPengangkatanProvider
   String get descriptionLocation => _descriptionLocation;
   Pengangkatan get pengangkatan => _pengangkatan;
   bool get isNow => _isNow;
-  PembayaranPengangkatan get pembayaranPengatan => _pembayaranPengangkatan;
+  PembayaranResponse get pembayaranPengatan => _pembayaranPengangkatan;
 
   bool get isValid =>
       _selectedBarang != null &&
@@ -69,7 +70,7 @@ class FormRequestPengangkatanProvider
   }
 
   void setPembayaranPengangkatan(
-      PembayaranPengangkatan pembayaranPengangkatan) {
+      PembayaranResponse pembayaranPengangkatan) {
     _pembayaranPengangkatan = pembayaranPengangkatan;
     notifyListeners();
   }
@@ -222,19 +223,17 @@ class FormRequestPengangkatanProvider
 
   void submitLanjutPembayaran() async {
     setStatusSubmitLanjutPembayaran(FormzStatus.submissionInProgress);
-    final body = CreatePengangkatanPembayaranInvoiceRequest(
+    final body = PembayaranInvoiceRequest(
       amount: _pengangkatan.dp,
-      pengangkatanID: _pengangkatan.id,
+      sourceId: _pengangkatan.id,
+      sourceType: "PENGANGKATAN"
     );
 
     final response =
-        await ApiProvider().createPengangkatanPembayaranInvoice(body);
+        await ApiProvider().createPembayaranInvoice(body);
 
-    if (!ApiProvider.isStatusCodeOK(response.statusCode)) {
-      return;
-    }
-
-    setPembayaranPengangkatan(PembayaranPengangkatan.fromJson(response.data));
+ 
+    setPembayaranPengangkatan(response);
     setStatusSubmitLanjutPembayaran(FormzStatus.submissionSuccess);
   }
 }

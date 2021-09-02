@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:trashi/constants/pengangkatan.dart';
 import 'package:trashi/http_request/api_provider.dart';
+import 'package:trashi/http_request/models/pembayaran.dart';
 import 'package:trashi/http_request/models/pembayaran_pengangkatan.dart';
 import 'package:trashi/http_request/models/pengangkatan.dart';
 
@@ -50,14 +51,14 @@ class CollectionHistoryProvider with ChangeNotifier, DiagnosticableTreeMixin {
     notifyListeners();
   }
 
-  List<PembayaranPengangkatan> _pembayaranPengangkatans;
-  PembayaranPengangkatan _pembayaranPengangkatan;
+  List<PembayaranResponse> _pembayaranPengangkatans;
+  PembayaranResponse _pembayaranPengangkatan;
   GetPembayaranListOfPengangkatanResponse
       _getPembayaranListOfPengangkatanResponse;
 
-  List<PembayaranPengangkatan> get pembayaranPengangkatans =>
+  List<PembayaranResponse> get pembayaranPengangkatans =>
       _pembayaranPengangkatans;
-  PembayaranPengangkatan get pembayaranPengangkatan => _pembayaranPengangkatan;
+  PembayaranResponse get pembayaranPengangkatan => _pembayaranPengangkatan;
   GetPembayaranListOfPengangkatanResponse
       get getPembayaranListOfPengangkatanResponse =>
           _getPembayaranListOfPengangkatanResponse;
@@ -65,7 +66,8 @@ class CollectionHistoryProvider with ChangeNotifier, DiagnosticableTreeMixin {
   Future<void> getPembayaranListOfPengangkatan(int pengangkatanID) async {
     final response =
         await ApiProvider().getPembayaranListOfPengangkatan(pengangkatanID);
-
+    print("jiakakak");
+    print(response);
     if (!ApiProvider.isStatusCodeOK(response.statusCode)) {
       return;
     }
@@ -79,19 +81,14 @@ class CollectionHistoryProvider with ChangeNotifier, DiagnosticableTreeMixin {
   Future<void> createPembayaranPengangkatan() async {
     final remainderAmount = _pengangkatan.harga - _pengangkatan.hargaterbayar;
 
-    final body = CreatePengangkatanPembayaranInvoiceRequest(
-      amount: remainderAmount,
-      pengangkatanID: _pengangkatan.id,
-    );
+    final body = PembayaranInvoiceRequest(
+        amount: remainderAmount,
+        sourceId: _pengangkatan.id,
+        sourceType: "PENGANGKATAN");
 
-    final response =
-        await ApiProvider().createPengangkatanPembayaranInvoice(body);
+    final response = await ApiProvider().createPembayaranInvoice(body);
 
-    if (!ApiProvider.isStatusCodeOK(response.statusCode)) {
-      return;
-    }
-
-    _pembayaranPengangkatan = PembayaranPengangkatan.fromJson(response.data);
+    _pembayaranPengangkatan = response;
 
     notifyListeners();
   }

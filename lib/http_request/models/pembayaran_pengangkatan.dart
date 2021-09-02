@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:trashi/http_request/models/pembayaran.dart';
 
 part 'pembayaran_pengangkatan.g.dart';
 
@@ -43,7 +44,7 @@ class PembayaranPengangkatan {
 /// response of this endpoint: /api/pengangkatan/:id/pembayaran/list
 @JsonSerializable()
 class GetPembayaranListOfPengangkatanResponse {
-  final List<PembayaranPengangkatan> pembayaranPengangkatan;
+  final List<PembayaranResponse> pembayaranPengangkatan;
   final bool hasInvalidPayment;
   final bool shouldCreateNewPayment;
 

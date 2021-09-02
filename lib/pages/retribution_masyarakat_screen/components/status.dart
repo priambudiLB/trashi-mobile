@@ -20,7 +20,7 @@ class Status extends StatelessWidget {
   Widget build(BuildContext context) {
     print(status);
     switch (status) {
-      case 0:
+      case 1:
         return InkWell(
           child: Container(
             padding: EdgeInsets.symmetric(vertical: 5),
@@ -49,7 +49,7 @@ class Status extends StatelessWidget {
           },
         );
         break;
-      case 1:
+      case 3:
         return Container(
             // width: 1000,
             height: 16,
