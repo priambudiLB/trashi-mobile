@@ -351,6 +351,7 @@ class GetRetribusiListFilterV2 {
   int status;
   int skip;
   int defaultLimit = 5;
+  String search;
 
   GetRetribusiListFilterV2({
     this.yearMonth,
@@ -359,6 +360,7 @@ class GetRetribusiListFilterV2 {
     this.upstID,
     this.status,
     this.skip,
+    this.search,
   });
 
   String get getFilterAsString {
@@ -405,6 +407,23 @@ class GetRetribusiListFilterV2 {
       filter += '&skip=$skipFilterString';
     }
 
+    if (this.search != null &&
+        this.search.isNotEmpty &&
+        this.search.length > 0) {
+      String searchString = this.search?.toString() ?? '';
+      filter += '&search=$searchString';
+    }
+
+    if (filter == '?') {
+      return '';
+    }
+
     return filter;
+  }
+
+  void setSearch(String value) {
+    print('the value');
+    print(value);
+    this.search = value;
   }
 }

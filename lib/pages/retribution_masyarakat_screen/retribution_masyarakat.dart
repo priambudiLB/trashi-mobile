@@ -11,7 +11,16 @@ import 'package:trashi/pages/retribution_masyarakat_screen/provider.dart';
 class RetributionMasyarakat extends StatelessWidget {
   static const String PATH = "retribution_masyarakat";
   const RetributionMasyarakat({Key key}) : super(key: key);
-  _buildSearchField(String label) {
+
+  _buildSearchField(String label, BuildContext context) {
+    TextEditingController _searchController = TextEditingController();
+
+    if (context.watch<RetributionMasyarakatProvider>().shouldDeleteSearchText) {
+      _searchController.text = '';
+      context.read<RetributionMasyarakatProvider>().shouldDeleteSearchText =
+          false;
+    }
+
     TextFormField textFormField = TextFormField(
       cursorColor: hexToColor('#909090'),
       keyboardType: TextInputType.text,
@@ -42,6 +51,7 @@ class RetributionMasyarakat extends StatelessWidget {
           ),
         ),
       ),
+      onChanged: context.read<RetributionMasyarakatProvider>().onSearchChanged,
     );
 
     return Column(
@@ -101,9 +111,9 @@ class RetributionMasyarakat extends StatelessWidget {
           : ListView(
               children: [
                 Container(
-                    // child: _buildSearchField('Search'),
-                    // margin: EdgeInsets.only(top: 16),
-                    ),
+                  child: _buildSearchField('Search', context),
+                  margin: EdgeInsets.only(top: 16),
+                ),
                 Payment(),
               ],
             ),
