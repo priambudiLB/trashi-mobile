@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:trashi/constants/time.dart';
 import 'package:trashi/http_request/api_provider.dart';
@@ -453,5 +455,32 @@ class RetributionProvider with ChangeNotifier, DiagnosticableTreeMixin {
     }
 
     return true;
+  }
+
+  Timer _debounce;
+
+  bool _shouldDeleteSearchText = false;
+  bool get shouldDeleteSearchText => _shouldDeleteSearchText;
+
+  set shouldDeleteSearchText(bool value) {
+    _shouldDeleteSearchText = value;
+    notifyListeners();
+  }
+
+  onSearchChanged(String value) {
+    if (_debounce?.isActive ?? false) {
+      _debounce.cancel();
+    }
+
+    _debounce = Timer(const Duration(milliseconds: 500), () async {
+      if (_getRetribusiListFilterV2 == null) {
+        _getRetribusiListFilterV2 = GetRetribusiListFilterV2(search: value);
+      } else {
+        _getRetribusiListFilterV2.setSearch(value);
+      }
+
+      await getRetribusiListByRole(filter: _getRetribusiListFilterV2);
+      notifyListeners();
+    });
   }
 }

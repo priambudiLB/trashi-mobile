@@ -201,6 +201,8 @@ class _FilterAdminScreen extends State<FilterAdminScreen> {
 
         closeTrashiProgressIndicator(context);
 
+        context.read<RetributionProvider>().shouldDeleteSearchText = true;
+
         Navigator.of(context).pop();
       },
     );

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:trashi/components/layout_redesign.dart';
 import 'package:trashi/pages/retribution_screen/components/payment.dart';
+import 'package:trashi/pages/retribution_screen/provider/provider.dart';
 import 'package:trashi/utils/commons.dart';
+import 'package:provider/provider.dart';
 
 class RetributionScreen extends StatefulWidget {
   static const String PATH = "retribution";
@@ -11,7 +13,14 @@ class RetributionScreen extends StatefulWidget {
 }
 
 class _RetributionScreenState extends State<RetributionScreen> {
+  TextEditingController _searchController = TextEditingController();
+
   _buildSearchField(String label) {
+    if (context.watch<RetributionProvider>().shouldDeleteSearchText) {
+      _searchController.text = '';
+      context.read<RetributionProvider>().shouldDeleteSearchText = false;
+    }
+
     TextFormField textFormField = TextFormField(
       cursorColor: hexToColor('#909090'),
       keyboardType: TextInputType.text,
@@ -42,6 +51,8 @@ class _RetributionScreenState extends State<RetributionScreen> {
           ),
         ),
       ),
+      controller: _searchController,
+      onChanged: context.read<RetributionProvider>().onSearchChanged,
     );
 
     return Column(
@@ -75,9 +86,9 @@ class _RetributionScreenState extends State<RetributionScreen> {
           body: ListView(
             children: [
               Container(
-                  // child: _buildSearchField('Search'),
-                  // margin: EdgeInsets.only(top: 16),
-                  ),
+                child: _buildSearchField('Search'),
+                margin: EdgeInsets.only(top: 16),
+              ),
               Payment(),
             ],
           ),
