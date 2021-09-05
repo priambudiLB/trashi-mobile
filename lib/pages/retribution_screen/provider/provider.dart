@@ -457,6 +457,8 @@ class RetributionProvider with ChangeNotifier, DiagnosticableTreeMixin {
     return true;
   }
 
+  // search
+
   Timer _debounce;
 
   bool _shouldDeleteSearchText = false;

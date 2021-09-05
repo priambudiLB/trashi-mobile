@@ -99,5 +99,7 @@ class Status extends StatelessWidget {
             ));
         break;
     }
+
+    return SizedBox.shrink();
   }
 }

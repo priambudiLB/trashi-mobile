@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:formz/formz.dart';
 import 'package:trashi/constants/retribution_status.dart';
@@ -109,5 +111,34 @@ class RetributionMasyarakatProvider
   void setCreateStatus(FormzStatus value) {
     _statusFetchData = value;
     notifyListeners();
+  }
+
+  // search
+
+  Timer _debounce;
+
+  bool _shouldDeleteSearchText = false;
+  bool get shouldDeleteSearchText => _shouldDeleteSearchText;
+
+  set shouldDeleteSearchText(bool value) {
+    _shouldDeleteSearchText = value;
+    notifyListeners();
+  }
+
+  onSearchChanged(String value) {
+    if (_debounce?.isActive ?? false) {
+      _debounce.cancel();
+    }
+
+    _debounce = Timer(const Duration(milliseconds: 500), () async {
+      if (_getRetribusiListFilterV2 == null) {
+        _getRetribusiListFilterV2 = GetRetribusiListFilterV2(search: value);
+      } else {
+        _getRetribusiListFilterV2.setSearch(value);
+      }
+
+      await getList(filter: _getRetribusiListFilterV2);
+      notifyListeners();
+    });
   }
 }
