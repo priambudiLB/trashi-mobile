@@ -230,6 +230,8 @@ class RumahResponse {
   final DateTime createdAt;
   final DateTime updatedAt;
   final int tarifRetribusi;
+  final RTRWResponse rt;
+  final RTRWResponse rw;
 
   RumahResponse({
     this.id,
@@ -247,6 +249,8 @@ class RumahResponse {
     this.createdAt,
     this.updatedAt,
     this.tarifRetribusi,
+    this.rt,
+    this.rw,
   });
 
   factory RumahResponse.fromJson(Map<String, dynamic> json) =>
@@ -257,6 +261,37 @@ class RumahResponse {
   String get fullName {
     return this.firstname + ' ' + this.lastname;
   }
+}
+
+@JsonSerializable()
+class RTRWResponse {
+  @JsonKey(name: '_id')
+  final int id;
+  final String userId;
+  final String nomor;
+  final bool isRT;
+  @JsonKey(name: 'kabupaten')
+  final int kabupatenID;
+  @JsonKey(name: 'kecamatan')
+  final int kecamatanID;
+  final DateTime createdAt;
+  final DateTime updatedAt;
+
+  RTRWResponse({
+    this.id,
+    this.userId,
+    this.nomor,
+    this.isRT,
+    this.kabupatenID,
+    this.kecamatanID,
+    this.createdAt,
+    this.updatedAt,
+  });
+
+  factory RTRWResponse.fromJson(Map<String, dynamic> json) =>
+      _$RTRWResponseFromJson(json);
+
+  Map<String, dynamic> toJson() => _$RTRWResponseToJson(this);
 }
 
 @JsonSerializable()

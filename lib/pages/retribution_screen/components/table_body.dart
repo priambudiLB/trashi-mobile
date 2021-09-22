@@ -33,6 +33,15 @@ class _TableBody extends State<TableBody> {
     );
   }
 
+  Text _buildPenanggungJawabText() {
+    final rt = 'RT ' + widget.getRetribusiListItemResponse.now.rumah.rt.nomor;
+    final rw = 'RW ' + widget.getRetribusiListItemResponse.now.rumah.rw.nomor;
+
+    final penanggungJawabText = '$rt/$rw';
+
+    return _buildTextContent(penanggungJawabText);
+  }
+
   Widget _buildStatus() {
     RoleType roleType = context.read<RetributionProvider>().roleType;
 
@@ -147,7 +156,7 @@ class _TableBody extends State<TableBody> {
                 .read<RetributionProvider>()
                 .shouldShowPenanggungJawabColumn())
               TableBodyContent(
-                content: _buildTextContent('RT002/RW001'),
+                content: _buildPenanggungJawabText(),
                 flex: 4,
               ),
             TableBodyContent(
